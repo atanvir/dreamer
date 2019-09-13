@@ -52,6 +52,10 @@ public class NavigationMoreFragment extends Fragment implements View.OnClickList
         adapter =new PaymentListAdapter(getActivity(),menusList);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+
+
+
         return view;
 
     }

@@ -90,13 +90,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/privacy_policy" />
 
-            <TextView
+            <com.boushra.View.SegoeRegularTextView
                 android:id="@+id/term_condition_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="8dp"
-                android:textColor="@android:color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView20"
                 app:layout_constraintStart_toEndOf="@+id/imageView20"
@@ -142,13 +141,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <com.boushra.View.SegoeRegularTextView
                 android:id="@+id/privacy_policy_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="8dp"
-                android:textColor="@android:color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView13"
                 app:layout_constraintStart_toEndOf="@+id/imageView13"

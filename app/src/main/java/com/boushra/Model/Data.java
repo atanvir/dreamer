@@ -106,7 +106,7 @@ public class Data {
     private Integer totalRating;
     @SerializedName("avgRating")
     @Expose
-    private Integer avgRating;
+    private Float avgRating;
     @SerializedName("onlineStatus")
     @Expose
     private Boolean onlineStatus;
@@ -212,6 +212,14 @@ public class Data {
     @SerializedName("forecasterData")
     @Expose
     private ForecasterData forecasterData;
+
+    public Float getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Float avgRating) {
+        this.avgRating = avgRating;
+    }
 
     public Boolean getRequestStatus() {
         return requestStatus;
@@ -445,13 +453,6 @@ public class Data {
         this.totalRating = totalRating;
     }
 
-    public Integer getAvgRating() {
-        return avgRating;
-    }
-
-    public void setAvgRating(Integer avgRating) {
-        this.avgRating = avgRating;
-    }
 
     public Boolean getOnlineStatus() {
         return onlineStatus;

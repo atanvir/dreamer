@@ -69,7 +69,7 @@ public class ForcasterListAdapter extends RecyclerView.Adapter<ForcasterListAdap
        {
            holder.onlineStatus_iv.setVisibility(View.GONE);
        }
-       holder.ratingBar.setRating(lists.get(position).getTotalRating());
+       holder.ratingBar.setRating(lists.get(position).getAvgRating());
        holder.pricePerQues_txt.setText(lists.get(position).getPricePerQues());
 
 

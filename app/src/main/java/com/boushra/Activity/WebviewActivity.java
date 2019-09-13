@@ -22,7 +22,7 @@ public class WebviewActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://18.188.1.136:4002/help");
+        webView.loadUrl("http://18.218.65.12:4002/help");
     }
 
     @Override

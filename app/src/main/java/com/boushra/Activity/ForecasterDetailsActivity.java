@@ -90,10 +90,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         init();
-        manager=new LinearLayoutManager(this);
-        ForecasterDetailsAdapter adapter=new ForecasterDetailsAdapter(this);
-        recView.setLayoutManager(manager);
-        recView.setAdapter(adapter);
+
         getForecasterDetailsApi();
 
 
@@ -121,6 +118,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                         {
 
                             List<Data> data=server_resposne.getData();
+                            settingAdapter(data);
                             audio_uri=Uri.parse(server_resposne.getData().get(0).getVoiceRecording());
                             settingSeekbar();
                             Glide.with(ForecasterDetailsActivity.this).load(data.get(0).getProfilePic()).into(profilepic_iv);
@@ -163,6 +161,13 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void settingAdapter(List<Data> data) {
+        manager=new LinearLayoutManager(this);
+        ForecasterDetailsAdapter adapter=new ForecasterDetailsAdapter(this,data);
+        recView.setLayoutManager(manager);
+        recView.setAdapter(adapter);
+    }
+
     private void settingSeekbar() {
         try
         {
@@ -177,14 +182,13 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         seekBar.setMax(300);
-
-        seekBar.setProgress(mediaPlayer.getDuration()/1000);
+        seekBar.setProgress(mediaPlayer.getDuration()/100);
         if(mediaPlayer.getDuration()/1000<10) {
             timer_txt.setText("0:0"+mediaPlayer.getDuration() / 1000);
         }
         else
         {
-            timer_txt.setText(""+mediaPlayer.getDuration()/1000+":00");
+            timer_txt.setText("0:"+mediaPlayer.getDuration()/1000);
         }
 
 
@@ -196,7 +200,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    timer_txt.setText("" + progress/1000+":00");
+                    timer_txt.setText("0:" + progress/1000);
                 }
             }
 
@@ -304,7 +308,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                 if (mediaPlayer.getDuration() / 1000 < 10) {
                     timer_txt.setText("0:0" + mediaPlayer.getDuration() / 1000);
                 } else {
-                    timer_txt.setText("" + mediaPlayer.getDuration() / 1000 + ":00");
+                    timer_txt.setText("0:" + mediaPlayer.getDuration() / 1000);
                 }
             }
 

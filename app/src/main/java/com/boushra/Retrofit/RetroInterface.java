@@ -10,6 +10,8 @@ import com.boushra.Model.ForcasterList;
 import com.boushra.Model.ForgotPassword;
 import com.boushra.Model.Login;
 import com.boushra.Model.Logout;
+import com.boushra.Model.MyBooking;
+import com.boushra.Model.Rating;
 import com.boushra.Model.Signup;
 import com.boushra.Model.SocialLogin;
 import com.boushra.Model.StaticContent;
@@ -96,4 +98,10 @@ public interface RetroInterface {
 
     @POST("chatListForDreamer")
     Call<Chat> chatListForDreamer(@Body Chat chat);
+
+    @POST("getMyBooking")
+    Call<MyBooking> getMyBooking(@Body MyBooking booking,@Header("token") String token);
+
+    @POST("rating")
+    Call<Rating> rating(@Body Rating rating,@Header("token") String token);
 }
