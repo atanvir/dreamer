@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/pop_background"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/pop_round_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.boushra.View.SegoeRegularTextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/fill_the_following"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollView5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.boushra.View.SegoeRegularEditText
+                    android:id="@+id/name_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittextshape"
+                    android:hint="Name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textColor="#123"
+                    android:textColorHint="#123"
+                    android:textSize="@dimen/text_size_regular"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.boushra.View.SegoeRegularEditText
+                    android:id="@+id/email_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittextshape"
+                    android:hint="@string/email_id"
+                    android:textColor="#123"
+                    android:imeOptions="actionDone"
+
+                    android:textColorHint="#123"
+                    android:textSize="@dimen/text_size_regular"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name_editText" />
+
+                <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+                    <!--android:id="@+id/dob_cl"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/dp_60"-->
+                    <!--android:layout_marginStart="16dp"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:layout_marginEnd="16dp"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--android:background="@drawable/edittextshape"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/email_edittext">-->
+
+                <com.boushra.View.SegoeRegularEditText
+                    android:id="@+id/dob_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittextshape"
+                    android:editable="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/date_of_birth"
+                    android:textColor="#123"
+                    android:textColorHint="#123"
+                    android:textSize="@dimen/text_size_regular"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/email_edittext"
+                    app:layout_constraintTop_toBottomOf="@+id/email_edittext" />
+
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="@dimen/dp_23"-->
+                        <!--android:layout_height="@dimen/dp_23"-->
+                        <!--android:layout_marginEnd="16dp"-->
+                        <!--android:src="@drawable/calendar"-->
+                        <!--app:layout_constraintBottom_toBottomOf="@+id/dob_editText"-->
+                        <!--app:layout_constraintEnd_toEndOf="@+id/dob_editText"-->
+                        <!--app:layout_constraintTop_toTopOf="@+id/dob_editText" />-->
+
+
+                <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+
+
+                <com.boushra.View.SegoeRegularEditText
+                    android:id="@+id/pob_editText"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittextshape"
+                    android:hint="@string/place_of_birth"
+                    android:textColor="#123"
+                    android:textColorHint="#123"
+                    android:imeOptions="actionDone"
+
+                    android:textSize="@dimen/text_size_regular"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dob_editText" />
+
+
+                <com.boushra.View.SegoeRegularTextView
+                    android:id="@+id/genderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittextshape"
+                    android:text="Gender"
+                    android:textColor="#123"
+                    android:gravity="clip_vertical"
+                    android:textSize="@dimen/text_size_regular"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pob_editText" />
+
+
+                <Spinner
+                    android:id="@+id/genderSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/cardviewback"
+
+                    android:textColor="#00112233"
+
+                    app:layout_constraintEnd_toEndOf="@+id/genderTextView"
+                    app:layout_constraintStart_toStartOf="@+id/genderTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/genderTextView">
+
+
+                </Spinner>
+
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/down_arrow"
+                    app:layout_constraintBottom_toBottomOf="@+id/genderSpinner"
+                    app:layout_constraintEnd_toEndOf="@+id/genderTextView"
+                    app:layout_constraintTop_toTopOf="@+id/genderTextView" />
+
+
+                <com.boushra.View.SegoeRegularTextView
+                    android:id="@+id/maritalTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittextshape"
+                    android:text="Marital Status"
+                    android:textColor="@color/black"
+                    android:gravity="clip_vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/genderSpinner" />
+
+
+                <Spinner
+                    android:id="@+id/maritalSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height=".1dp"
+                    android:layout_marginBottom="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/maritalTextView"
+
+                    app:layout_constraintEnd_toEndOf="@+id/maritalTextView"
+                    app:layout_constraintStart_toStartOf="@+id/maritalTextView"></Spinner>
+
+
+                <ImageView
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/down_arrow"
+                    app:layout_constraintBottom_toBottomOf="@+id/maritalSpinner"
+                    app:layout_constraintEnd_toEndOf="@+id/maritalTextView"
+                    app:layout_constraintTop_toTopOf="@+id/maritalTextView"
+                    app:layout_constraintVertical_bias="0.555" />
+
+
+                <ImageView
+                    android:id="@+id/checkbox_im"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/unchecked"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/maritalSpinner" />
+
+                <com.boushra.View.SegoeRegularTextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/agreed_to_terms"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_regular"
+                    app:layout_constraintBottom_toBottomOf="@+id/checkbox_im"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/checkbox_im"
+                    app:layout_constraintTop_toTopOf="@+id/checkbox_im" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
+
+        <com.boushra.View.fredokaButton
+            android:id="@+id/saveBtn"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/buttongradient"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:textSize="@dimen/dp_20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

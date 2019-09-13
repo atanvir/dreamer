@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="marital_status"><item>
+        Marital Status
+    </item>
+    <item>Married</item>
+        <item>Un-Married</item>
+
+    </string-array>
+    <string-array name="martial_status"><item>Marital Status</item></string-array>
+    <string-array name="genderName"><item>
+        Male</item>
+        <item> Female</item>
+    </string-array>
+    <string-array name="categoryType"><item>
+        Category Type</item>
+        <item> Type coming soon</item>
+    </string-array>
+
+    <string-array name="bankType"><item>
+       Icici Bank</item>
+        <item>BOI</item>
+    </string-array>
+    <string-array name="select_bank" >
+        <item>Select Bank</item>
+
+
+
+    </string-array>
+    <string-array name="gender_Type"><item>Category Type</item></string-array>
+    <string-array name="add_payment_method"><item>Add Payment Method</item></string-array>
+</resources>

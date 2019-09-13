@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40">
+
+            <LinearLayout
+                android:id="@+id/backLL"
+                android:layout_width="@dimen/dp_70"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/backImageView"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back"
+
+                    />
+            </LinearLayout>
+
+            <com.boushra.View.SegoeRegularTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:text="@string/add_money"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium_large" />
+
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#9C9C9C"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view7">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F0F0F0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scrollView4">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/dp_5"
+                app:cardElevation="@dimen/dp_7"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout4"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginHorizontal="@dimen/dp_5"
+                        >
+
+                        <com.boushra.View.SegoeRegularTextView
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp_50"
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:layout_marginRight="@dimen/dp_40"
+                            android:layout_weight="1"
+                            android:background="@drawable/promocode_background2"
+                            android:gravity="center"
+                            android:text="@string/promo_code"
+                            android:textSize="@dimen/text_size_medium"
+                            android:textAlignment="center" />
+
+
+                        <com.boushra.View.SegoeRegularTextView
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/dp_50"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@drawable/btnbackground"
+                            android:gravity="center"
+
+                            android:text="@string/apply"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_medium" />
+
+
+                    </LinearLayout>
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/textView41"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="32dp"
+                        android:text="@string/total_price"
+                        android:textSize="@dimen/text_size_medium_large"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="@+id/linearLayout4"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/textView43"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="Rs.3000"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium_large"
+                        app:layout_constraintEnd_toEndOf="@+id/linearLayout4"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/textView46"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="Discounted Price"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium_large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView41"
+                        app:layout_constraintTop_toBottomOf="@+id/textView41"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/textView47"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="Rs.-900"
+                        android:textColor="@color/app_theme"
+                        android:textSize="@dimen/text_size_medium_large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView43"
+                        app:layout_constraintTop_toBottomOf="@+id/textView43" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/dp_5"
+                app:cardElevation="@dimen/dp_7"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView8">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/textView48"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/please_select_payment_method"
+                        android:textSize="@dimen/text_size_medium_large"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/fredokaTextView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/btnbackground"
+                        android:gravity="center"
+                        android:text="@string/payment_gateway"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView48"
+                        app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/btnbackground"
+                        android:gravity="center"
+                        android:text="@string/bank_transfer"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/textView48"
+                        app:layout_constraintTop_toBottomOf="@+id/fredokaTextView2" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView10">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/bankDeatil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/admin_bank_detail"
+                        android:textSize="@dimen/text_size_large"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/bank_name"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/text_size_medium_large"
+                        app:layout_constraintStart_toStartOf="@+id/bankDeatil"
+                        app:layout_constraintTop_toBottomOf="@+id/bankDeatil" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="4dp"
+                        android:text="@string/state_bank_of_india"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView8"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView8" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/bank_account_holder_name"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/text_size_medium"
+                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView9"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView9" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Prashant Choudhary"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView11"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView11" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/bank_account_number"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/text_size_medium"
+                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView13"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView13" />
+
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="0001236596598"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView14"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView14" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/dp_5"
+                app:cardElevation="@dimen/dp_7"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView12">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView11"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView10"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/your_bank_details"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium_large"
+
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/promocode_background"
+                        android:entries="@array/select_bank"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        android:paddingLeft="@dimen/dp_10"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView7">
+
+
+                    </Spinner>
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/down_arrow"
+                        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+                        app:layout_constraintEnd_toEndOf="@+id/spinner"
+                        app:layout_constraintTop_toTopOf="@+id/spinner" />
+
+
+                    <com.boushra.View.SegoeRegularEditText
+                        android:id="@+id/segoeRegularEditText6"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/promocode_background"
+                        android:hint="@string/bank_holder_account"
+                        android:textSize="@dimen/text_size_medium"
+
+                        android:textColorHint="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+                    <com.boushra.View.SegoeRegularEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_marginStart="8dp"
+
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="24dp"
+                        android:background="@drawable/promocode_background"
+                        android:hint="@string/bank_account_number"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textColorHint="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularEditText6" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/imageView299"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/attachment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView11" />
+
+            <com.boushra.View.SegoeRegularTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/please_attach_photo"
+                android:textSize="@dimen/text_size_medium_large"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView299"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView299"
+                app:layout_constraintTop_toTopOf="@+id/imageView299" />
+
+            <com.boushra.View.fredokaTextView
+                android:id="@+id/submittxt"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_60"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/btnbackground"
+                android:gravity="center"
+                android:text="@string/submit"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView299" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
