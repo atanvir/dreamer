@@ -28,10 +28,6 @@ public class ImageSliderAdapter extends PagerAdapter {
 
     }
 
-
-    private int[] sliderImageId = new int[]{};
-
-
     @Override
     public int getCount() {
         return data.size();
@@ -53,10 +49,8 @@ public class ImageSliderAdapter extends PagerAdapter {
        Glide.with(context).load(data.get(position).getImage()).into(icon_iv);
        titletxt.setText(data.get(position).getTitle());
        desc_txt.setText(data.get(position).getDescription());
-
-        ((ViewPager) container).addView(view, position);
-
-        return view;
+       ((ViewPager) container).addView(view, 0);
+       return view;
     }
 
     @Override

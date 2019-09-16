@@ -2,6 +2,7 @@ package com.boushra.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +106,8 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                 public void onClick(View v) {
                     if(getAdapterPosition()==0)
                     {
-                        ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.replace,new MyBookingFragment()).commit();
+                        Log.e("NavigationMore",NavigationMoreFragment.class.getSimpleName());
+                        ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.replace,new MyBookingFragment()).addToBackStack(NavigationMoreFragment.class.getSimpleName()).commit();
 
                     }
                     if(getAdapterPosition()==2)

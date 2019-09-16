@@ -171,7 +171,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
                        progressDialog.dismiss();
-                       Toast.makeText(SettingsActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                      // Toast.makeText(SettingsActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
                        settingPreferences(server_response);
                     }
                     else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))

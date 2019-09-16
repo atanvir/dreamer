@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PsychologicalListActivity extends Fragment {
+public class PsychologicalListFragment extends Fragment {
     @BindView(R.id.notification_im) ImageView notification_im;
     @BindView(R.id.self_development_cv) CardView self_development_cv;
     @BindView(R.id.family_cv) CardView family_cv;
@@ -66,19 +66,19 @@ void onClick(View view)
             break;
 
         case R.id.self_development_cv:
-           getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).commit();
+           getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
            break;
 
         case R.id.family_cv:
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
             break;
 
         case R.id.parenting_cv:
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
             break;
 
         case R.id.psychological_cv:
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
             break;
 
         case R.id.backLL:

@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.airbnb.lottie.L;
 import com.boushra.Activity.MyWalletActivity;
-import com.boushra.Activity.PsychologicalListActivity;
+import com.boushra.Activity.PsychologicalListFragment;
 import com.boushra.Adapter.ImageSliderAdapter;
 import com.boushra.Model.BannerList;
 import com.boushra.Model.Data;
@@ -32,10 +29,6 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Util.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.SharedPreferenceWriter;
-import com.bumptech.glide.Glide;
-import com.google.gson.annotations.Expose;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Timer;
@@ -97,9 +90,9 @@ public class NavigationHomeFragment extends Fragment {
 
                         }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
-//                            Toast.makeText(thi)
-
-
+                            Toast toast=Toast.makeText(getActivity(),server_response.getResponseMessage(),Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            toast.show();
                         }
                     }
                 }
@@ -133,11 +126,11 @@ public class NavigationHomeFragment extends Fragment {
         switch (view.getId())
         {
             case R.id.dreamLL:
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(ForecasterListFragment.class.getSimpleName()).commit();
                 break;
 
             case R.id.psychologicalLL:
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new PsychologicalListActivity()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new PsychologicalListFragment()).addToBackStack(ForecasterListFragment.class.getSimpleName()).commit();
                 break;
 
             case R.id.notification_im:
@@ -172,7 +165,7 @@ public class NavigationHomeFragment extends Fragment {
             public void run() {
                 handler.post(runnable);
             }
-        },250,2500);
+        },2500,2500);
 
 
     }

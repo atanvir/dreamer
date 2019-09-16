@@ -82,19 +82,6 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
 
     @Override
     public void onBindViewHolder(@NonNull MyBookingsListAdapter.MyViewHolder myViewHolder, int i) {
-//        if(i>1)
-//        {
-//            myViewHolder.calenderdatetxt.setVisibility(View.GONE);
-//            myViewHolder.calenderImgVw.setVisibility(View.GONE);
-//            myViewHolder.ratingBar3.setVisibility(View.VISIBLE);
-//            myViewHolder.ratingText.setVisibility(View.GONE);
-//
-//        }
-//        else {
-
-
-//
-
         Glide.with(context).load(bookinglist.get(i).getForecasterData().getProfilePic()).into(myViewHolder.profilepic_iv);
         myViewHolder.name_txt.setText(bookinglist.get(i).getForecasterData().getName());
         myViewHolder.price_txt.setText("Price "+bookinglist.get(i).getForecasterData().getPricePerQues());
@@ -124,7 +111,7 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
             myViewHolder.calenderImgVw.setVisibility(View.GONE);
             myViewHolder.ratingBar3.setVisibility(View.VISIBLE);
             myViewHolder.ratingText.setVisibility(View.GONE);
-            myViewHolder.ratingBar3.setRating(bookinglist.get(i).getForecasterData().getTotalRating());
+            myViewHolder.ratingBar3.setRating(bookinglist.get(i).getForecasterData().getAvgRating());
 
         }
         else
