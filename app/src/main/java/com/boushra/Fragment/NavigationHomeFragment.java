@@ -26,7 +26,7 @@ import com.boushra.Model.Data;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.InternetCheck;
+import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.SharedPreferenceWriter;
 

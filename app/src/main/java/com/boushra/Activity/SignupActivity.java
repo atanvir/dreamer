@@ -40,6 +40,7 @@ import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -91,6 +92,7 @@ public class SignupActivity extends AppCompatActivity {
     long clickcount=0;
     long clickcount2=0;
     TextView resend_code_txt;
+    private ProgressDailogHelper dailogHelper;
     private DatePickerDialog.OnDateSetListener datePickerListener;
 
     @Override
@@ -101,11 +103,7 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         auth_token=SharedPreferenceWriter.getInstance(SignupActivity.this).getString(GlobalVariables.firebase_token);
         auth=FirebaseAuth.getInstance();
-        progresBar=new ProgressDialog(SignupActivity.this);
-        progresBar.setCancelable(false);
-        progresBar.setMessage("Sending Otp");
-        progresBar.setTitle("Please wait");
-        progresBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dailogHelper=new ProgressDailogHelper(this,"");
         signup=new Signup();
 
         TouchListner();
@@ -266,7 +264,7 @@ public class SignupActivity extends AppCompatActivity {
     private void checkUserPhoneNumberApi() {
         if(password.equalsIgnoreCase(confirm_password))
         {
-            progresBar.show();
+            dailogHelper.showDailog();
             RetroInterface apiService =RetrofitInit.getConnect().createConnection();
             signup.setMobileNumber(phone_number);
             if(countrycode.equalsIgnoreCase(""))
@@ -290,7 +288,7 @@ public class SignupActivity extends AppCompatActivity {
                         Signup server_response=response.body();
                         if(server_response.getStatus().equalsIgnoreCase("SUCCESS")) {
                             sendVerificationCode(phone_number);
-                            progresBar.dismiss();
+                            dailogHelper.dismissDailog();
                             otpVerifyPopup();
 //                             termConditionPopup();
 
@@ -365,8 +363,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!opt_phone_ed.getText().toString().isEmpty()) {
                     dialog.dismiss();
-                    progresBar.setMessage("Verifying Otp");
-                    progresBar.show();
+                    dailogHelper.showDailog();
                     verifyVerificationCode(opt_phone_ed.getText().toString().trim());
                 }
                 else
@@ -494,7 +491,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progresBar.dismiss();
+                            dailogHelper.dismissDailog();
                             signupApi();
 
 //                            termConditionPopup();
@@ -523,8 +520,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void signupApi() {
-        progresBar.setMessage("Uploading data");
-        progresBar.show();
+        dailogHelper.showDailog();
         if(countrycode.equalsIgnoreCase(""))
         {
             signup.setCountryCode("+91");
@@ -549,7 +545,7 @@ public class SignupActivity extends AppCompatActivity {
                     Signup server_response=response.body();
                     if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
-                        progresBar.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(SignupActivity.this,server_response.getResponse_message(),Toast.LENGTH_LONG).show();
                         Intent log_in = new Intent(SignupActivity.this, CategorySelectionActivity.class);
                         setPreferences(server_response);
@@ -560,7 +556,7 @@ public class SignupActivity extends AppCompatActivity {
                     else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
                     {
 //                                                        dialog1.dismiss();
-                        progresBar.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(SignupActivity.this,server_response.getResponse_message(),Toast.LENGTH_LONG).show();
                     }
                 }

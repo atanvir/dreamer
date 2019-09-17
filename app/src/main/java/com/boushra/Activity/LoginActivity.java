@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.boushra.Model.ForgotPassword;
 import com.boushra.Model.Login;
 import com.boushra.Model.Signup;
@@ -37,6 +38,7 @@ import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -90,6 +92,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     TextView resend_code_txt;
     long clickcount=0;
     EditText opt_phone_ed;
+    ProgressDailogHelper dailogHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,12 +160,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void settingProgressDialog() {
-        progressDialog=new ProgressDialog(LoginActivity.this);
-        progressDialog.setTitle("Please wait!");
-        progressDialog.setMessage("Checking credentials");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-
+        dailogHelper=new ProgressDailogHelper(this,"");
     }
 
     @OnClick()
@@ -177,8 +175,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
             case R.id.log_in:
                 if(checkValidation()) {
-                    progressDialog.setMessage("Checking credentials");
-                    progressDialog.show();
+                    ProgressDailogHelper dailogHelper=new ProgressDailogHelper(this,"");
+                    dailogHelper.showDailog();
                     Login login=new Login();
                     if(countrycode.equalsIgnoreCase(""))
                     {
@@ -204,11 +202,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         public void onResponse(Call<Login> call, Response<Login> response) {
                             if(response.isSuccessful())
                             {
-                                progressDialog.dismiss();
+                                dailogHelper.dismissDailog();
                                 Login server_response=response.body();
                                 if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                                 {
-                                    Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                                  //  Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
                                     setPreferences(server_response);
                                     Intent intent=new Intent(LoginActivity.this,CategorySelectionActivity.class);
                                     startActivity(intent);
@@ -318,8 +316,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onClick(View v) {
                 if(!phone_editText.getText().toString().trim().isEmpty() && phone_editText.getText().toString().trim().length()==10)
                 {
-                    progressDialog.setMessage("Sending Otp");
-                    progressDialog.show();
+                    dailogHelper.showDailog();
                     RetroInterface api_service=RetrofitInit.getConnect().createConnection();
                     Signup signup=new Signup();
                     signup.setMobileNumber(phone_editText.getText().toString().trim());
@@ -346,7 +343,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                                 {
                                     dialog.dismiss();
-                                    progressDialog.dismiss();
+                                    dailogHelper.dismissDailog();
                                     if(server_response.getResponse_message().equalsIgnoreCase("Mobile number is registered")) {
                                         setPreferencesForSignup(server_response);
                                         sendVerificationCode(phone_editText.getText().toString().trim());
@@ -407,7 +404,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     phone_editText.setError(server_response.getResponse_message());
                                     phone_editText.setFocusable(true);
                                     phone_editText.requestFocus();
-                                    progressDialog.dismiss();
+                                    dailogHelper.dismissDailog();
 
 
 

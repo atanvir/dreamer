@@ -42,30 +42,31 @@ public class ForecasterDetailsAdapter extends RecyclerView.Adapter<ForecasterDet
 
     @Override
     public void onBindViewHolder(@NonNull ForecasterDetailsAdapter.MyViewHolder holder, int position) {
-        Glide.with(context).load(dataList.get(position).getRatingData().getUserData().getProfilePic()).into(holder.profilepic_iv);
-        holder.name_txt.setText(dataList.get(position).getRatingData().getUserData().getName());
-        holder.comment_txt.setText(dataList.get(position).getRatingData().getRatingMessage());
+        if(dataList.get(position).getRatingData().getUserData()!=null) {
+            Glide.with(context).load(dataList.get(position).getRatingData().getUserData().getProfilePic()).into(holder.profilepic_iv);
+            holder.name_txt.setText(dataList.get(position).getRatingData().getUserData().getName());
+            holder.comment_txt.setText(dataList.get(position).getRatingData().getRatingMessage());
 
-        String getDate = dataList.get(position).getRatingData().getCreatedAt();
-        String server_format = getDate;    //server comes format ?
-        String server_format1 = "2019-04-04T13:27:36.591Z";    //server comes format ?
-        String myFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String getDate = dataList.get(position).getRatingData().getCreatedAt();
+            String server_format = getDate;    //server comes format ?
+            String server_format1 = "2019-04-04T13:27:36.591Z";    //server comes format ?
+            String myFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        try {
-            Date date = sdf.parse(server_format);
-            System.out.println(date);
-            String your_format = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(date);
-            System.out.println(your_format);
-            String[] splitted = your_format.split(" ");
-            System.out.println(splitted[1]);    //The second part of the splitted string, i.e time
-            // Now you can set the TextView here
-            holder.date_txt.setText(String.valueOf(splitted[0]));
-        } catch (Exception e) {
-            System.out.println(e.toString()); //date format error
+            try {
+                Date date = sdf.parse(server_format);
+                System.out.println(date);
+                String your_format = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(date);
+                System.out.println(your_format);
+                String[] splitted = your_format.split(" ");
+                System.out.println(splitted[1]);    //The second part of the splitted string, i.e time
+                // Now you can set the TextView here
+                holder.date_txt.setText(String.valueOf(splitted[0]));
+            } catch (Exception e) {
+                System.out.println(e.toString()); //date format error
+            }
         }
-
 
     }
 

@@ -1,20 +1,12 @@
 package com.boushra.Fragment;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -33,32 +25,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.boushra.Activity.CategorySelectionActivity;
 import com.boushra.Activity.MyWalletActivity;
-import com.boushra.BuildConfig;
-import com.boushra.Model.Login;
 import com.boushra.Model.UpdateUserProfile;
 import com.boushra.Model.User;
-import com.boushra.Model.UserSetting;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.AddServiceBody;
-import com.boushra.Util.TakeImage;
+import com.boushra.Utility.AddServiceBody;
+import com.boushra.Utility.TakeImage;
 import com.boushra.Utility.GlobalVariables;
-import com.boushra.Utility.ImageHelper;
+import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
-import com.boushra.Utility.Validation;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,7 +54,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -84,8 +67,6 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static android.graphics.Bitmap.CompressFormat.JPEG;
-import static android.graphics.Bitmap.CompressFormat.PNG;
 
 
 public class NavigationProfileFragment extends Fragment {
@@ -104,7 +85,7 @@ public class NavigationProfileFragment extends Fragment {
     @BindView(R.id.martialStatusSpn) Spinner martialStatusSpn;
     @BindView(R.id.dob_ed) EditText dob_ed;
     @BindView(R.id.pointtxt) TextView pointtxt;
-    ProgressDialog dialog;
+
     List<String> genderlist;
     List<String> martailList;
     private final int PERMISSION_CODE=12;
@@ -121,6 +102,7 @@ public class NavigationProfileFragment extends Fragment {
     private String imagePath = null;
     private int START_VERIFICATION = 1001;
     private DatePickerDialog.OnDateSetListener datePickerListener;
+    private ProgressDailogHelper dailogHelper;
 
     @Nullable
     @Override
@@ -128,13 +110,7 @@ public class NavigationProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_navigation, container, false);
         ButterKnife.bind(this, view);
         init();
-
-        dialog = new ProgressDialog(getActivity());
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setTitle("Please wait!...");
-        dialog.setMessage("Checking Profile");
-        dialog.setCancelable(false);
-        dialog.show();
+        dailogHelper=new ProgressDailogHelper(getActivity(),"");
         getUserDetails();
 
 
@@ -204,6 +180,7 @@ public class NavigationProfileFragment extends Fragment {
 
 
     private void getUserDetails() {
+        dailogHelper.showDailog();
         RetroInterface api_service = RetrofitInit.getConnect().createConnection();
         User user = new User();
         user.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
@@ -215,7 +192,7 @@ public class NavigationProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     User server_response = response.body();
                     if (server_response.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        dialog.dismiss();
+                        dailogHelper.dismissDailog();
                         Glide.with(getActivity()).load(server_response.getData().getProfilePic()).into(profile_im);
                         username_ed.setText(server_response.getData().getUsername());
                         full_name_ed.setText(server_response.getData().getName());
@@ -235,7 +212,7 @@ public class NavigationProfileFragment extends Fragment {
 
 
                     } else if (server_response.getStatus().equalsIgnoreCase("FAILURE")) {
-                        dialog.dismiss();
+                        dailogHelper.dismissDailog();
 
                     }
                 }
@@ -315,8 +292,7 @@ public class NavigationProfileFragment extends Fragment {
     }
 
     private void UpdateProfileAPI() {
-        dialog.show();
-        dialog.setMessage("Updating Profile");
+        dailogHelper.showDailog();
         RetroInterface api_service = RetrofitInit.getConnect().createConnection();
         UpdateUserProfile userSetting = new UpdateUserProfile();
         userSetting.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
@@ -346,12 +322,13 @@ public class NavigationProfileFragment extends Fragment {
                 public void onResponse(Call<UpdateUserProfile> call, Response<UpdateUserProfile> response) {
                     UpdateUserProfile server_response = response.body();
                     if (server_response.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        dialog.dismiss();
-                        getFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).commit();
+                        dailogHelper.dismissDailog();
+                       // getFragmentManager().beginTransaction().replace(R.id.replace,new Cate()).commit();
+                        startActivity(new Intent(getActivity(), CategorySelectionActivity.class));
                         Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
 
                     } else if (server_response.getStatus().equalsIgnoreCase("FAILURE")) {
-                        dialog.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
                     }
 

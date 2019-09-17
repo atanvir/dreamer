@@ -5,24 +5,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.boushra.Model.BookForcaster;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.AddBody;
-import com.boushra.Util.InternetCheck;
+import com.boushra.Utility.AddBody;
+import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;

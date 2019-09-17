@@ -1,4 +1,4 @@
-package com.boushra.Util;
+package com.boushra.Utility;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -33,9 +33,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.e("server_name",remoteMessage.getFrom());
         Map<String,String> dataMap=remoteMessage.getData();
-
         sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("message"));
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

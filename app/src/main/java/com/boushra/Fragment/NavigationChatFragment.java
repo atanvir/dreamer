@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +17,7 @@ import com.boushra.Activity.MyWalletActivity;
 import com.boushra.Adapter.ChatListAdapter;
 import com.boushra.Model.Chat;
 import com.boushra.R;
-import com.boushra.Retrofit.RetroInterface;
-import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
-import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 
 import java.util.ArrayList;
@@ -31,9 +26,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NavigationChatFragment extends Fragment {
     @BindView(R.id.chatRV) RecyclerView chatRV;

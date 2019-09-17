@@ -308,13 +308,15 @@
 
                 <com.boushra.View.fredokaTextView
                     android:id="@+id/fredokaTextView6"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="64dp"
                     android:text="Tell your dream in a voice note"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dp_16"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -322,14 +324,15 @@
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/recording_im"
                     android:layout_width="@dimen/dp_25"
-                    android:layout_height="@dimen/dp_30"
+                    android:layout_height="30dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="32dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/mike_ic"
-                    app:lottie_loop="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/fredokaTextView6"
-                    app:layout_constraintTop_toBottomOf="@+id/fredokaTextView6" />
+                    app:layout_constraintTop_toBottomOf="@+id/fredokaTextView6"
+                    app:lottie_loop="true" />
 
 
                 <SeekBar
@@ -340,7 +343,7 @@
                     android:progressDrawable="@drawable/progress"
                     android:thumb="@drawable/thumb"
                     app:layout_constraintBottom_toBottomOf="@+id/recording_im"
-                    app:layout_constraintEnd_toStartOf="@+id/play_iv"
+                    app:layout_constraintEnd_toEndOf="@+id/fredokaTextView6"
                     app:layout_constraintStart_toEndOf="@+id/recording_im"
                     app:layout_constraintTop_toTopOf="@+id/recording_im"
                     app:layout_constraintVertical_bias="0.428" />
@@ -350,11 +353,25 @@
                     android:id="@+id/play_iv"
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="6dp"
                     android:src="@drawable/media_play_symbol"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/seekBar"
                     app:layout_constraintEnd_toStartOf="@+id/timer_txt"
                     app:layout_constraintTop_toTopOf="@+id/seekBar" />
+
+
+                <ImageView
+                    android:id="@+id/pause_iv"
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/pause_icon"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+                    app:layout_constraintEnd_toStartOf="@+id/timer_txt"
+                    app:layout_constraintTop_toTopOf="@+id/seekBar" />
+
 
                 <TextView
                     android:id="@+id/timer_txt"

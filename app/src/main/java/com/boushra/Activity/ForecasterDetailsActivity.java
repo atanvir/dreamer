@@ -1,6 +1,5 @@
 package com.boushra.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -10,12 +9,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -37,12 +34,11 @@ import com.boushra.Model.ForcasterDetails;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.InternetCheck;
+import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -75,11 +71,15 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     @BindView(R.id.timer_txt) TextView timer_txt;
     @BindView(R.id.stop_iv) ImageView stop_iv;
     @BindView(R.id.chronometer) Chronometer chronometer;
+    @BindView(R.id.pause_iv) ImageView pause_iv;
     Uri video_uri,audio_uri;
     MediaPlayer mediaPlayer;
     boolean playing=false;
     int progress=0;
     private Handler handler=new Handler();
+    int lastplay_position=0;
+    boolean pause=false;
+    int mCurrentPosition=0;
 
 
 
@@ -99,7 +99,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     private void getForecasterDetailsApi() {
         if(new InternetCheck(this).isConnect())
         {
-            ProgressDailogHelper dailog=new ProgressDailogHelper(ForecasterDetailsActivity.this,"Getting Details");
+            ProgressDailogHelper dailog=new ProgressDailogHelper(ForecasterDetailsActivity.this,"");
             dailog.showDailog();
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             ForcasterDetails details=new ForcasterDetails();
@@ -124,17 +124,19 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                             Glide.with(ForecasterDetailsActivity.this).load(data.get(0).getProfilePic()).into(profilepic_iv);
                             name_txt.setText(server_resposne.getData().get(0).getName());
                             ratingBar.setRating(server_resposne.getData().get(0).getTotalRating());
+                            aboutus_txt.setText(server_resposne.getData().get(0).getAboutUs());
 
                             try {
                                 Bitmap bitmap=retriveVideoFrameFromVideo(server_resposne.getData().get(0).getUploadedVideo());
                                 video_iv.setImageBitmap(bitmap);
                                 video_uri=Uri.parse(server_resposne.getData().get(0).getUploadedVideo());
-                                dailog.dismissDailog();
+
 
                             } catch (Throwable throwable) {
                                 throwable.printStackTrace();
                             }
-                            aboutus_txt.setText(server_resposne.getData().get(0).getAboutUs());
+                            dailog.dismissDailog();
+
 
 
                         }else if(server_resposne.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
@@ -226,6 +228,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         video_iv.setOnClickListener(this::OnClick);
         playaudio_iv.setOnClickListener(this::OnClick);
         stop_iv.setOnClickListener(this::OnClick);
+        pause_iv.setOnClickListener(this::OnClick);
     }
 
     public Bitmap retriveVideoFrameFromVideo(String videoPath) throws Throwable
@@ -294,7 +297,32 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
             case R.id.stop_iv:
                 stoppingAudio();
                 break;
+
+            case R.id.pause_iv:
+                pauseAudio();
+                break;
         }
+
+    }
+
+    private void pauseAudio() {
+        pause=true;
+        try
+        {
+            playaudio_iv.setVisibility(View.VISIBLE);
+            pause_iv.setVisibility(View.GONE);
+            if(mediaPlayer.isPlaying())
+            {
+                mediaPlayer.pause();
+                lastplay_position=mediaPlayer.getCurrentPosition();
+            }
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+
+        }
+
 
     }
 
@@ -333,22 +361,47 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
 
     private void playingAudio() {
             try {
+                pause_iv.setVisibility(View.VISIBLE);
+                playaudio_iv.setVisibility(View.GONE);
                 timer_txt.setVisibility(View.VISIBLE);
                 playing=true;
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(this, audio_uri);
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
                 mediaPlayer.prepare();
-                mediaPlayer.start();
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+
+                            if(pause) {
+                                mediaPlayer.seekTo(lastplay_position);
+                                mediaPlayer.start();
+                        }
+                            else
+                            {
+                                mediaPlayer.seekTo(0);
+                                mediaPlayer.start();
+                            }
+
+                    }
+                });
+//                mediaPlayer.start();
                 seekBar.setProgress(0);
                 seekBar.setMax(mediaPlayer.getDuration());
                 seekBar.setClickable(false);
                 seekUpdation();
 
+
+
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         chronometer.stop();
+                        playaudio_iv.setVisibility(View.VISIBLE);
+                        pause_iv.setVisibility(View.GONE);
+                        pause=false;
+                        playing=false;
                     }
                 });
             } catch (IOException e) {
@@ -365,9 +418,10 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     };
 
     private void seekUpdation() {
+
         if(playing) {
             if (mediaPlayer != null) {
-                int mCurrentPosition = mediaPlayer.getCurrentPosition();
+                int mCurrentPosition=mediaPlayer.getCurrentPosition();
                 seekBar.setProgress(mCurrentPosition);
             }
             handler.postDelayed(runnable, 100);

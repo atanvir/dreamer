@@ -3,30 +3,21 @@ package com.boushra.Activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Chronometer;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,22 +32,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.airbnb.lottie.L;
 import com.airbnb.lottie.LottieAnimationView;
-import com.boushra.Model.BookForcaster;
 import com.boushra.Model.UpdateUserProfile;
 import com.boushra.Model.User;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.AddBody;
-import com.boushra.Util.AddServiceBody;
-import com.boushra.Util.InternetCheck;
+import com.boushra.Utility.AddServiceBody;
+import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.boushra.Utility.Validation;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,13 +57,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.POST;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -96,6 +79,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
     @BindView(R.id.timer_txt) TextView timer_txt;
     @BindView(R.id.genderSpinner) Spinner genderSpinner;
     @BindView(R.id.maritalSpinner) Spinner maritalSpinner;
+    @BindView(R.id.pause_iv) ImageView pause_iv;
 
     private MediaRecorder mRecorder;
     private Handler handler=new Handler();
@@ -115,6 +99,8 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
     List<String> genderlist;
     List<String> martailList;
     boolean updateprofileApi;
+    int lastplayposition=0;
+    boolean pause=false;
     private DatePickerDialog.OnDateSetListener datePickerListener;
 
 
@@ -255,6 +241,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         gender_txt.setOnClickListener(this::onClick);
         maritalstatus_txt.setOnClickListener(this::onClick);
         dob_ed.setOnClickListener(this::onClick);
+        pause_iv.setOnClickListener(this::onClick);
     }
 
     @OnClick()
@@ -329,8 +316,25 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
                 break;
 
+            case R.id.pause_iv:
+                pauseAudio();
+                break;
+
 
         }
+    }
+
+    private void pauseAudio() {
+        pause=true;
+        play_iv.setVisibility(View.VISIBLE);
+        pause_iv.setVisibility(View.GONE);
+        if (mPlayer.isPlaying())
+        {
+            mPlayer.pause();
+            lastplayposition=mPlayer.getCurrentPosition();
+
+        }
+
     }
 
     private void updateProfileAPi() {
@@ -473,6 +477,8 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
     private void playingAudio() {
         try {
+            play_iv.setVisibility(View.GONE);
+            pause_iv.setVisibility(View.VISIBLE);
 
             if(timer!=null) {
                 timer.cancel();
@@ -484,23 +490,30 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             if(fileName!=null) {
                 mPlayer.setDataSource(fileName);
                 mPlayer.prepare();
+                if(pause) {
+                    mPlayer.seekTo(lastplayposition);
+                }
                 mPlayer.start();
+                seekBar.setMax(mPlayer.getDuration());
             }
             else
             {
                 Toast toast=Toast.makeText(ForcasterForPriceActivity.this,"Please record your audio first",Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();
+                seekBar.setMax(0);
             }
 
             seekBar.setProgress(0);
-            seekBar.setMax(mPlayer.getDuration());
             seekBar.setClickable(false);
             seekUpdation();
 
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    play_iv.setVisibility(View.VISIBLE);
+                    pause_iv.setVisibility(View.GONE);
+                    pause=false;
 
                 }
             });
@@ -773,6 +786,8 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             } else {
                 timer_txt.setText("0:" + progress / 10);
             }
+
+
 
         }
 

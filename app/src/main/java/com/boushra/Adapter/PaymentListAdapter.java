@@ -28,6 +28,7 @@ import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 
 import java.util.List;
@@ -41,11 +42,13 @@ import retrofit2.Response;
 public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.MyViewHolder> {
     private Context context;
     private List<Menus> menusList;
+    private ProgressDailogHelper dailogHelper;
 
 
     public PaymentListAdapter(Context context, List<Menus> menusList) {
         this.context=context;
         this.menusList=menusList;
+         dailogHelper=new ProgressDailogHelper(context,"");
     }
 
 
@@ -124,6 +127,8 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                     }
 
                     if(getAdapterPosition()==4) {
+
+                        dailogHelper.showDailog();
                         RetroInterface api_service= RetrofitInit.getConnect().createConnection();
                         UserSetting setting=new UserSetting();
                         setting.setUserId(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables._id));
@@ -134,6 +139,7 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                             public void onResponse(Call<UserSetting> call, Response<UserSetting> response) {
                                 if(response.isSuccessful())
                                 {
+                                    dailogHelper.dismissDailog();
                                     UserSetting server_resposne=response.body();
                                     if(server_resposne.getStatus().equalsIgnoreCase("SUCCESS"))
                                     {
@@ -141,8 +147,6 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                                         Intent intent = new Intent(context, SettingsActivity.class);
                                         context.startActivity(intent);
                                         setPreferences(server_resposne);
-                                        Toast.makeText(context,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
-
 
                                     }
                                     else if(server_resposne.getStatus().equalsIgnoreCase("FAILURE"))

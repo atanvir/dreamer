@@ -1,4 +1,4 @@
-package com.boushra.Util;
+package com.boushra.Utility;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

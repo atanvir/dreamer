@@ -21,8 +21,9 @@ import com.boushra.Model.MyBooking;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.InternetCheck;
+import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class MyBookingFragment extends Fragment {
     @BindView(R.id.backLL) LinearLayout backLL;
     @BindView(R.id.myBookingRecView) RecyclerView myBookingRecView;
     List<Data> bookinglist;
-
+    private ProgressDailogHelper dailogHelper;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class MyBookingFragment extends Fragment {
     private void getMyBookingApi() {
         if(new InternetCheck(getActivity()).isConnect())
         {
+            dailogHelper=new ProgressDailogHelper(getActivity(),"");
+            dailogHelper.showDailog();
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             MyBooking booking=new MyBooking();
             booking.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
@@ -69,6 +72,7 @@ public class MyBookingFragment extends Fragment {
                 public void onResponse(Call<MyBooking> call, Response<MyBooking> response) {
                     if(response.isSuccessful())
                     {
+                        dailogHelper.dismissDailog();
                         MyBooking server_response=response.body();
                         if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
                         {

@@ -8,8 +8,10 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.boushra.Fragment.NavigationChatFragment;
 import com.boushra.Fragment.NavigationHomeFragment;
@@ -30,6 +32,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
     @BindView(R.id.chat_im) ImageView chat_im;
     @BindView(R.id.profile_im) ImageView profile_im;
     @BindView(R.id.more_im) ImageView more_im;
+    int clickcount=0;
 
 
     @Override
@@ -41,7 +44,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
         toolbar = getSupportActionBar();
         home_iv.setBackground(getDrawable(R.drawable.home_gradient));
         home_iv.setImageDrawable(null);
-        getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
 
         SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).writeStringValue(GlobalVariables.islogin,"Yes");
     }
@@ -111,10 +114,8 @@ public class CategorySelectionActivity extends AppCompatActivity{
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBackPressed() {
-
             int count =getSupportFragmentManager().getBackStackEntryCount();
             String entryName  = getSupportFragmentManager().getBackStackEntryAt(count-1).getName();
-//
             if(entryName!=null) {
                 Log.e("class_name",entryName);
                 if (entryName.equalsIgnoreCase("NavigationMoreFragment")) {
@@ -132,8 +133,13 @@ public class CategorySelectionActivity extends AppCompatActivity{
                 {
                     getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).commit();
                 }
+                else if(entryName.equalsIgnoreCase("CategorySelectionActivity"))
+                {
+                  finishAffinity();
+                }
 
             }
+
             else
             {
                 home_iv.setBackground(getDrawable(R.drawable.home_gradient));
@@ -144,7 +150,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
                 profile_im.setBackground(null);
                 chat_im.setBackground(null);
                 more_im.setBackground(null);
-                getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
 
             }
 

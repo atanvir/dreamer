@@ -3,19 +3,17 @@ package com.boushra.Activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.boushra.Fragment.NavigationMoreFragment;
 import com.boushra.Model.WalletDetail;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
-import com.boushra.Util.InternetCheck;
+import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;

@@ -32,6 +32,7 @@ import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 
 import butterknife.BindView;
@@ -49,10 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.contact_us_cl) ConstraintLayout contact_us_cl;
     @BindView(R.id.trun_notifation_im) ImageView turn_notifation_im;
     @BindView(R.id.backLL) LinearLayout backLL;
-    ProgressDialog progressDialog;
     EditText oldpass_txt,newpass_txt,confirmpass_txt;
     Boolean notificationStatus;
     String language;
+    private ProgressDailogHelper dailogHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,6 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         init();
-        settingProgressDailog();
         checkingNotificationStatus();
         checkingLanguage();
 
@@ -84,14 +84,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void settingProgressDailog() {
-        progressDialog=new ProgressDialog(this);
-        progressDialog.setTitle("Please wait!...");
-
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-
-    }
 
     private void init() {
         changePasswordCL.setOnClickListener(this::onClick);
@@ -101,6 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         turn_notifation_im.setOnClickListener(this::onClick);
         backLL.setOnClickListener(this::onClick);
+        dailogHelper=new ProgressDailogHelper(this,"");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -109,8 +102,6 @@ public class SettingsActivity extends AppCompatActivity {
         switch (view.getId())
         {
             case R.id.logoutCL:
-                progressDialog.setMessage("Performing logout");
-                progressDialog.show();
                 UserLogoutApi();
                 break;
 
@@ -153,8 +144,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void updateUserSettingApi(Boolean notificationStatus) {
-        progressDialog.setMessage("Updating Setting");
-        progressDialog.show();
+        dailogHelper.showDailog();
         RetroInterface api_service=RetrofitInit.getConnect().createConnection();
         UserSetting userSetting=new UserSetting();
         userSetting.setLangCode("en");
@@ -170,13 +160,13 @@ public class SettingsActivity extends AppCompatActivity {
                     UserSetting server_response=response.body();
                     if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
-                       progressDialog.dismiss();
+                        dailogHelper.dismissDailog();
                       // Toast.makeText(SettingsActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
                        settingPreferences(server_response);
                     }
                     else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
                     {
-                        progressDialog.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(SettingsActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
 
                     }
@@ -272,8 +262,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void updateLanguageSettingApi(String language) {
-        progressDialog.setMessage("Updating Language");
-        progressDialog.show();
+        dailogHelper.showDailog();
         RetroInterface api_service=RetrofitInit.getConnect().createConnection();
         UserSetting userSetting=new UserSetting();
         userSetting.setLanguage(language);
@@ -289,8 +278,8 @@ public class SettingsActivity extends AppCompatActivity {
                     UserSetting server_resposne=response.body();
                     if(server_resposne.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
-                        progressDialog.dismiss();
-                        Toast.makeText(SettingsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        dailogHelper.dismissDailog();
+                        //Toast.makeText(SettingsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
                         settingPreferences(server_resposne);
                         Intent intent=new Intent(SettingsActivity.this,CategorySelectionActivity.class);
                         startActivity(intent);
@@ -298,7 +287,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                     }else if(server_resposne.getStatus().equalsIgnoreCase("FAILURE"))
                     {
-                        progressDialog.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(SettingsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
 
 
@@ -330,6 +319,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkValidation()) {
+                    dailogHelper.showDailog();
                     RetroInterface api_service = RetrofitInit.getConnect().createConnection();
                     ChangePassword password = new ChangePassword();
                     password.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
@@ -344,10 +334,12 @@ public class SettingsActivity extends AppCompatActivity {
                                 ChangePassword server_response = response.body();
                                 if (server_response.getStatus().equalsIgnoreCase("SUCCESS")) {
                                     dialog.dismiss();
+                                    dailogHelper.dismissDailog();
                                     Toast.makeText(SettingsActivity.this, "" + server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
 
                                 } else if (server_response.getStatus().equalsIgnoreCase("FAILURE")) {
                                     dialog.dismiss();
+                                    dailogHelper.dismissDailog();
                                     Toast.makeText(SettingsActivity.this, "" + server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
 
 
@@ -368,6 +360,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void UserLogoutApi() {
+        dailogHelper.showDailog();
         RetroInterface api_service =RetrofitInit.getConnect().createConnection();
         Logout logout=new Logout();
         logout.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
@@ -381,7 +374,7 @@ public class SettingsActivity extends AppCompatActivity {
                     Logout server_resposne=response.body();
                     if(server_resposne.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
-                        progressDialog.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(SettingsActivity.this,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
                         SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.islogin,"No");
                         Intent intent=new Intent(SettingsActivity.this,LoginActivity.class);
@@ -392,7 +385,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     else if(server_resposne.getStatus().equalsIgnoreCase("FAILURE"))
                     {
-                        progressDialog.dismiss();
+                        dailogHelper.dismissDailog();
                         Toast.makeText(SettingsActivity.this,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
                     }
                 }

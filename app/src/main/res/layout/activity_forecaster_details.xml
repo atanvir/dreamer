@@ -135,23 +135,39 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:layout_marginEnd="64dp"
                     android:progressDrawable="@drawable/progress"
                     android:thumb="@drawable/thumb"
-                    app:layout_constraintEnd_toStartOf="@+id/playaudio_iv"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/stop_iv"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
 
                 <ImageView
                     android:id="@+id/playaudio_iv"
-                    android:layout_width="@dimen/dp_15"
+                    android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_15"
+                    android:layout_marginEnd="4dp"
                     android:src="@drawable/media_play_symbol"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/seekBar"
                     app:layout_constraintEnd_toStartOf="@+id/timer_txt"
-                    app:layout_constraintStart_toEndOf="@+id/seekBar"
                     app:layout_constraintTop_toTopOf="@+id/seekBar"
                     app:layout_constraintVertical_bias="1.0" />
+
+                <ImageView
+                    android:id="@+id/pause_iv"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/pause_icon"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+                    app:layout_constraintEnd_toStartOf="@+id/timer_txt"
+                    app:layout_constraintTop_toTopOf="@+id/seekBar"
+                    app:layout_constraintVertical_bias="1.0" />
+
+
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -189,14 +205,11 @@
                     android:id="@+id/timer_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
                     android:text="0:23"
                     android:textColor="@android:color/black"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/seekBar"
                     app:layout_constraintEnd_toEndOf="@+id/rr"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/playaudio_iv"
                     app:layout_constraintTop_toTopOf="@+id/seekBar"
                     app:layout_constraintVertical_bias="0.0" />
 
