@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 
 import com.boushra.Activity.CategorySelectionActivity;
 import com.boushra.Activity.MyWalletActivity;
+import com.boushra.Model.Data;
 import com.boushra.Model.UpdateUserProfile;
 import com.boushra.Model.User;
 import com.boushra.R;
@@ -277,8 +278,10 @@ public class NavigationProfileFragment extends Fragment {
             case R.id.dob_ed:
                 Date date= Calendar.getInstance().getTime();
 
-                new DatePickerDialog(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT,datePickerListener,Integer.parseInt(new SimpleDateFormat("yyyy").format(date)),
-                        Integer.parseInt(new SimpleDateFormat("MM").format(date))-1,Integer.parseInt(new SimpleDateFormat("dd").format(date))).show();
+                DatePickerDialog dialog=new DatePickerDialog(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT,datePickerListener,Integer.parseInt(new SimpleDateFormat("yyyy").format(date)),
+                        Integer.parseInt(new SimpleDateFormat("MM").format(date))-1,Integer.parseInt(new SimpleDateFormat("dd").format(date)));
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+                dialog.show();
 
 
                 break;

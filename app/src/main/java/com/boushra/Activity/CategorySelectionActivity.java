@@ -138,6 +138,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
                   finishAffinity();
                 }
 
+
             }
 
             else
