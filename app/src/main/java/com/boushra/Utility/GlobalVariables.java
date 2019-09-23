@@ -42,4 +42,13 @@ public class GlobalVariables {
     public static String roomId="roomId";
     public static String dream="dream";
     public static String voice="voice";
+    public static String type;
+
+    public static String getType() {
+        return type;
+    }
+
+    public static void setType(String type) {
+        GlobalVariables.type = type;
+    }
 }

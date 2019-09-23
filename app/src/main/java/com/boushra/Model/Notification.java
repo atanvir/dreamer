@@ -5,11 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ForcasterDetails {
+public class Notification {
 
-    @SerializedName("forecasterId")
+    @SerializedName("userId")
     @Expose
-    private String forecasterId;
+    private String userId;
+
+    @SerializedName("langCode")
+    @Expose
+    private String langCode;
 
     @SerializedName("status")
     @Expose
@@ -17,43 +21,16 @@ public class ForcasterDetails {
     @SerializedName("response_message")
     @Expose
     private String responseMessage;
-
-    @SerializedName("langCode")
-    @Expose
-    private String langCode;
-
-    @SerializedName("userId")
-    @Expose
-    private String userId;
-
-
-
     @SerializedName("Data")
     @Expose
-    private Data data;
+    private List<Data> data;
 
-    public Data getData() {
+    public List<Data> getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(List<Data> data) {
         this.data = data;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getForecasterId() {
-        return forecasterId;
-    }
-
-    public void setForecasterId(String forecasterId) {
-        this.forecasterId = forecasterId;
     }
 
     public String getStatus() {
@@ -72,6 +49,13 @@ public class ForcasterDetails {
         this.responseMessage = responseMessage;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getLangCode() {
         return langCode;

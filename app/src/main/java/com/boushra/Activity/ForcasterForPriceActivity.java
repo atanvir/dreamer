@@ -311,9 +311,10 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
             case R.id.dob_ed:
                 Date date= Calendar.getInstance().getTime();
-                new DatePickerDialog(ForcasterForPriceActivity.this, AlertDialog.THEME_HOLO_LIGHT,datePickerListener,Integer.parseInt(new SimpleDateFormat("yyyy").format(date)),
-                        Integer.parseInt(new SimpleDateFormat("MM").format(date))-1,Integer.parseInt(new SimpleDateFormat("dd").format(date))).show();
-
+                DatePickerDialog dialog=new DatePickerDialog(ForcasterForPriceActivity.this, AlertDialog.THEME_HOLO_LIGHT,datePickerListener,Integer.parseInt(new SimpleDateFormat("yyyy").format(date)),
+                        Integer.parseInt(new SimpleDateFormat("MM").format(date))-1,Integer.parseInt(new SimpleDateFormat("dd").format(date)));
+                dialog.getDatePicker().setMaxDate(date.getTime());
+                dialog.show();
                 break;
 
             case R.id.pause_iv:

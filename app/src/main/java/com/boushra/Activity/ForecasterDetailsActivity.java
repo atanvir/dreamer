@@ -29,8 +29,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Adapter.ForecasterDetailsAdapter;
-import com.boushra.Model.Data;
+import com.boushra.Model.*;
 import com.boushra.Model.ForcasterDetails;
+import com.boushra.Model.ForecasterRating.ForecasterRating;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
@@ -80,6 +81,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     int lastplay_position=0;
     boolean pause=false;
     int mCurrentPosition=0;
+    ProgressDailogHelper dailog;
 
 
 
@@ -99,7 +101,6 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     private void getForecasterDetailsApi() {
         if(new InternetCheck(this).isConnect())
         {
-            ProgressDailogHelper dailog=new ProgressDailogHelper(ForecasterDetailsActivity.this,"");
             dailog.showDailog();
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             ForcasterDetails details=new ForcasterDetails();
@@ -107,6 +108,8 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
             details.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
             details.setLangCode("en");
             Call<ForcasterDetails> call= api_service.getForecasterDetails(details,SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.jwtToken));
+       //     Call<ForcasterDetails> call=api_service.getForecasterRating(details);
+
             call.enqueue(new Callback<ForcasterDetails>() {
                 @Override
                 public void onResponse(Call<ForcasterDetails> call, Response<ForcasterDetails> response) {
@@ -117,25 +120,24 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                         if(server_resposne.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
                         {
 
-                            List<Data> data=server_resposne.getData();
-                            settingAdapter(data);
-                            audio_uri=Uri.parse(server_resposne.getData().get(0).getVoiceRecording());
+
+
+                            audio_uri=Uri.parse(server_resposne.getData().getVoiceRecording());
                             settingSeekbar();
-                            Glide.with(ForecasterDetailsActivity.this).load(data.get(0).getProfilePic()).into(profilepic_iv);
-                            name_txt.setText(server_resposne.getData().get(0).getName());
-                            ratingBar.setRating(server_resposne.getData().get(0).getTotalRating());
-                            aboutus_txt.setText(server_resposne.getData().get(0).getAboutUs());
-
+                            Glide.with(ForecasterDetailsActivity.this).load(server_resposne.getData().getProfilePic()).into(profilepic_iv);
+                            name_txt.setText(server_resposne.getData().getName());
+                            ratingBar.setRating(server_resposne.getData().getAvgRating());
+                            aboutus_txt.setText(server_resposne.getData().getAboutUs());
                             try {
-                                Bitmap bitmap=retriveVideoFrameFromVideo(server_resposne.getData().get(0).getUploadedVideo());
+                                Bitmap bitmap=retriveVideoFrameFromVideo(server_resposne.getData().getUploadedVideo());
                                 video_iv.setImageBitmap(bitmap);
-                                video_uri=Uri.parse(server_resposne.getData().get(0).getUploadedVideo());
-
+                                video_uri=Uri.parse(server_resposne.getData().getUploadedVideo());
 
                             } catch (Throwable throwable) {
                                 throwable.printStackTrace();
                             }
                             dailog.dismissDailog();
+                            getForcasterRatingApi();
 
 
 
@@ -163,7 +165,44 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void settingAdapter(List<Data> data) {
+    private void getForcasterRatingApi() {
+        dailog.showDailog();
+        RetroInterface api_serive=RetrofitInit.getConnect().createConnection();
+        ForcasterDetails details=new ForcasterDetails();
+        details.setForecasterId(getIntent().getStringExtra(GlobalVariables.forecasterId));
+        Call<ForecasterRating> call=api_serive.getForecasterRating(details);
+        call.enqueue(new Callback<ForecasterRating>() {
+            @Override
+            public void onResponse(Call<ForecasterRating> call, Response<ForecasterRating> response) {
+            if(response.isSuccessful())
+            {
+               dailog.dismissDailog();
+               ForecasterRating server_response=response.body();
+               if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
+               {
+
+                   settingAdapter(server_response.getData());
+
+
+               }
+               else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
+               {
+                   Toast.makeText(ForecasterDetailsActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+               }
+
+            }
+            }
+
+            @Override
+            public void onFailure(Call<ForecasterRating> call, Throwable t) {
+                Log.e("error", String.valueOf(t.getMessage()));
+
+            }
+        });
+
+    }
+
+    private void settingAdapter(List<com.boushra.Model.ForecasterRating.Data> data) {
         manager=new LinearLayoutManager(this);
         ForecasterDetailsAdapter adapter=new ForecasterDetailsAdapter(this,data);
         recView.setLayoutManager(manager);
@@ -229,6 +268,8 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         playaudio_iv.setOnClickListener(this::OnClick);
         stop_iv.setOnClickListener(this::OnClick);
         pause_iv.setOnClickListener(this::OnClick);
+        dailog=new ProgressDailogHelper(ForecasterDetailsActivity.this,"");
+
     }
 
     public Bitmap retriveVideoFrameFromVideo(String videoPath) throws Throwable

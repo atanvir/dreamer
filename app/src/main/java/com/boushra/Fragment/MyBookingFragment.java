@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Adapter.MyBookingsListAdapter;
-import com.boushra.Model.Data;
-import com.boushra.Model.MyBooking;
+import com.boushra.Model.MyBooking.Data;
+import com.boushra.Model.MyBooking.MyBooking;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
@@ -49,10 +49,7 @@ public class MyBookingFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_mybooking,container,false);
         ButterKnife.bind(this,view);
         init();
-
         getMyBookingApi();
-
-
 
         return view;
     }
@@ -60,7 +57,6 @@ public class MyBookingFragment extends Fragment {
     private void getMyBookingApi() {
         if(new InternetCheck(getActivity()).isConnect())
         {
-            dailogHelper=new ProgressDailogHelper(getActivity(),"");
             dailogHelper.showDailog();
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             MyBooking booking=new MyBooking();
@@ -81,11 +77,6 @@ public class MyBookingFragment extends Fragment {
                             adapter =new MyBookingsListAdapter(getActivity(),bookinglist);
                             myBookingRecView.setLayoutManager(manager);
                             myBookingRecView.setAdapter(adapter);
-
-
-
-
-
                         }
                         else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
@@ -102,6 +93,7 @@ public class MyBookingFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<MyBooking> call, Throwable t) {
+                    Toast.makeText(getActivity(),t.getMessage(),Toast.LENGTH_LONG).show();
 
                 }
             });
@@ -118,6 +110,7 @@ public class MyBookingFragment extends Fragment {
 
     private void init() {
         backLL.setOnClickListener(this::onClick);
+        dailogHelper=new ProgressDailogHelper(getActivity(),"");
     }
 
     @OnClick()

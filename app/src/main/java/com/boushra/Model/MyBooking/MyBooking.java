@@ -1,5 +1,6 @@
-package com.boushra.Model;
+package com.boushra.Model.MyBooking;
 
+import com.boushra.Model.MyBooking.Data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

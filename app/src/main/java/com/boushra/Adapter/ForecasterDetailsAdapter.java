@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Activity.ForecasterDetailsActivity;
-import com.boushra.Model.Data;
+import com.boushra.Model.ForecasterRating.Data;
 import com.boushra.R;
 import com.bumptech.glide.Glide;
 
@@ -23,6 +23,7 @@ import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ForecasterDetailsAdapter extends RecyclerView.Adapter<ForecasterDetailsAdapter.MyViewHolder> {
     private Context context;
@@ -42,12 +43,12 @@ public class ForecasterDetailsAdapter extends RecyclerView.Adapter<ForecasterDet
 
     @Override
     public void onBindViewHolder(@NonNull ForecasterDetailsAdapter.MyViewHolder holder, int position) {
-        if(dataList.get(position).getRatingData().getUserData()!=null) {
-            Glide.with(context).load(dataList.get(position).getRatingData().getUserData().getProfilePic()).into(holder.profilepic_iv);
-            holder.name_txt.setText(dataList.get(position).getRatingData().getUserData().getName());
-            holder.comment_txt.setText(dataList.get(position).getRatingData().getRatingMessage());
 
-            String getDate = dataList.get(position).getRatingData().getCreatedAt();
+            Glide.with(context).load(dataList.get(position).getUserId().getProfilePic()).into(holder.profilepic_iv);
+            holder.name_txt.setText(dataList.get(position).getUserId().getName());
+            holder.comment_txt.setText(dataList.get(position).getRatingMessage());
+
+            String getDate = dataList.get(position).getCreatedAt();
             String server_format = getDate;    //server comes format ?
             String server_format1 = "2019-04-04T13:27:36.591Z";    //server comes format ?
             String myFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
@@ -66,7 +67,7 @@ public class ForecasterDetailsAdapter extends RecyclerView.Adapter<ForecasterDet
             } catch (Exception e) {
                 System.out.println(e.toString()); //date format error
             }
-        }
+
 
     }
 
@@ -76,7 +77,7 @@ public class ForecasterDetailsAdapter extends RecyclerView.Adapter<ForecasterDet
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.profilepic_iv) ImageView profilepic_iv;
+        @BindView(R.id.profilepic_iv) CircleImageView profilepic_iv;
         @BindView(R.id.name_txt) TextView name_txt;
         @BindView(R.id.date_txt) TextView date_txt;
         @BindView(R.id.comment_txt) TextView comment_txt;

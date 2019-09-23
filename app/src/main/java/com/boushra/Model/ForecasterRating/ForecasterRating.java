@@ -1,59 +1,29 @@
-package com.boushra.Model;
+package com.boushra.Model.ForecasterRating;
 
-import com.boushra.Model.Data;
+import com.boushra.Model.ForecasterRating.Data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ForcasterList {
+public class ForecasterRating {
 
     @SerializedName("status")
     @Expose
     private String status;
 
-    @SerializedName("userId")
-    @Expose
-    private String userId;
-
     @SerializedName("response_message")
     @Expose
     private String responseMessage;
+
     @SerializedName("Data")
     @Expose
     private List<Data> data = null;
 
-    @SerializedName("langCode")
+    @SerializedName("forecasterId")
     @Expose
-    private String langCode;
+    private String forecasterId;
 
-    @SerializedName("type")
-    @Expose
-    private String type;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getLangCode() {
-        return langCode;
-    }
-
-    public void setLangCode(String langCode) {
-        this.langCode = langCode;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getStatus() {
         return status;
@@ -77,5 +47,13 @@ public class ForcasterList {
 
     public void setData(List<Data> data) {
         this.data = data;
+    }
+
+    public String getForecasterId() {
+        return forecasterId;
+    }
+
+    public void setForecasterId(String forecasterId) {
+        this.forecasterId = forecasterId;
     }
 }

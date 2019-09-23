@@ -7,7 +7,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +39,10 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
     Boolean notificationStatus;
     String language;
     private ProgressDailogHelper dailogHelper;
+    int clickcount=0,clickcount2=0,clickcount3=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,10 +321,12 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.activity_change_password);
 
+
         TextView changePasswordTextView=dialog.findViewById(R.id.changePasswordTextView);
         oldpass_txt=dialog.findViewById(R.id.oldpass_txt);
         newpass_txt=dialog.findViewById(R.id.newpass_txt);
         confirmpass_txt=dialog.findViewById(R.id.confirmpass_txt);
+        TouchListner();
         changePasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -359,6 +371,116 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void TouchListner() {
+        oldpass_txt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (oldpass_txt.getRight() - oldpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if(clickcount % 2 ==0)
+                        {
+                            clickcount=clickcount+1;
+                            oldpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            oldpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                            return true;
+                        }
+                        else
+                        {
+                            clickcount=clickcount+1;
+                            oldpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            oldpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                            return true;
+
+
+                        }
+
+                    }
+                }
+
+
+                return false;
+            }
+        });
+        newpass_txt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (newpass_txt.getRight() - newpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if(clickcount2 % 2 ==0)
+                        {
+                            clickcount2=clickcount2+1;
+                            newpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                            return true;
+                        }
+                        else
+                        {
+                            clickcount2=clickcount2+1;
+                            newpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                            return true;
+
+
+                        }
+
+                    }
+                }
+
+
+                return false;
+            }
+        });
+
+        confirmpass_txt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (confirmpass_txt.getRight() - confirmpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if(clickcount3 % 2 ==0)
+                        {
+                            clickcount3=clickcount3+1;
+                            confirmpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                            return true;
+                        }
+                        else
+                        {
+                            clickcount3=clickcount3+1;
+                            confirmpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                            return true;
+
+
+                        }
+
+                    }
+                }
+
+
+                return false;
+            }
+        });
+
+    }
+
     private void UserLogoutApi() {
         dailogHelper.showDailog();
         RetroInterface api_service =RetrofitInit.getConnect().createConnection();
@@ -380,7 +502,21 @@ public class SettingsActivity extends AppCompatActivity {
                         Intent intent=new Intent(SettingsActivity.this,LoginActivity.class);
                         finish();
                         startActivity(intent);
-                        SharedPreferenceWriter.getInstance(SettingsActivity.this).clearPreferenceValues();;
+                        SharedPreferenceWriter.getInstance(SettingsActivity.this).clearPreferenceValues();
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    // Log.w(TAG, "getInstanceId failed", task.getException());
+                                    return;
+                                }
+
+                                String auth_token = task.getResult().getToken();
+                                Log.w("firebaese","token: "+auth_token);
+                                SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.firebase_token,auth_token);
+                            }
+                        });
+
 
                     }
                     else if(server_resposne.getStatus().equalsIgnoreCase("FAILURE"))

@@ -3,6 +3,8 @@ package com.boushra.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Data {
     @SerializedName("profilePic")
     @Expose
@@ -103,7 +105,7 @@ public class Data {
 
     @SerializedName("totalRating")
     @Expose
-    private Integer totalRating;
+    private Float totalRating;
     @SerializedName("avgRating")
     @Expose
     private Float avgRating;
@@ -174,6 +176,7 @@ public class Data {
     @Expose
     private RatingData ratingData;
 
+
     @SerializedName("spendedPoints")
     @Expose
     private Integer spendedPoints;
@@ -212,6 +215,184 @@ public class Data {
     @SerializedName("forecasterData")
     @Expose
     private ForecasterData forecasterData;
+
+
+    @SerializedName("rating")
+    @Expose
+    private Integer rating;
+    @SerializedName("ratingMessage")
+    @Expose
+    private String ratingMessage;
+    @SerializedName("bookingId")
+    @Expose
+    private String bookingId;
+
+
+    @SerializedName("profileSetup")
+    @Expose
+    private Boolean profileSetup;
+    @SerializedName("profileComplete")
+    @Expose
+    private Boolean profileComplete;
+    @SerializedName("bookingCount")
+    @Expose
+    private Integer bookingCount;
+
+    @SerializedName("accountHolderName")
+    @Expose
+    private String accountHolderName;
+    @SerializedName("accountNumber")
+    @Expose
+    private String accountNumber;
+    @SerializedName("bankName")
+    @Expose
+    private String bankName;
+    @SerializedName("documentType")
+    @Expose
+    private String documentType;
+
+    @SerializedName("notiTo")
+    @Expose
+    private String notiTo;
+    @SerializedName("notiTitle")
+    @Expose
+    private String notiTitle;
+    @SerializedName("notiMessage")
+    @Expose
+    private String notiMessage;
+    @SerializedName("userType")
+    @Expose
+    private String userType;
+
+
+    public String getNotiTo() {
+        return notiTo;
+    }
+
+    public void setNotiTo(String notiTo) {
+        this.notiTo = notiTo;
+    }
+
+    public String getNotiTitle() {
+        return notiTitle;
+    }
+
+    public void setNotiTitle(String notiTitle) {
+        this.notiTitle = notiTitle;
+    }
+
+    public String getNotiMessage() {
+        return notiMessage;
+    }
+
+    public void setNotiMessage(String notiMessage) {
+        this.notiMessage = notiMessage;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public Float getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(Float totalRating) {
+        this.totalRating = totalRating;
+    }
+
+    public Boolean getProfileSetup() {
+        return profileSetup;
+    }
+
+    public void setProfileSetup(Boolean profileSetup) {
+        this.profileSetup = profileSetup;
+    }
+
+    public Boolean getProfileComplete() {
+        return profileComplete;
+    }
+
+    public void setProfileComplete(Boolean profileComplete) {
+        this.profileComplete = profileComplete;
+    }
+
+    public Integer getBookingCount() {
+        return bookingCount;
+    }
+
+    public void setBookingCount(Integer bookingCount) {
+        this.bookingCount = bookingCount;
+    }
+
+    public String getAccountHolderName() {
+        return accountHolderName;
+    }
+
+    public void setAccountHolderName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getRatingMessage() {
+        return ratingMessage;
+    }
+
+    public void setRatingMessage(String ratingMessage) {
+        this.ratingMessage = ratingMessage;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(String bookingId) {
+        this.bookingId = bookingId;
+    }
+
+
+    public RatingData getRatingData() {
+        return ratingData;
+    }
+
+    public void setRatingData(RatingData ratingData) {
+        this.ratingData = ratingData;
+    }
 
     public Float getAvgRating() {
         return avgRating;
@@ -333,13 +514,6 @@ public class Data {
         this.voiceRecording = voiceRecording;
     }
 
-    public RatingData getRatingData() {
-        return ratingData;
-    }
-
-    public void setRatingData(RatingData ratingData) {
-        this.ratingData = ratingData;
-    }
 
     public String getAboutUs() {
         return aboutUs;
@@ -443,14 +617,6 @@ public class Data {
 
     public void setPricePerQues(String pricePerQues) {
         this.pricePerQues = pricePerQues;
-    }
-
-    public Integer getTotalRating() {
-        return totalRating;
-    }
-
-    public void setTotalRating(Integer totalRating) {
-        this.totalRating = totalRating;
     }
 
 

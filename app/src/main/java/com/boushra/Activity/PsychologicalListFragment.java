@@ -19,6 +19,7 @@ import com.boushra.Fragment.ForecasterListFragment;
 import com.boushra.Fragment.NavigationHomeFragment;
 import com.boushra.Fragment.NotificationFragment;
 import com.boushra.R;
+import com.boushra.Utility.GlobalVariables;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,18 +68,22 @@ void onClick(View view)
 
         case R.id.self_development_cv:
            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
+            GlobalVariables.setType("Self Development Counselling");
            break;
 
         case R.id.family_cv:
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
+            GlobalVariables.setType("Family Counselling");
             break;
 
         case R.id.parenting_cv:
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
+            GlobalVariables.setType("Parent Counselling");
             break;
 
         case R.id.psychological_cv:
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(PsychologicalListFragment.class.getSimpleName()).commit();
+            GlobalVariables.setType("Psychological Counselling");
             break;
 
         case R.id.backLL:

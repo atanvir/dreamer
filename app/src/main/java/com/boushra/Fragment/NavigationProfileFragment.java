@@ -277,13 +277,10 @@ public class NavigationProfileFragment extends Fragment {
 
             case R.id.dob_ed:
                 Date date= Calendar.getInstance().getTime();
-
                 DatePickerDialog dialog=new DatePickerDialog(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT,datePickerListener,Integer.parseInt(new SimpleDateFormat("yyyy").format(date)),
                         Integer.parseInt(new SimpleDateFormat("MM").format(date))-1,Integer.parseInt(new SimpleDateFormat("dd").format(date)));
                 dialog.getDatePicker().setMaxDate(new Date().getTime());
                 dialog.show();
-
-
                 break;
 
             case R.id.pointtxt:

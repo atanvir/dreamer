@@ -1,7 +1,15 @@
 package com.boushra.Fragment;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -15,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -58,11 +67,6 @@ public class NavigationHomeFragment extends Fragment {
         pointtxt.setOnClickListener(this::onClick);
         pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getInt(GlobalVariables.totalPoints));
         getBannerListApi();
-
-
-
-
-
         return view;
     }
 
@@ -127,6 +131,7 @@ public class NavigationHomeFragment extends Fragment {
         {
             case R.id.dreamLL:
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new ForecasterListFragment()).addToBackStack(ForecasterListFragment.class.getSimpleName()).commit();
+                GlobalVariables.setType("Dreamer");
                 break;
 
             case R.id.psychologicalLL:

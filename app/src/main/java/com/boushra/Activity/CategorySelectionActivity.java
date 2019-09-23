@@ -17,6 +17,7 @@ import com.boushra.Fragment.NavigationChatFragment;
 import com.boushra.Fragment.NavigationHomeFragment;
 import com.boushra.Fragment.NavigationMoreFragment;
 import com.boushra.Fragment.NavigationProfileFragment;
+import com.boushra.Fragment.NotificationFragment;
 import com.boushra.R;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.SharedPreferenceWriter;
@@ -33,6 +34,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
     @BindView(R.id.profile_im) ImageView profile_im;
     @BindView(R.id.more_im) ImageView more_im;
     int clickcount=0;
+    String fcm="";
 
 
     @Override
@@ -44,8 +46,21 @@ public class CategorySelectionActivity extends AppCompatActivity{
         toolbar = getSupportActionBar();
         home_iv.setBackground(getDrawable(R.drawable.home_gradient));
         home_iv.setImageDrawable(null);
-        getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
 
+       fcm=getIntent().getStringExtra("FCM");
+       if(fcm!=null)
+       {
+           if(fcm.equalsIgnoreCase("Yes")) {
+               getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NotificationFragment()).commit();
+           }
+
+       }
+
+       else {
+
+
+           getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NavigationHomeFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
+       }
         SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).writeStringValue(GlobalVariables.islogin,"Yes");
     }
 

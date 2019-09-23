@@ -7,10 +7,12 @@ import com.boushra.Model.ChangePassword;
 import com.boushra.Model.Chat;
 import com.boushra.Model.ForcasterDetails;
 import com.boushra.Model.ForcasterList;
+import com.boushra.Model.ForecasterRating.ForecasterRating;
 import com.boushra.Model.ForgotPassword;
 import com.boushra.Model.Login;
 import com.boushra.Model.Logout;
-import com.boushra.Model.MyBooking;
+import com.boushra.Model.MyBooking.MyBooking;
+import com.boushra.Model.Notification;
 import com.boushra.Model.Rating;
 import com.boushra.Model.Signup;
 import com.boushra.Model.SocialLogin;
@@ -20,7 +22,6 @@ import com.boushra.Model.User;
 import com.boushra.Model.UserSetting;
 import com.boushra.Model.WalletDetail;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -104,4 +105,10 @@ public interface RetroInterface {
 
     @POST("rating")
     Call<Rating> rating(@Body Rating rating,@Header("token") String token);
+
+    @POST("getForecasterRating")
+    Call<ForecasterRating> getForecasterRating(@Body ForcasterDetails details);
+
+    @POST("getNotificationList")
+    Call<Notification> getNotificationList(@Body Notification notification, @Header("token") String token);
 }

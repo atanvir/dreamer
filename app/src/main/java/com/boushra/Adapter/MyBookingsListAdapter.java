@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Fragment.MyBookingFragment;
-import com.boushra.Model.Data;
+import com.boushra.Model.MyBooking.Data;
 import com.boushra.Model.Rating;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
@@ -90,7 +90,7 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
         } catch (Exception e) {
             System.out.println(e.toString()); //date format error
         }
-        if(bookinglist.get(i).getForecasterData().getTotalRating()>0)
+        if(bookinglist.get(i).getRate())
         {
             myViewHolder.calenderdatetxt.setVisibility(View.GONE);
             myViewHolder.calenderImgVw.setVisibility(View.GONE);
@@ -160,6 +160,7 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
                                     rating.setBookingId(bookinglist.get(getAdapterPosition()).getId());
                                     rating.setRating((int) ratingBar2.getRating());
                                     rating.setRatingMessage(rating_cmt_ed.getText().toString());
+                                    rating.setRate(true);
 
                                     Call<Rating> call=api_service.rating(rating,SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.jwtToken));
                                     call.enqueue(new Callback<Rating>() {

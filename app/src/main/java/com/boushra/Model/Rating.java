@@ -27,6 +27,18 @@ public class Rating {
     @Expose
     private String responseMessage;
 
+    @SerializedName("isRate")
+    @Expose
+    private Boolean isRate;
+
+    public Boolean getRate() {
+        return isRate;
+    }
+
+    public void setRate(Boolean rate) {
+        isRate = rate;
+    }
+
     public String getStatus() {
         return status;
     }

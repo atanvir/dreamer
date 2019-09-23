@@ -60,12 +60,11 @@ public class ForecasterListFragment extends Fragment {
     private void getForcasterListApi() {
         ProgressDailogHelper dailog=new ProgressDailogHelper(getActivity(),"Getting forecaster list");
         dailog.showDailog();
-
-
         RetroInterface api_service= RetrofitInit.getConnect().createConnection();
         ForcasterList forcasterList=new ForcasterList();
         forcasterList.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
         forcasterList.setLangCode("en");
+        forcasterList.setType(GlobalVariables.getType());
         Call<ForcasterList> call=api_service.getForecasterList(forcasterList,SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.jwtToken));
         call.enqueue(new Callback<ForcasterList>() {
             @Override
@@ -79,8 +78,6 @@ public class ForecasterListFragment extends Fragment {
 
                         List=server_response.getData();
                         settingAdapter();
-
-                        // Toast.makeText(context,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
                     }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                     {
                         Toast.makeText(getActivity(),server_response.getResponseMessage(),Toast.LENGTH_LONG).show();

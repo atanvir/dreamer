@@ -10,7 +10,7 @@ public class ForecasterData {
     private String profilePic;
     @SerializedName("totalRating")
     @Expose
-    private Integer totalRating;
+    private Float totalRating;
     @SerializedName("avgRating")
     @Expose
     private Float avgRating;
@@ -37,15 +37,13 @@ public class ForecasterData {
         this.profilePic = profilePic;
     }
 
-    public Integer getTotalRating() {
+    public Float getTotalRating() {
         return totalRating;
     }
 
-    public void setTotalRating(Integer totalRating) {
+    public void setTotalRating(Float totalRating) {
         this.totalRating = totalRating;
     }
-
-
 
     public String getName() {
         return name;

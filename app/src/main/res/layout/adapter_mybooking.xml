@@ -85,6 +85,7 @@
                 android:layout_marginBottom="16dp"
                 android:numStars="5"
                 android:scaleX="1.8"
+                android:isIndicator="true"
                 android:rating="4"
                 android:scaleY="1.8"
                 android:visibility="visible"

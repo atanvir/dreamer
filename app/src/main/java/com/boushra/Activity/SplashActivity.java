@@ -2,6 +2,7 @@ package com.boushra.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
+    String fcm="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,23 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        startMethod();
+        fcm=getIntent().getStringExtra("body");
+        if(fcm!=null)
+        {
+            Log.e("fcm",fcm);
+                Intent intent=new Intent(this,CategorySelectionActivity.class);
+                intent.putExtra("FCM","Yes");
+                startActivity(intent);
+
+
+
+        }
+        else
+        {
+            startMethod();
+        }
+
+
     }
 
     private void startMethod() {

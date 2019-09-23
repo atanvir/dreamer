@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     long clickcount=0;
     EditText opt_phone_ed;
     ProgressDailogHelper dailogHelper;
+    int clickcount2=0,clickcount3=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -547,6 +548,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             oldpass_txt.setVisibility(View.GONE);
                              newpass_txt=dialog.findViewById(R.id.newpass_txt);
                              confirmpass_txt=dialog.findViewById(R.id.confirmpass_txt);
+                            TouchListner();
+
                             TextView changePasswordTextView=dialog.findViewById(R.id.changePasswordTextView);
 
                             changePasswordTextView.setOnClickListener(new View.OnClickListener() {
@@ -621,6 +624,80 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }
                     }
                 });
+    }
+
+    private void TouchListner() {
+
+        newpass_txt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (newpass_txt.getRight() - newpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if(clickcount3 % 2 ==0)
+                        {
+                            clickcount3=clickcount3+1;
+                            newpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                            return true;
+                        }
+                        else
+                        {
+                            clickcount3=clickcount3+1;
+                            newpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                            return true;
+
+
+                        }
+
+                    }
+                }
+
+
+                return false;
+            }
+        });
+        confirmpass_txt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (confirmpass_txt.getRight() - confirmpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if(clickcount2 % 2 ==0)
+                        {
+                            clickcount2=clickcount2+1;
+                            confirmpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                            return true;
+                        }
+                        else
+                        {
+                            clickcount2=clickcount2+1;
+                            confirmpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                            return true;
+
+
+                        }
+
+                    }
+                }
+
+
+                return false;
+            }
+        });
     }
 
     private boolean checkValidationChangePassword() {

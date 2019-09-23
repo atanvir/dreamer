@@ -3,19 +3,25 @@ package com.boushra.Utility;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.boushra.Activity.CategorySelectionActivity;
+import com.boushra.Fragment.NotificationFragment;
+import com.boushra.Model.Notification;
 import com.boushra.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -33,46 +39,64 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.e("server_name",remoteMessage.getFrom());
         Map<String,String> dataMap=remoteMessage.getData();
-        sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("message"));
+        Log.e("Data:", String.valueOf(remoteMessage.getData()));
+
+
+
+
+        if(NotificationUtils.isAppIsInBackground(getApplicationContext()))
+        {
+            Intent intent=new Intent("FCM");
+            intent.putExtra("FCM","yes");
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+            Intent push=new Intent(this,CategorySelectionActivity.class);
+            sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
+        }else
+        {
+            Intent intent=new Intent(this,CategorySelectionActivity.class);
+            intent.putExtra("FCM","yes");
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+            sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),intent);
+
+        }
+
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void sendNotification(String title, String message) {
-        try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Intent intent ;
+    private void sendNotification(String title, String message,Intent intent) {
 
-        intent = new Intent(this, CategorySelectionActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-
-
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
-
-        String channelId ="hms_user";
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.app_icon)
-                        .setContentTitle(title+"")
-                        .setContentText(message+"")
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        int notificationId = 1;
+        String channelId = "channel-01";
+        String channelName = "Channel Name";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
         }
 
-        notificationManager.notify(0 , notificationBuilder.build());
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.round_noty)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        notificationManager.notify(notificationId, mBuilder.build());
+
+
+
     }
 
 
