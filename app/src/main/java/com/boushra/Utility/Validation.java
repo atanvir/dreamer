@@ -17,7 +17,7 @@ public class Validation {
     // Error Messages
     private static final String REQUIRED_MSG = "required field";
     private static final String EMAIL_MSG = "invalid email";
-    private static final String PHONE_MSG = "invalid number";
+    private static final String PHONE_MSG = "Please enter valid mobile number";
     private static String usernametext;
 
 
@@ -73,6 +73,20 @@ public class Validation {
         return true;
     }
 
+    public static boolean hasText(EditText editText,String message) {
+
+        usernametext = editText.getText().toString().trim();
+        editText.setError(null);
+
+        // length 0 means there is no text
+        if (usernametext.length() == 0) {
+            editText.setError(message);
+            return false;
+        }
+
+        return true;
+    }
+
     public static boolean password(EditText editText) {
         Boolean ret=true;
         String text=editText.getText().toString().trim();
@@ -122,6 +136,27 @@ public class Validation {
 
             if(text.length()==0) {
                 editText.setError(REQUIRED_MSG);
+                editText.setFocusable(true);
+                ret = false;
+            }
+            else if(!Patterns.EMAIL_ADDRESS.matcher(text).matches())
+            {
+                editText.setError("Not a valid Email format\neg: abc@domain.com");
+                editText.setFocusable(true);
+                ret = false;
+            }
+        }
+
+        return ret;
+    }
+    public static boolean email(EditText editText,String message) {
+        boolean ret=true;
+        String text=editText.getText().toString().trim();
+        if(text.length()==0 || !Patterns.EMAIL_ADDRESS.matcher(text).matches())
+        {
+
+            if(text.length()==0) {
+                editText.setError(message);
                 editText.setFocusable(true);
                 ret = false;
             }

@@ -2,8 +2,10 @@ package com.boushra.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.boushra.Activity.LoginActivity;
 import com.boushra.Fragment.MyBookingFragment;
 import com.boushra.Model.MyBooking.Data;
 import com.boushra.Model.Rating;
@@ -32,6 +35,10 @@ import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -142,7 +149,6 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
                     EditText rating_cmt_ed=dialog.findViewById(R.id.rating_cmt_ed);
                     TextView please_rate_txt=dialog.findViewById(R.id.please_rate_txt);
 
-
                     ratingTxt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -182,11 +188,30 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
                                                  ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.replace,new MyBookingFragment()).commit();
 
                                              }
-                                             else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
-                                             {
-                                                 Toast toast= Toast.makeText(context,server_response.getResponseMessage(),Toast.LENGTH_LONG);
-                                                 toast.setGravity(Gravity.CENTER,0,0);
-                                                 toast.show();
+                                             else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                                                 if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                                     Toast.makeText(context, context.getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                                     //getActivity().finish();
+                                                     context.startActivity(new Intent(context, LoginActivity.class));
+                                                     SharedPreferenceWriter.getInstance(context).clearPreferenceValues();
+                                                     FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                                         @Override
+                                                         public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                             if (!task.isSuccessful()) {
+                                                                 // Log.w(TAG, "getInstanceId failed", task.getException());
+                                                                 return;
+                                                             }
+
+                                                             String auth_token = task.getResult().getToken();
+                                                             Log.w("firebaese", "token: " + auth_token);
+                                                             SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                                         }
+                                                     });
+                                                 } else {
+                                                     Toast toast = Toast.makeText(context, server_response.getResponseMessage(), Toast.LENGTH_LONG);
+                                                     toast.setGravity(Gravity.CENTER, 0, 0);
+                                                     toast.show();
+                                                 }
                                              }
                                             }
                                         }

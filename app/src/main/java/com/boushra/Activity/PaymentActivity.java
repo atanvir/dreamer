@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.boushra.Model.BookForcaster;
@@ -23,6 +25,10 @@ import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 
@@ -41,7 +47,8 @@ public class PaymentActivity extends AppCompatActivity {
     @BindView(R.id.backLL) LinearLayout backLL;
     @BindView(R.id.avail_points_txt) TextView avail_points_txt;
     @BindView(R.id.forcaster_fees_txt) TextView forcaster_fees_txt;
-    int avail_point,forcaster_fees;
+    String avail_point;
+    String forcaster_fees;
 
 
     @Override
@@ -60,10 +67,10 @@ public class PaymentActivity extends AppCompatActivity {
     private void init() {
         paytext.setOnClickListener(this::OnClick);
         backLL.setOnClickListener(this::OnClick);
-        avail_points_txt.setText(""+SharedPreferenceWriter.getInstance(PaymentActivity.this).getInt(GlobalVariables.totalPoints));
+        avail_points_txt.setText(""+SharedPreferenceWriter.getInstance(PaymentActivity.this).getString(GlobalVariables.totalPoints));
         forcaster_fees_txt.setText(getIntent().getStringExtra(GlobalVariables.points));
-        avail_point=SharedPreferenceWriter.getInstance(PaymentActivity.this).getInt(GlobalVariables.totalPoints);
-        forcaster_fees= Integer.parseInt(getIntent().getStringExtra(GlobalVariables.points));
+        avail_point= SharedPreferenceWriter.getInstance(PaymentActivity.this).getString(GlobalVariables.totalPoints);
+        forcaster_fees= getIntent().getStringExtra(GlobalVariables.points);
     }
 
     @OnClick()
@@ -72,7 +79,7 @@ public class PaymentActivity extends AppCompatActivity {
         switch (view.getId())
         {
             case R.id.paytext:
-                if(avail_point>=forcaster_fees)
+                if(Float.parseFloat(avail_point)>=Float.parseFloat(forcaster_fees))
                 {
                     bookForcasterApi();
 
@@ -108,11 +115,11 @@ public class PaymentActivity extends AppCompatActivity {
             bookforcaster.setUserId(getIntent().getStringExtra(GlobalVariables.userId));
 
             if(getIntent().getStringExtra(GlobalVariables.points)!=null) {
-                bookforcaster.setPoints(Integer.valueOf(getIntent().getStringExtra(GlobalVariables.points)));
+                bookforcaster.setPoints(Float.valueOf(getIntent().getStringExtra(GlobalVariables.points)));
             }
             else
             {
-                bookforcaster.setPoints(0);
+                bookforcaster.setPoints(Float.valueOf(0));
             }
 
             bookforcaster.setCategoryName(getIntent().getStringExtra(GlobalVariables.categoryName));
@@ -141,9 +148,29 @@ public class PaymentActivity extends AppCompatActivity {
                             requestPlaceSuccessfullyPopUp(server_response.getResponseMessage());
 
 
-                        }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
-                        {
-                            Toast.makeText(PaymentActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                            if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                Toast.makeText(PaymentActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(new Intent(PaymentActivity.this, LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(PaymentActivity.this).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese", "token: " + auth_token);
+                                        SharedPreferenceWriter.getInstance(PaymentActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                    }
+                                });
+                            } else {
+                                requestPlaceSuccessfullyPopUp(server_response.getResponseMessage());
+//                                Toast.makeText(PaymentActivity.this, server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 }
@@ -173,9 +200,9 @@ public class PaymentActivity extends AppCompatActivity {
         SharedPreferenceWriter.getInstance(PaymentActivity.this).writeStringValue(GlobalVariables.transactionStatus,server_response.getData().getTransactionStatus());
         SharedPreferenceWriter.getInstance(PaymentActivity.this).writeStringValue(GlobalVariables.categoryName,server_response.getData().getCategoryName());
         SharedPreferenceWriter.getInstance(PaymentActivity.this).writeStringValue(GlobalVariables.roomId,server_response.getData().getRoomId());
-        int available_point=SharedPreferenceWriter.getInstance(PaymentActivity.this).getInt(GlobalVariables.totalPoints);
-        int deducted_points=Integer.parseInt(server_response.getData().getPoints());
-        SharedPreferenceWriter.getInstance(PaymentActivity.this).writeIntValue(GlobalVariables.totalPoints,(available_point-deducted_points));
+        float available_point= Float.parseFloat(SharedPreferenceWriter.getInstance(PaymentActivity.this).getString(GlobalVariables.totalPoints));
+        float deducted_points=Float.parseFloat(server_response.getData().getPoints());
+        SharedPreferenceWriter.getInstance(PaymentActivity.this).writeStringValue(GlobalVariables.totalPoints, String.valueOf((available_point-deducted_points)));
     }
 
     private void requestPlaceSuccessfullyPopUp(String response) {

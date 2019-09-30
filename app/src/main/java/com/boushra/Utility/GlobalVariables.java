@@ -43,6 +43,10 @@ public class GlobalVariables {
     public static String dream="dream";
     public static String voice="voice";
     public static String type;
+    public static String videouri="videouri";
+    public static String invalidoken="Invalid Token";
+    public static String old_passcode="old_passcode";
+    public static String touchid="touchid";
 
     public static String getType() {
         return type;

@@ -44,7 +44,7 @@ public class StoreActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         init();
-        avail_points_txt.setText(""+SharedPreferenceWriter.getInstance(StoreActivity.this).getInt(GlobalVariables.totalPoints));
+        avail_points_txt.setText(""+SharedPreferenceWriter.getInstance(StoreActivity.this).getString(GlobalVariables.totalPoints));
 
         storePointsList=new ArrayList<>();
         SettingValues();

@@ -83,6 +83,7 @@
                 android:background="@drawable/cardviewback"
                 android:ems="10"
                 android:editable="false"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW XYZ"
                 android:hint="Name"
                 android:inputType="textPersonName"
                 android:paddingLeft="24dp"

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,10 @@ import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -53,7 +58,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForecasterDetailsActivity extends AppCompatActivity {
+public class ForecasterDetailsActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
 
     LinearLayoutManager manager;
     @BindView(R.id.backLL) LinearLayout backLL;
@@ -62,7 +67,6 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     @BindView(R.id.profilepic_iv) CircleImageView profilepic_iv;
     @BindView(R.id.name_txt) TextView name_txt;
     @BindView(R.id.ratingBar) RatingBar ratingBar;
-    @BindView(R.id.video_iv) ImageView video_iv;
     @BindView(R.id.aboutus_txt) TextView aboutus_txt;
     @BindView(R.id.videoview) VideoView videoview;
     @BindView(R.id.play_iv) ImageView play_iv;
@@ -73,6 +77,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     @BindView(R.id.stop_iv) ImageView stop_iv;
     @BindView(R.id.chronometer) Chronometer chronometer;
     @BindView(R.id.pause_iv) ImageView pause_iv;
+    @BindView(R.id.zoom_in) ImageView zoom_in;
     Uri video_uri,audio_uri;
     MediaPlayer mediaPlayer;
     boolean playing=false;
@@ -82,6 +87,9 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     boolean pause=false;
     int mCurrentPosition=0;
     ProgressDailogHelper dailog;
+    MediaController mediacontroller;
+    SeekBar media_seekbar;
+    Boolean mediacontroller_seekbar=false;
 
 
 
@@ -108,8 +116,6 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
             details.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
             details.setLangCode("en");
             Call<ForcasterDetails> call= api_service.getForecasterDetails(details,SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.jwtToken));
-       //     Call<ForcasterDetails> call=api_service.getForecasterRating(details);
-
             call.enqueue(new Callback<ForcasterDetails>() {
                 @Override
                 public void onResponse(Call<ForcasterDetails> call, Response<ForcasterDetails> response) {
@@ -128,23 +134,45 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                             name_txt.setText(server_resposne.getData().getName());
                             ratingBar.setRating(server_resposne.getData().getAvgRating());
                             aboutus_txt.setText(server_resposne.getData().getAboutUs());
-                            try {
-                                Bitmap bitmap=retriveVideoFrameFromVideo(server_resposne.getData().getUploadedVideo());
-                                video_iv.setImageBitmap(bitmap);
-                                video_uri=Uri.parse(server_resposne.getData().getUploadedVideo());
 
-                            } catch (Throwable throwable) {
-                                throwable.printStackTrace();
-                            }
+                            video_uri=Uri.parse(server_resposne.getData().getUploadedVideo());
+                            videoview.setVisibility(View.VISIBLE);
+                            videoview.setVideoURI(video_uri);
+                            videoview.seekTo(1);
+                            play_iv.setVisibility(View.VISIBLE);
+
                             dailog.dismissDailog();
                             getForcasterRatingApi();
-
 
 
                         }else if(server_resposne.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
                             dailog.dismissDailog();
-                            Toast.makeText(ForecasterDetailsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
+                            if (server_resposne.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                Toast.makeText(ForecasterDetailsActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(new Intent(ForecasterDetailsActivity.this, LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(ForecasterDetailsActivity.this).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese", "token: " + auth_token);
+                                        SharedPreferenceWriter.getInstance(ForecasterDetailsActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                    }
+                                });
+                            }else
+                            {
+                                Toast.makeText(ForecasterDetailsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
+
+                            }
+
+
 
                         }
                     }
@@ -185,9 +213,28 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
 
 
                }
-               else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
-               {
-                   Toast.makeText(ForecasterDetailsActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+               else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                   if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                       Toast.makeText(ForecasterDetailsActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                       finish();
+                       startActivity(new Intent(ForecasterDetailsActivity.this, LoginActivity.class));
+                       SharedPreferenceWriter.getInstance(ForecasterDetailsActivity.this).clearPreferenceValues();
+                       FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                           @Override
+                           public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                               if (!task.isSuccessful()) {
+                                   // Log.w(TAG, "getInstanceId failed", task.getException());
+                                   return;
+                               }
+
+                               String auth_token = task.getResult().getToken();
+                               Log.w("firebaese", "token: " + auth_token);
+                               SharedPreferenceWriter.getInstance(ForecasterDetailsActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                           }
+                       });
+                   } else {
+                       Toast.makeText(ForecasterDetailsActivity.this, server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                   }
                }
 
             }
@@ -222,6 +269,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         {
             e.printStackTrace();
         }
+
         seekBar.setMax(300);
         seekBar.setProgress(mediaPlayer.getDuration()/100);
         if(mediaPlayer.getDuration()/1000<10) {
@@ -264,11 +312,11 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         backLL.setOnClickListener(this::OnClick);
         ask_question_txt.setOnClickListener(this::OnClick);
         videoview.setOnClickListener(this::OnClick);
-        video_iv.setOnClickListener(this::OnClick);
         playaudio_iv.setOnClickListener(this::OnClick);
         stop_iv.setOnClickListener(this::OnClick);
         pause_iv.setOnClickListener(this::OnClick);
         dailog=new ProgressDailogHelper(ForecasterDetailsActivity.this,"");
+        zoom_in.setOnClickListener(this::OnClick);
 
     }
 
@@ -318,13 +366,6 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
                 break;
 
 
-            case R.id.video_iv:
-                video_iv.setVisibility(View.GONE);
-                play_iv.setVisibility(View.GONE);
-                videoview.performClick();
-
-                break;
-
             case R.id.videoview:
                 play_iv.setVisibility(View.GONE);
                 videoview.setVisibility(View.VISIBLE);
@@ -341,6 +382,12 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
 
             case R.id.pause_iv:
                 pauseAudio();
+                break;
+
+            case R.id.zoom_in:
+                Intent intent1=new Intent(ForecasterDetailsActivity.this,FullScreenVideoActivity.class);
+                intent1.putExtra(GlobalVariables.videouri,video_uri.toString());
+                startActivity(intent1);
                 break;
         }
 
@@ -365,6 +412,19 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        videoview.setVideoURI(video_uri);
+        videoview.seekTo(1);
+
+        if( mediacontroller!=null) {
+            videoview.stopPlayback();
+            mediacontroller.hide();
+        }
+        Log.e("resumed","yes");
     }
 
     private void stoppingAudio() {
@@ -472,10 +532,15 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
     private void settingThumbnail() {
         progress_bar.setVisibility(View.VISIBLE);
         try {
-            MediaController mediacontroller = new MediaController(ForecasterDetailsActivity.this);
+            mediacontroller = new MediaController(ForecasterDetailsActivity.this);
             mediacontroller.setAnchorView(videoview);
             videoview.setMediaController(mediacontroller);
             videoview.setVideoURI(video_uri);
+            final int topContainerId1 = getResources().getIdentifier("mediacontroller_progress", "id", "android");
+            media_seekbar = (SeekBar) mediacontroller.findViewById(topContainerId1);
+            media_seekbar.setOnSeekBarChangeListener(this);
+            mediacontroller_seekbar=true;
+
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             e.printStackTrace();
@@ -501,6 +566,54 @@ public class ForecasterDetailsActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(mediacontroller_seekbar) {
+            Log.e("Progress", String.valueOf(seekBar.getProgress()));
+            if (seekBar.getMax() == progress) {
+                if (mediacontroller.isShowing()) {
+                    mediacontroller.hide();
+                    Log.e("prepare", String.valueOf(progress));
+                    play_iv.setVisibility(View.VISIBLE);
+                    videoview.stopPlayback();
+                }
+            } else {
+                play_iv.setVisibility(View.GONE);
+
+
+            }
+        }
+
+
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        Log.e("Stop", String.valueOf(seekBar.getProgress()));
+        if(mediacontroller_seekbar)
+        {
+            media_seekbar.setProgress(seekBar.getProgress());
+            videoview.seekTo(seekBar.getProgress());
+            videoview.resume();
+        }
+
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        Log.e("Stop", String.valueOf(seekBar.getProgress()));
+        if(mediacontroller_seekbar)
+        {
+            media_seekbar.setProgress(seekBar.getProgress());
+            videoview.seekTo(seekBar.getProgress());
+            videoview.resume();
+        }
+
 
     }
 }

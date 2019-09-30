@@ -99,14 +99,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/cardviewback"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                 android:hint="@string/full_name"
                 android:textColorHint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.boushra.View.SegoeRegularEditText
                 android:id="@+id/username_ed"
@@ -147,10 +146,10 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/cardviewback"
-                android:hint="@string/date_of_birth"
-                android:focusable="true"
                 android:editable="false"
+                android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:hint="@string/date_of_birth"
                 android:textColorHint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -158,187 +157,206 @@
                 app:layout_constraintTop_toBottomOf="@+id/email_ed" />
 
 
-
-
-            <com.boushra.View.SegoeRegularEditText
-                android:id="@+id/phone_ed"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/cardviewback"
-                android:hint="@string/phone_number"
-                android:editable="false"
-                android:textColorHint="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dob_ed" />
-
-            <com.boushra.View.SegoeRegularEditText
-                android:id="@+id/pob_ed"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/cardviewback"
-                android:hint="@string/place_of_birth"
-                android:textColorHint="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/phone_ed" />
-
-            <LinearLayout
-                android:id="@+id/linearLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/cardviewback"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pob_ed">
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/gener_array"
-                    >
-
-
-                </Spinner>
-            </LinearLayout>
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl"
+                android:id="@+id/cl3"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_60"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/cardviewback"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pob_ed"
-                android:background="@drawable/cardviewback">
+                app:layout_constraintTop_toBottomOf="@+id/dob_ed">
 
                 <com.boushra.View.SegoeRegularTextView
-                    android:id="@+id/gendertxt"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_60"
-                    android:text="Gender"
-                    android:gravity="start|center"
+
+                    android:id="@+id/countrycode_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+91"
+                    android:textSize="@dimen/dp_18"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_large"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/phone_ed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/down_arrow"
-                    app:layout_constraintBottom_toBottomOf="@+id/gendertxt"
+                <com.boushra.View.SegoeRegularEditText
+                    android:id="@+id/phone_ed"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="8dp"
+                    android:editable="false"
+                    android:hint="@string/phone_number"
+                    android:textColorHint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/gendertxt" />
+                    app:layout_constraintStart_toEndOf="@+id/countrycode_txt"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.boushra.View.SegoeRegularEditText
+            android:id="@+id/pob_ed"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/cardviewback"
+            android:hint="@string/place_of_birth"
+            android:textColorHint="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl3" />
+
+            <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/cardviewback"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pob_ed">
+
+            <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/gener_array"
+            >
+
+
+            </Spinner>
+            </LinearLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pob_ed"
+            android:background="@drawable/cardviewback">
+
+            <com.boushra.View.SegoeRegularTextView
+            android:id="@+id/gendertxt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:text="Gender"
+            android:gravity="start|center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/down_arrow"
+            app:layout_constraintBottom_toBottomOf="@+id/gendertxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/gendertxt" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Spinner
-                android:id="@+id/genderSpn"
-                android:layout_width="0dp"
-                android:layout_height="0.1dp"
-                android:background="@drawable/cardviewback"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl">
+            android:id="@+id/genderSpn"
+            android:layout_width="0dp"
+            android:layout_height="0.1dp"
+            android:background="@drawable/cardviewback"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl">
 
 
             </Spinner>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/genderSpn"
-                android:background="@drawable/cardviewback">
+            android:id="@+id/cl2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/genderSpn"
+            android:background="@drawable/cardviewback">
 
-                <com.boushra.View.SegoeRegularTextView
-                    android:id="@+id/maritalstatus_txt"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:gravity="start|center"
-                    android:text="Marital Status"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_large"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.boushra.View.SegoeRegularTextView
+            android:id="@+id/maritalstatus_txt"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="start|center"
+            android:text="Marital Status"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-                <ImageView
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/down_arrow"
-                    app:layout_constraintBottom_toBottomOf="@+id/maritalstatus_txt"
-                    app:layout_constraintEnd_toEndOf="@+id/maritalstatus_txt"
-                    app:layout_constraintTop_toTopOf="@+id/maritalstatus_txt" />
-
+            <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/down_arrow"
+            app:layout_constraintBottom_toBottomOf="@+id/maritalstatus_txt"
+            app:layout_constraintEnd_toEndOf="@+id/maritalstatus_txt"
+            app:layout_constraintTop_toTopOf="@+id/maritalstatus_txt" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Spinner
-                android:id="@+id/martialStatusSpn"
-                android:layout_width="0dp"
-                android:layout_height="0.1dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/cardviewback"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl2">
+            android:id="@+id/martialStatusSpn"
+            android:layout_width="0dp"
+            android:layout_height="0.1dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/cardviewback"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl2">
 
 
             </Spinner>
 
 
             <com.boushra.View.fredokaButton
-                android:id="@+id/save_btn"
+            android:id="@+id/save_btn"
 
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/buttongradient"
-                android:text="@string/save"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/cl2"
-                app:layout_constraintTop_toBottomOf="@+id/cl2" />
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/buttongradient"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/cl2"
+            app:layout_constraintTop_toBottomOf="@+id/cl2" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

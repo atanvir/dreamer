@@ -47,11 +47,12 @@ public class CategorySelectionActivity extends AppCompatActivity{
         home_iv.setBackground(getDrawable(R.drawable.home_gradient));
         home_iv.setImageDrawable(null);
 
+
        fcm=getIntent().getStringExtra("FCM");
        if(fcm!=null)
        {
            if(fcm.equalsIgnoreCase("Yes")) {
-               getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NotificationFragment()).commit();
+               getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NotificationFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
            }
 
        }

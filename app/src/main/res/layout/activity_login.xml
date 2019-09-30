@@ -58,6 +58,7 @@
             android:hint="@string/mobile_number"
             android:inputType="number"
             android:textColorHint="#123"
+            android:maxLength="10"
             android:imeOptions="actionNext"
             android:background="@android:color/transparent"
             android:textSize="@dimen/text_size_regular"

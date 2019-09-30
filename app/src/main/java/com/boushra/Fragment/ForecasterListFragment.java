@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.boushra.Activity.CategorySelectionActivity;
+import com.boushra.Activity.LoginActivity;
 import com.boushra.Adapter.ForcasterListAdapter;
 import com.boushra.Model.Data;
 import com.boushra.Model.ForcasterList;
@@ -25,6 +27,10 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +86,28 @@ public class ForecasterListFragment extends Fragment {
                         settingAdapter();
                     }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                     {
-                        Toast.makeText(getActivity(),server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                            Toast.makeText(getActivity(), getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                            SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValues();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        // Log.w(TAG, "getInstanceId failed", task.getException());
+                                        return;
+                                    }
 
+                                    String auth_token = task.getResult().getToken();
+                                    Log.w("firebaese", "token: " + auth_token);
+                                    SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
 
 

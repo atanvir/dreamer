@@ -1,6 +1,8 @@
 package com.boushra.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Activity.CategorySelectionActivity;
+import com.boushra.Activity.ForecasterDetailsActivity;
+import com.boushra.Activity.LoginActivity;
 import com.boushra.Adapter.NotificationAdapter;
 import com.boushra.Model.Data;
 import com.boushra.Model.Notification;
@@ -26,6 +30,10 @@ import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.NotificationUtils;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.List;
 
@@ -84,10 +92,30 @@ public class NotificationFragment extends Fragment {
 
                       }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                       {
-                        Toast toast=Toast.makeText(getActivity(),server_response.getResponseMessage(),Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER,0,0);
-                        toast.show();
+                          if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                              Toast.makeText(getActivity(), getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                              getActivity().finish();
+                              startActivity(new Intent(getActivity(), LoginActivity.class));
+                              SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValues();
+                              FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                  @Override
+                                  public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                      if (!task.isSuccessful()) {
+                                          // Log.w(TAG, "getInstanceId failed", task.getException());
+                                          return;
+                                      }
 
+                                      String auth_token = task.getResult().getToken();
+                                      Log.w("firebaese", "token: " + auth_token);
+                                      SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                  }
+                              });
+                          }
+                          else {
+                              Toast toast = Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG);
+                              toast.setGravity(Gravity.CENTER, 0, 0);
+                              toast.show();
+                          }
                       }
                     }
                 }

@@ -1,12 +1,15 @@
 package com.boushra.Activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.boushra.Model.WalletDetail;
@@ -17,6 +20,10 @@ import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,8 +80,28 @@ public class MyWalletActivity extends AppCompatActivity {
 
                        }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                        {
-                           Toast.makeText(MyWalletActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                           if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                               Toast.makeText(MyWalletActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                               finish();
+                               startActivity(new Intent(MyWalletActivity.this, LoginActivity.class));
+                               SharedPreferenceWriter.getInstance(MyWalletActivity.this).clearPreferenceValues();
+                               FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                       if (!task.isSuccessful()) {
+                                           // Log.w(TAG, "getInstanceId failed", task.getException());
+                                           return;
+                                       }
 
+                                       String auth_token = task.getResult().getToken();
+                                       Log.w("firebaese", "token: " + auth_token);
+                                       SharedPreferenceWriter.getInstance(MyWalletActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                   }
+                               });
+                           }
+                           else {
+                               Toast.makeText(MyWalletActivity.this, server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                           }
                        }
 
 
@@ -83,6 +110,8 @@ public class MyWalletActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<WalletDetail> call, Throwable t) {
+                    Log.e("Failure" +
+                            "",t.getMessage());
 
                 }
             });

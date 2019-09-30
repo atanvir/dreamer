@@ -36,7 +36,7 @@ public class NavigationChatFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_chat_navigation,container,false);
         ButterKnife.bind(this,view);
         pointtxt.setOnClickListener(this::OnClick);
-        pointtxt.setText(""+ SharedPreferenceWriter.getInstance(getActivity()).getInt(GlobalVariables.totalPoints));
+        pointtxt.setText(""+ SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.totalPoints));
         SettingListvalues();
         LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
         chatRV.setLayoutManager(layoutManager);

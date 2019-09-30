@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-feature
@@ -112,6 +115,13 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.WebviewActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".Activity.FullScreenVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activity.FingerprintActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.PinActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".Utility.FirebaseMessageService"

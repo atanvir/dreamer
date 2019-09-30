@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.boushra.Activity.CategorySelectionActivity;
+import com.boushra.Activity.LoginActivity;
 import com.boushra.Activity.MyWalletActivity;
 import com.boushra.Model.Data;
 import com.boushra.Model.UpdateUserProfile;
@@ -41,7 +42,12 @@ import com.boushra.Utility.TakeImage;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.boushra.Utility.Validation;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 import java.text.ParseException;
@@ -86,6 +92,7 @@ public class NavigationProfileFragment extends Fragment {
     @BindView(R.id.martialStatusSpn) Spinner martialStatusSpn;
     @BindView(R.id.dob_ed) EditText dob_ed;
     @BindView(R.id.pointtxt) TextView pointtxt;
+    @BindView(R.id.countrycode_txt) TextView countrycode_txt;
 
     List<String> genderlist;
     List<String> martailList;
@@ -145,6 +152,7 @@ public class NavigationProfileFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 maritalstatus_txt.setText(martailList.get(position));
+                maritalstatus_txt.setError(null);
             }
 
             @Override
@@ -156,6 +164,7 @@ public class NavigationProfileFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 gendertxt.setText(genderlist.get(position));
+                gendertxt.setError(null);
             }
 
             @Override
@@ -176,7 +185,8 @@ public class NavigationProfileFragment extends Fragment {
         profile_im.setOnClickListener(this::OnClick);
         dob_ed.setOnClickListener(this::OnClick);
         pointtxt.setOnClickListener(this::OnClick);
-        pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getInt(GlobalVariables.totalPoints));
+        countrycode_txt.setOnClickListener(this::OnClick);
+        pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.totalPoints));
     }
 
 
@@ -210,10 +220,32 @@ public class NavigationProfileFragment extends Fragment {
                         }
 
                         dob_ed.setText(server_response.getData().getDob());
+                        countrycode_txt.setText(server_response.getData().getCountryCode());
 
 
                     } else if (server_response.getStatus().equalsIgnoreCase("FAILURE")) {
                         dailogHelper.dismissDailog();
+                        if(server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken))
+                        {
+                            Toast.makeText(getActivity(),getString(R.string.other_device_logged_in),Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                            SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValues();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        // Log.w(TAG, "getInstanceId failed", task.getException());
+                                        return;
+                                    }
+
+                                    String auth_token = task.getResult().getToken();
+                                    Log.w("firebaese","token: "+auth_token);
+                                    SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.firebase_token,auth_token);
+                                }
+                            });
+                        }
+
 
                     }
                 }
@@ -329,7 +361,27 @@ public class NavigationProfileFragment extends Fragment {
 
                     } else if (server_response.getStatus().equalsIgnoreCase("FAILURE")) {
                         dailogHelper.dismissDailog();
-                        Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                        if(server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken))
+                        {
+                            Toast.makeText(getActivity(),getString(R.string.other_device_logged_in),Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                            SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValues();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        // Log.w(TAG, "getInstanceId failed", task.getException());
+                                        return;
+                                    }
+
+                                    String auth_token = task.getResult().getToken();
+                                    Log.w("firebaese","token: "+auth_token);
+                                    SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.firebase_token,auth_token);
+                                }
+                            });
+                        }
+                        //Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -346,7 +398,7 @@ public class NavigationProfileFragment extends Fragment {
 
     private void MaritalStatusSpinner() {
         martailList = new ArrayList<>();
-        martailList.add("Please select");
+        martailList.add("Marital status");
         martailList.add("Single");
         martailList.add("Married");
 
@@ -385,7 +437,7 @@ public class NavigationProfileFragment extends Fragment {
 
     private void GenderSpinner() {
         genderlist = new ArrayList<>();
-        genderlist.add("Please select");
+        genderlist.add("Gender");
         genderlist.add("Male");
         genderlist.add("Female");
 
@@ -425,60 +477,68 @@ public class NavigationProfileFragment extends Fragment {
 
     private boolean checkValidation() {
         boolean ret=true;
-        if(full_name_ed.getText().toString().isEmpty())
-        {
-            full_name_ed.setError("Please provide full name");
-            full_name_ed.setFocusable(true);
-            full_name_ed.requestFocus();
-            ret=false;
-        }
-        if(username_ed.getText().toString().isEmpty())
-        {
-            username_ed.setError("Please enter username");
-            username_ed.setFocusable(true);
-            username_ed.requestFocus();
-            ret=false;
-        }
-        if(email_ed.getText().toString().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email_ed.getText().toString().trim()).matches())
-        {
-            if(email_ed.getText().toString().isEmpty())
-            {
-                email_ed.setError("Please enter email id");
-                email_ed.requestFocus();
-                email_ed.setFocusable(true);
-                ret=false;
-            }
-            else if(!Patterns.EMAIL_ADDRESS.matcher(email_ed.getText().toString().trim()).matches())
-            {
-                email_ed.setError("Please enter valid email id");
-                email_ed.requestFocus();
-                email_ed.setFocusable(true);
-                ret=false;
-            }
-        }
-        if(phone_ed.getText().toString().isEmpty())
-        {
-            phone_ed.setError("Please enter phone number");
-            phone_ed.setFocusable(true);
-            phone_ed.requestFocus();
-            ret=false;
 
-        }
-        if(pob_ed.getText().toString().isEmpty())
-        {
-            pob_ed.setError("Please enter place of birth");
-            pob_ed.requestFocus();
-            pob_ed.setFocusable(true);
-            ret=false;
-        }
-        if(dob_ed.getText().toString().isEmpty())
-        {
-            dob_ed.setError("Please enter date of birth");
-            dob_ed.setFocusable(true);
-            dob_ed.requestFocus();
-            ret=false;
-        }
+        if(!Validation.hasText(full_name_ed,getString(R.string.please_enter_full_name))
+        || !Validation.hasText(username_ed,getString(R.string.enter_username))
+        || !Validation.email(email_ed,getString(R.string.enter_email))
+        || !Validation.isPhoneNumber(phone_ed,true)
+        || !Validation.hasText(pob_ed,getString(R.string.please_enter_pob))
+        || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
+        || gendertxt.getText().toString().equalsIgnoreCase("Gender")
+        || maritalstatus_txt.getText().toString().equalsIgnoreCase("Marital status")
 
+        )
+        {
+            if(!Validation.hasText(full_name_ed,getString(R.string.please_enter_full_name)))
+            {
+                ret=false;
+                full_name_ed.requestFocus();
+            }
+            else if(!Validation.hasText(username_ed,getString(R.string.enter_username)))
+            {
+                ret=false;
+                username_ed.requestFocus();
+            }
+            else if(!Validation.email(email_ed,getString(R.string.enter_email)))
+            {
+                ret=false;
+                email_ed.requestFocus();
+            }
+            else if(!Validation.isPhoneNumber(phone_ed,true))
+            {
+                ret=false;
+                phone_ed.requestFocus();
+
+            }
+            else if(!Validation.hasText(pob_ed,getString(R.string.please_enter_pob)))
+            {
+                ret=false;
+                pob_ed.requestFocus();
+            }
+            else if(!Validation.hasText(dob_ed,getString(R.string.please_enter_dob)))
+            {
+                ret=false;
+                dob_ed.requestFocus();
+            }
+            else if(gendertxt.getText().toString().equalsIgnoreCase("Gender"))
+            {
+                ret=false;
+                gendertxt.setText(getString(R.string.please_select_gender));
+                gendertxt.setError("");
+                gendertxt.requestFocus();
+                gendertxt.setFocusable(true);
+                maritalstatus_txt.setError(null);
+            }
+            else if(maritalstatus_txt.getText().toString().equalsIgnoreCase("Marital status"))
+            {
+                ret=false;
+                maritalstatus_txt.setText(getString(R.string.please_select_marital_status));
+                maritalstatus_txt.setError("");
+                maritalstatus_txt.requestFocus();
+                maritalstatus_txt.setFocusable(true);
+                gendertxt.setError(null);
+            }
+        }
 
         return ret;
     }
@@ -496,7 +556,7 @@ public class NavigationProfileFragment extends Fragment {
                     boolean readAccepted = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
                     if (cameraAccepted && writeAccepted && readAccepted) {
-                        Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_LONG).show();
                         profileBottomLayout();
 
                     }else {
@@ -563,7 +623,7 @@ public class NavigationProfileFragment extends Fragment {
                 }
             }
         } else if (requestCode == 1 && resultCode == RESULT_CANCELED) {
-            getActivity().finish();
+//            getActivity().finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

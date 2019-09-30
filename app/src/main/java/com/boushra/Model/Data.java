@@ -20,9 +20,7 @@ public class Data {
     private String language;
     @SerializedName("totalPoints")
     @Expose
-    private Integer totalPoints;
-
-
+    private Float totalPoints;
 
     @SerializedName("_id")
     @Expose
@@ -179,7 +177,7 @@ public class Data {
 
     @SerializedName("spendedPoints")
     @Expose
-    private Integer spendedPoints;
+    private String spendedPoints;
     @SerializedName("progressBooking")
     @Expose
     private Integer progressBooking;
@@ -458,11 +456,11 @@ public class Data {
         this.forecasterData = forecasterData;
     }
 
-    public Integer getSpendedPoints() {
+    public String getSpendedPoints() {
         return spendedPoints;
     }
 
-    public void setSpendedPoints(Integer spendedPoints) {
+    public void setSpendedPoints(String spendedPoints) {
         this.spendedPoints = spendedPoints;
     }
 
@@ -763,11 +761,11 @@ public class Data {
         this.notificationStatus = notificationStatus;
     }
 
-    public Integer getTotalPoints() {
+    public Float getTotalPoints() {
         return totalPoints;
     }
 
-    public void setTotalPoints(Integer totalPoints) {
+    public void setTotalPoints(Float totalPoints) {
         this.totalPoints = totalPoints;
     }
 

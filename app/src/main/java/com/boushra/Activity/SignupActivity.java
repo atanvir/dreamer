@@ -18,6 +18,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.boushra.Utility.Validation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,6 +54,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.heetch.countrypicker.Country;
 import com.heetch.countrypicker.CountryPickerCallbacks;
 import com.heetch.countrypicker.CountryPickerDialog;
@@ -295,14 +299,38 @@ public class SignupActivity extends AppCompatActivity {
                         }
                         else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
                         {
-                            progresBar.dismiss();
-                            phone_editText.setError("Mobile number already registered");
-                            phone_editText.setFocusable(true);
-                            phone_editText.requestFocus();
-                            password_editText.setText("");
-                            cpasswd_editText.setText("");
-                            Toast.makeText(SignupActivity.this,""+response.body().getResponse_message(),Toast.LENGTH_LONG).show();
-                        }
+                            dailogHelper.dismissDailog();
+                            if(server_response.getResponse_message().equalsIgnoreCase(GlobalVariables.invalidoken))
+                            {
+                                Toast.makeText(SignupActivity.this,getString(R.string.other_device_logged_in),Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(SignupActivity.this).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese","token: "+auth_token);
+                                        SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.firebase_token,auth_token);
+                                    }
+                                });
+                            }
+                            else {
+
+
+                                phone_editText.setError(server_response.getResponse_message());
+                                phone_editText.setFocusable(true);
+                                phone_editText.requestFocus();
+                                password_editText.setText("");
+                                cpasswd_editText.setText("");
+                                //Toast.makeText(SignupActivity.this,""+response.body().getResponse_message(),Toast.LENGTH_LONG).show();
+                            }
+                            }
 
 
 
@@ -340,10 +368,6 @@ public class SignupActivity extends AppCompatActivity {
         opt_phone_ed = dialog.findViewById(R.id.opt_phone_ed);
 
 
-        //firebase
-
-
-
         Button verifyBtn = dialog.findViewById(R.id.verifyBtn);
         resend_code_txt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -361,16 +385,10 @@ public class SignupActivity extends AppCompatActivity {
         verifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!opt_phone_ed.getText().toString().isEmpty()) {
-                    dialog.dismiss();
+                if(checkValidationOtp()) {
+
                     dailogHelper.showDailog();
-                    verifyVerificationCode(opt_phone_ed.getText().toString().trim());
-                }
-                else
-                {
-                    opt_phone_ed.setError("Please enter otp");
-                    opt_phone_ed.requestFocus();
-                    opt_phone_ed.setFocusable(true);
+                    verifyVerificationCode(opt_phone_ed.getText().toString().trim(),dialog);
                 }
 
             }
@@ -384,6 +402,35 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    private boolean checkValidationOtp() {
+        boolean ret=true;
+
+        if(!Validation.hasText(opt_phone_ed,getString(R.string.please_enter_otp))
+        || opt_phone_ed.getText().toString().length()!=6
+        )
+        {
+            if(!Validation.hasText(opt_phone_ed,getString(R.string.please_enter_otp)))
+            {
+                ret=false;
+                opt_phone_ed.requestFocus();
+            }
+            else if(opt_phone_ed.getText().toString().length()!=6)
+            {
+                ret=false;
+                opt_phone_ed.setError(getString(R.string.please_enter_six_digit));
+                opt_phone_ed.requestFocus();
+                opt_phone_ed.setFocusable(true);
+
+            }
+
+
+        }
+
+
+        return ret;
+
     }
 
     private void startCountDown() {
@@ -472,6 +519,7 @@ public class SignupActivity extends AppCompatActivity {
 
             // Save verification ID and resending token so we can use them later
             verificationCode = verificationId;
+           // Toast.makeText(SignupActivity.this,getString(R.string.otp_send_successfully),Toast.LENGTH_LONG).show();
 //            mResendToken = token;
 
             // ...
@@ -479,41 +527,30 @@ public class SignupActivity extends AppCompatActivity {
     };
 
 
-    private void verifyVerificationCode(String otp) {
+    private void verifyVerificationCode(String otp, Dialog dialog) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
-        signInWithPhoneAuthCredential(credential);
+        signInWithPhoneAuthCredential(credential,dialog);
     }
 
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential, Dialog dialog) {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            dialog.dismiss();
                             dailogHelper.dismissDailog();
                             signupApi();
 
 //                            termConditionPopup();
                         }
-                else {
+                else    {
 
-                            //verification unsuccessful.. display an error message
-
-                            String message = "Somthing is wrong, we will fix it soon...";
-
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                message = "Invalid code entered...";
-                            }
-
-                            Snackbar snackbar = Snackbar.make(findViewById(R.id.parent), message, Snackbar.LENGTH_LONG);
-                            snackbar.setAction("Dismiss", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            });
-                            snackbar.show();
+                            dailogHelper.dismissDailog();
+                            opt_phone_ed.setError(getString(R.string.otp_not_match));
+                            opt_phone_ed.requestFocus();
+                            opt_phone_ed.setFocusable(true);
                         }
                     }
                 });
@@ -557,7 +594,29 @@ public class SignupActivity extends AppCompatActivity {
                     {
 //                                                        dialog1.dismiss();
                         dailogHelper.dismissDailog();
-                        Toast.makeText(SignupActivity.this,server_response.getResponse_message(),Toast.LENGTH_LONG).show();
+                        if(server_response.getResponse_message().equalsIgnoreCase(GlobalVariables.invalidoken))
+                        {
+                            Toast.makeText(SignupActivity.this,getString(R.string.other_device_logged_in),Toast.LENGTH_LONG).show();
+                            finish();
+                            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                            SharedPreferenceWriter.getInstance(SignupActivity.this).clearPreferenceValues();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        // Log.w(TAG, "getInstanceId failed", task.getException());
+                                        return;
+                                    }
+
+                                    String auth_token = task.getResult().getToken();
+                                    Log.w("firebaese","token: "+auth_token);
+                                    SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.firebase_token,auth_token);
+                                }
+                            });
+                        }
+                        else{
+                            Toast.makeText(SignupActivity.this,server_response.getResponse_message(),Toast.LENGTH_LONG).show();
+                    }
                     }
                 }
             }
@@ -661,7 +720,7 @@ public class SignupActivity extends AppCompatActivity {
         SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.profilePic,server_response.getData().getProfilePic());
         SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
         SharedPreferenceWriter.getInstance(SignupActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
-        SharedPreferenceWriter.getInstance(SignupActivity.this).writeIntValue(GlobalVariables.totalPoints,server_response.getData().getTotalPoints());
+        SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.totalPoints, String.valueOf(server_response.getData().getTotalPoints()));
         SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables._id,server_response.getData().getId());
         SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.name,server_response.getData().getName());
         SharedPreferenceWriter.getInstance(SignupActivity.this).writeStringValue(GlobalVariables.birthPlace,server_response.getData().getBirthPlace());
@@ -750,38 +809,45 @@ public class SignupActivity extends AppCompatActivity {
     private boolean checkValidation() {
         boolean ret=true;
 
-        if(phone_editText.getText().toString().isEmpty() || phone_editText.getText().toString().length()!=10)
+        if(!Validation.hasText(phone_editText,getString(R.string.enter_mobile_number))
+        || !Validation.isPhoneNumber(phone_editText,true)
+        || !Validation.hasText(password_editText,getString(R.string.please_enter_password))
+        || !Validation.hasText(cpasswd_editText,getString(R.string.please_enter_confirm_password))
+        || !cpasswd_editText.getText().toString().trim().equalsIgnoreCase(password_editText.getText().toString().trim())
+        )
         {
-            if(phone_editText.getText().toString().isEmpty()) {
-                phone_editText.setError("Please enter phone number");
-                phone_editText.requestFocus();
-                phone_editText.setFocusable(true);
-                ret=false;
-            }
-            else if(phone_editText.getText().toString().length()!=10)
+           if(!Validation.hasText(phone_editText,getString(R.string.enter_mobile_number)))
             {
-                phone_editText.setError("Please enter valid phone number");
-                phone_editText.requestFocus();
-                phone_editText.setFocusable(true);
                 ret=false;
+                phone_editText.requestFocus();
             }
-        }
-        if(password_editText.getText().toString().isEmpty())
-        {
-            password_editText.setError("Please enter password");
-            password_editText.requestFocus();
-            password_editText.setFocusable(true);
-            ret=false;
+            else if(!Validation.isPhoneNumber(phone_editText,true))
+           {
+               ret=false;
+               phone_editText.requestFocus();
+           }
+           else if(!Validation.hasText(password_editText,getString(R.string.please_enter_password)))
+            {
+                ret=false;
+                password_editText.requestFocus();
 
-        }
-        if(cpasswd_editText.getText().toString().isEmpty())
-        {
-            cpasswd_editText.setError("Please enter confirm password");
-            cpasswd_editText.requestFocus();
-            cpasswd_editText.setFocusable(true);
-            ret=false;
+            }
+           else if(!Validation.hasText(cpasswd_editText,getString(R.string.please_enter_confirm_password)))
+            {
+                ret=false;
+                cpasswd_editText.requestFocus();
 
+            }
+           else if(!cpasswd_editText.getText().toString().trim().equalsIgnoreCase(password_editText.getText().toString().trim()))
+           {
+               ret=false;
+               cpasswd_editText.setError(getString(R.string.confirm_password_not_match));
+               cpasswd_editText.requestFocus();
+               cpasswd_editText.setFocusable(true);
+           }
         }
+
+
         return ret;
     }
 

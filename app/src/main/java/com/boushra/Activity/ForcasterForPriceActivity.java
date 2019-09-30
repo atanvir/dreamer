@@ -44,6 +44,10 @@ import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.boushra.Utility.Validation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -207,7 +211,29 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
                         }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
+                            if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                Toast.makeText(ForcasterForPriceActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(new Intent(ForcasterForPriceActivity.this, LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese", "token: " + auth_token);
+                                        SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                    }
+                                });
+                            }
+                            else
+                            {
                             Toast.makeText(ForcasterForPriceActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        }
                         }
                     }
                 }
@@ -363,7 +389,28 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                         }
                         else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
+                            if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                Toast.makeText(ForcasterForPriceActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(new Intent(ForcasterForPriceActivity.this, LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese", "token: " + auth_token);
+                                        SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                    }
+                                });
+                            }else
+                            {
                             Toast.makeText(ForcasterForPriceActivity.this,server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        }
                         }
 
                     }
@@ -477,49 +524,54 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
     }
 
     private void playingAudio() {
-        try {
-            play_iv.setVisibility(View.GONE);
-            pause_iv.setVisibility(View.VISIBLE);
+        if(!recording) {
 
-            if(timer!=null) {
-                timer.cancel();
+            try {
+                play_iv.setVisibility(View.GONE);
+                pause_iv.setVisibility(View.VISIBLE);
 
-            }
-            recording=false;
-            playing=true;
-            mPlayer = new MediaPlayer();
-            if(fileName!=null) {
-                mPlayer.setDataSource(fileName);
-                mPlayer.prepare();
-                if(pause) {
-                    mPlayer.seekTo(lastplayposition);
-                }
-                mPlayer.start();
-                seekBar.setMax(mPlayer.getDuration());
-            }
-            else
-            {
-                Toast toast=Toast.makeText(ForcasterForPriceActivity.this,"Please record your audio first",Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.show();
-                seekBar.setMax(0);
-            }
-
-            seekBar.setProgress(0);
-            seekBar.setClickable(false);
-            seekUpdation();
-
-            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    play_iv.setVisibility(View.VISIBLE);
-                    pause_iv.setVisibility(View.GONE);
-                    pause=false;
+                if (timer != null) {
+                    timer.cancel();
 
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+                recording = false;
+                playing = true;
+                mPlayer = new MediaPlayer();
+                if (fileName != null) {
+                    mPlayer.setDataSource(fileName);
+                    mPlayer.prepare();
+                    if (pause) {
+                        mPlayer.seekTo(lastplayposition);
+                    }
+                    mPlayer.start();
+                    seekBar.setMax(mPlayer.getDuration());
+                } else {
+                    Toast toast = Toast.makeText(ForcasterForPriceActivity.this, "Please record your audio first", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    seekBar.setMax(0);
+                }
+
+                seekBar.setProgress(0);
+                seekBar.setClickable(false);
+                seekUpdation();
+
+                mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        play_iv.setVisibility(View.VISIBLE);
+                        pause_iv.setVisibility(View.GONE);
+                        pause = false;
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            Toast.makeText(ForcasterForPriceActivity.this,getString(R.string.please_stop_recording),Toast.LENGTH_LONG).show();
         }
     }
 
@@ -569,34 +621,61 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
     private boolean checkValidation() {
         boolean ret=true;
-        if(!Validation.hasText(name_ed)) ret=false;
-        if(!Validation.hasText(pob_ed)) ret=false;
-        if(!Validation.hasText(dob_ed)) ret=false;
-        if(gender_txt.getText().toString().equalsIgnoreCase(getString(R.string.gender)))
+        if(     !Validation.hasText(name_ed,getString(R.string.please_enter_full_name))
+                || !Validation.hasText(pob_ed,getString(R.string.please_enter_pob))
+                || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
+                || gender_txt.getText().toString().equalsIgnoreCase(getString(R.string.gender))
+                || maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status))
+                || !Validation.hasText(dream_ed,getString(R.string.write_dream))
+                || audio==null
+        )
         {
-         ret=false;
-         gender_txt.setError("Please select gender");
-         gender_txt.setFocusable(true);
-         gender_txt.requestFocus();
+            if(!Validation.hasText(name_ed,getString(R.string.please_enter_full_name)))
+            {
+                ret=false;
+                name_ed.requestFocus();
+            }
+            else if(!Validation.hasText(pob_ed,getString(R.string.please_enter_pob)))
+            {
+                ret=false;
+                pob_ed.requestFocus();
+            }
+            else if(!Validation.hasText(dob_ed,getString(R.string.please_enter_dob)))
+            {
+                ret=false;
+                dob_ed.requestFocus();
+            }
+            else if(gender_txt.getText().toString().equalsIgnoreCase(getString(R.string.gender)))
+            {
+                ret=false;
+                gender_txt.setError("Please select gender");
+                gender_txt.setFocusable(true);
+                gender_txt.requestFocus();
+                maritalstatus_txt.setError(null);
+
+            }
+            else if(maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status)))
+            {
+                ret=false;
+                maritalstatus_txt.setError("Please select gender");
+                maritalstatus_txt.setFocusable(true);
+                maritalstatus_txt.requestFocus();
+                gender_txt.setError(null);
+
+            }
+            else if(!Validation.hasText(dream_ed,getString(R.string.write_dream)))
+            {
+                ret=false;
+                maritalstatus_txt.setError(null);
+                gender_txt.setError(null);
+                dream_ed.requestFocus();
+            }
+            else if(audio==null)
+            {
+                ret=false;
+                Toast.makeText(ForcasterForPriceActivity.this,"Please record your voice note",Toast.LENGTH_LONG).show();
+            }
         }
-        if(maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status)))
-        {
-            ret=false;
-            maritalstatus_txt.setError("Please select marital status");
-            maritalstatus_txt.setFocusable(true);
-            maritalstatus_txt.requestFocus();
-
-        }
-
-
-        if(!Validation.hasText(dream_ed)) ret=false;
-        if(audio==null)
-        {
-            ret=false;
-            Toast.makeText(ForcasterForPriceActivity.this,"Please record your voice note",Toast.LENGTH_LONG).show();
-        }
-
-
         return ret;
     }
 

@@ -33,7 +33,6 @@
                 android:layout_height="@dimen/dp_40"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-
                 android:layout_centerVertical="true"
                 android:src="@drawable/back"
 
@@ -226,47 +225,66 @@
                     app:layout_constraintTop_toTopOf="@+id/seekBar"
                     app:layout_constraintVertical_bias="0.909" />
 
+                <!--<ImageView-->
+                    <!--android:id="@+id/video_iv"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/dp_200"-->
+                    <!--android:layout_marginStart="16dp"-->
+                    <!--android:layout_marginTop="24dp"-->
+                    <!--android:layout_marginEnd="16dp"-->
+                    <!--android:scaleType="fitXY"-->
+                    <!--android:visibility="visible"-->
+                    <!--app:layout_constraintBottom_toTopOf="@+id/cardView"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintHorizontal_bias="0.473"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+
+                    <!--app:layout_constraintTop_toBottomOf="@+id/imageView5"-->
+                    <!--app:srcCompat="@drawable/vedio_img" />-->
+
+
                 <ImageView
-                    android:id="@+id/video_iv"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_200"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="16dp"
-                    android:scaleType="fitXY"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/cardView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.473"
-                    app:layout_constraintStart_toStartOf="parent"
-
-                    app:layout_constraintTop_toBottomOf="@+id/imageView5"
-                    app:srcCompat="@drawable/vedio_img" />
+                    android:id="@+id/zoom_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:elevation="@dimen/dp_4"
+                    android:src="@drawable/zoom_in"
+                    app:layout_constraintStart_toStartOf="@+id/rr"
+                    app:layout_constraintTop_toTopOf="@+id/rr">
 
 
-                <RelativeLayout
+                </ImageView>
+
+
+                <LinearLayout
                     android:id="@+id/rr"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
-                    app:layout_constraintBottom_toTopOf="@+id/cardView"
+                    android:gravity="center"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.473"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView5">
 
 
                     <VideoView
                         android:id="@+id/videoview"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_200"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
                         android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
                         android:layout_alignParentRight="true"
-                        android:visibility="gone"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="center"
+                        android:elevation="2dp"
+                        android:foregroundGravity="center"
+                        android:visibility="visible"
                         app:srcCompat="@drawable/vedio_img" />
-                </RelativeLayout>
+                </LinearLayout>
 
 
                 <ImageView
@@ -275,8 +293,8 @@
                     android:layout_height="wrap_content"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/rr"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/rr"
+                    app:layout_constraintStart_toStartOf="@+id/rr"
                     app:layout_constraintTop_toTopOf="@+id/rr"
                     app:srcCompat="@android:drawable/ic_media_play" />
 
@@ -306,7 +324,7 @@
                     app:cardUseCompatPadding="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/video_iv">
+                    app:layout_constraintTop_toBottomOf="@+id/rr">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"

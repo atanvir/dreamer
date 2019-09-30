@@ -99,6 +99,36 @@
     <string name="gender">Gender</string>
     <string name="marital_status">Marital Status</string>
     <string name="write_here_comment">Write here comment...</string>
+    <string name="enter_mobile_number">Please enter mobile number</string>
+    <string name="enter_password">Please enter password</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="please_enter_confirm_password">Please enter confirm password</string>
+    <string name="confirm_password_not_match">Confirm passcode does not match</string>
+    <string name="please_enter_otp">Please enter otp</string>
+    <string name="please_enter_six_digit">Please enter six digit otp</string>
+    <string name="otp_not_match">Otp does not match</string>
+    <string name="otp_send_successfully">Otp has send successfully</string>
+    <string name="please_enter_new_password">Please enter new password</string>
+    <string name="please_enter_old_password">Please enter old password</string>
+    <string name="please_enter_full_name">Please enter full name</string>
+    <string name="enter_username">Please enter username</string>
+    <string name="enter_email">Please enter email</string>
+    <string name="please_enter_pob">Please enter place of birth</string>
+    <string name="please_enter_dob">Please enter date of birth</string>
+    <string name="please_select_gender">Please select gender</string>
+    <string name="please_select_marital_status">Please select marital status</string>
+    <string name="write_dream">Please write your dream</string>
+    <string name="please_stop_recording">Please stop recording first</string>
+    <string name="other_device_logged_in">Same user has been logged in another device</string>
+    <string name="use_passcode">Use passcode</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="invalid">Invalid !</string>
+    <string name="back">BACK</string>
+    <string name="delete">DELETE</string>
+    <string name="touch_id">Touch id</string>
+    <string name="create_your_passcode">Create your passcode</string>
+    <string name="please_reenter_confirm_password">Please re-enter confirm passcode</string>
+    <string name="fingerprint_configured">Fingerprint configured</string>
 
     <string-array name="gener_array">
         <item>Gender</item>

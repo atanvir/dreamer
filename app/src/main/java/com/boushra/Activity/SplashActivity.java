@@ -32,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
     String fcm="";
+    String splash_pass="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,36 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         ButterKnife.bind(this);
+        splash_pass=getIntent().getStringExtra("pass_splash");
 
+
+        if (SharedPreferenceWriter.getInstance(SplashActivity.this).getBoolean(GlobalVariables.touchid)) {
+            if(splash_pass!=null) {
+                if(splash_pass.equalsIgnoreCase("Yes"))
+                {
+                    startSplashMethods();
+                }
+
+            }
+            else {
+                Intent intent = new Intent(this, FingerprintActivity.class);
+                finish();
+                startActivity(intent);
+            }
+        } else {
+
+            startSplashMethods();
+        }
+
+
+
+
+
+
+
+    }
+
+    private void startSplashMethods() {
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -58,9 +88,9 @@ public class SplashActivity extends AppCompatActivity {
         if(fcm!=null)
         {
             Log.e("fcm",fcm);
-                Intent intent=new Intent(this,CategorySelectionActivity.class);
-                intent.putExtra("FCM","Yes");
-                startActivity(intent);
+            Intent intent=new Intent(this,CategorySelectionActivity.class);
+            intent.putExtra("FCM","Yes");
+            startActivity(intent);
 
 
 
@@ -69,7 +99,6 @@ public class SplashActivity extends AppCompatActivity {
         {
             startMethod();
         }
-
 
     }
 

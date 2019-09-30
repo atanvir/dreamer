@@ -45,7 +45,7 @@ public class NavigationMoreFragment extends Fragment implements View.OnClickList
         notification_im=view.findViewById(R.id.notification_im);
         pointtxt=view.findViewById(R.id.pointtxt);
         pointtxt.setOnClickListener(this);
-        pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getInt(GlobalVariables.totalPoints));
+        pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.totalPoints));
 
         notification_im.setOnClickListener((View.OnClickListener) this);
         manager=new LinearLayoutManager(getActivity());

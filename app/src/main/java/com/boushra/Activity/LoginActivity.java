@@ -40,6 +40,7 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.boushra.Utility.Validation;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -55,6 +56,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.heetch.countrypicker.Country;
 import com.heetch.countrypicker.CountryPickerCallbacks;
 import com.heetch.countrypicker.CountryPickerDialog;
@@ -87,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     String auth_token;
     FirebaseAuth auth;;
 
-    TextView newpass_txt,confirmpass_txt;
+    EditText newpass_txt,confirmpass_txt;
     String countrycode="";
     TextView resend_code_txt;
     long clickcount=0;
@@ -207,7 +210,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 Login server_response=response.body();
                                 if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                                 {
-                                  //  Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
                                     setPreferences(server_response);
                                     Intent intent=new Intent(LoginActivity.this,CategorySelectionActivity.class);
                                     startActivity(intent);
@@ -216,15 +218,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 }
                                 else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
                                 {
-                                    mobile_number_ed.setError("Invalid number");
-                                    mobile_number_ed.setFocusable(true);
-                                    mobile_number_ed.requestFocus();
+                                    if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                        Toast.makeText(LoginActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                        finish();
+                                        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                                        SharedPreferenceWriter.getInstance(LoginActivity.this).clearPreferenceValues();
+                                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    // Log.w(TAG, "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
 
-                                    password_ed.setError("Invalid password");
-                                    password_ed.setFocusable(true);
-                                    password_ed.requestFocus();
-
-                                    //Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                                                String auth_token = task.getResult().getToken();
+                                                Log.w("firebaese", "token: " + auth_token);
+                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                            }
+                                        });
+                                    }else
+                                    {
+                                    Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                                }
                                 }
 
                             }
@@ -233,16 +248,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                         @Override
                         public void onFailure(Call<Login> call, Throwable t) {
+                            Log.e("error",t.getMessage());
 
                         }
                     });
 
                 }
-
-
-
-
-
 
                 break;
             case R.id.googleLL:
@@ -260,6 +271,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             case R.id.forgetPasswordtxt:
                 forgotPasswordPopup();
+//                changePasswordPopUp();
                 break;
 
             case R.id.countryCodePicker:
@@ -380,17 +392,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         verifyBtn.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                if(!opt_phone_ed.getText().toString().isEmpty())
+                                                if(checkValidationOtp())
                                                 {
-                                                    dialog.dismiss();
-                                                    verifyVerificationCode(opt_phone_ed.getText().toString().trim());
+                                                    dailogHelper.showDailog();
+                                                    verifyVerificationCode(opt_phone_ed.getText().toString().trim(),dialog);
 
-                                                }
-                                                else
-                                                {
-                                                    opt_phone_ed.setError("Please enter Otp");
-                                                    opt_phone_ed.setFocusable(true);
-                                                    opt_phone_ed.requestFocus();
                                                 }
 
                                             }
@@ -402,10 +408,33 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
                                 {
                                     //dialog.dismiss();
-                                    phone_editText.setError(server_response.getResponse_message());
-                                    phone_editText.setFocusable(true);
-                                    phone_editText.requestFocus();
                                     dailogHelper.dismissDailog();
+
+                                    if (server_response.getResponse_message().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                        Toast.makeText(LoginActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                        finish();
+                                        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                                        SharedPreferenceWriter.getInstance(LoginActivity.this).clearPreferenceValues();
+                                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    // Log.w(TAG, "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
+
+                                                String auth_token = task.getResult().getToken();
+                                                Log.w("firebaese", "token: " + auth_token);
+                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        phone_editText.setError(server_response.getResponse_message());
+                                        phone_editText.setFocusable(true);
+                                        phone_editText.requestFocus();
+                                    }
+
 
 
 
@@ -456,6 +485,35 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    private boolean checkValidationOtp() {
+        boolean ret=true;
+
+        if(!Validation.hasText(opt_phone_ed,getString(R.string.please_enter_otp))
+                || opt_phone_ed.getText().toString().length()!=6
+        )
+        {
+            if(!Validation.hasText(opt_phone_ed,getString(R.string.please_enter_otp)))
+            {
+                ret=false;
+                opt_phone_ed.requestFocus();
+            }
+            else if(opt_phone_ed.getText().toString().length()!=6)
+            {
+                ret=false;
+                opt_phone_ed.setError(getString(R.string.please_enter_six_digit));
+                opt_phone_ed.requestFocus();
+                opt_phone_ed.setFocusable(true);
+
+            }
+
+
+        }
+
+
+        return ret;
+
+    }
+
     private void otpVerifyPopup() {
     }
 
@@ -501,7 +559,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.language,server_response.getData().getLanguage());
-        SharedPreferenceWriter.getInstance(LoginActivity.this).writeIntValue(GlobalVariables.totalPoints,server_response.getData().getTotalPoints());
+        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.totalPoints, String.valueOf(server_response.getData().getTotalPoints()));
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.name,server_response.getData().getName());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.birthPlace,server_response.getData().getBirthPlace());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.email,server_response.getData().getEmail());
@@ -524,106 +582,135 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-    private void verifyVerificationCode(String otp) {
+    private void verifyVerificationCode(String otp, Dialog dialog) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
 
         //signing the user
-        signInWithPhoneAuthCredential(credential);
+        signInWithPhoneAuthCredential(credential,dialog);
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential, Dialog dialog) {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            Log.e("otp_matched","matched");
-                            final Dialog dialog=new Dialog(LoginActivity.this,android.R.style.Theme_Black);
-                            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.setContentView(R.layout.activity_change_password);
-                            TextView oldpass_txt=dialog.findViewById(R.id.oldpass_txt);
-                            oldpass_txt.setVisibility(View.GONE);
-                             newpass_txt=dialog.findViewById(R.id.newpass_txt);
-                             confirmpass_txt=dialog.findViewById(R.id.confirmpass_txt);
-                            TouchListner();
-
-                            TextView changePasswordTextView=dialog.findViewById(R.id.changePasswordTextView);
-
-                            changePasswordTextView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if(checkValidationChangePassword())
-                                    {
-
-                                        RetroInterface api_service=RetrofitInit.getConnect().createConnection();
-                                        ForgotPassword password=new ForgotPassword();
-                                        password.setUserId(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables._id));
-                                        password.setPassword(newpass_txt.getText().toString().trim());
-                                        password.setLangCode("en");
-                                        Call<ForgotPassword> call= api_service.userResetPassword(password);
-                                        call.enqueue(new Callback<ForgotPassword>() {
-                                            @Override
-                                            public void onResponse(Call<ForgotPassword> call, Response<ForgotPassword> response) {
-                                                if(response.isSuccessful())
-                                                {
-
-                                                    ForgotPassword server_response=response.body();
-                                                    if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
-                                                    {
-                                                        dialog.dismiss();
-                                                        setPreferencesForgotPassword(server_response);
-                                                        Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
-                                                    }
-                                                    else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
-                                                    {
-                                                        dialog.dismiss();
-                                                        Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
-                                                    }
-
-                                                }
-                                            }
-
-                                            private void setPreferencesForgotPassword(ForgotPassword server_response) {
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.profilePic,server_response.getData().getProfilePic());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeIntValue(GlobalVariables.totalPoints,server_response.getData().getTotalPoints());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.name,server_response.getData().getName());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.birthPlace,server_response.getData().getBirthPlace());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.email,server_response.getData().getEmail());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.mobileNumber,server_response.getData().getMobileNumber());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.dob,server_response.getData().getDob());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.gender,server_response.getData().getGender());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.countryCode,server_response.getData().getCountryCode());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.maritalStatus,server_response.getData().getMaritalStatus());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.createdAt,server_response.getData().getCreatedAt());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.updatedAt,server_response.getData().getUpdatedAt());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeIntValue(GlobalVariables.__v,server_response.getData().getV());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables._id,server_response.getData().getId());
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.jwtToken,server_response.getData().getJwtToken());
-
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ForgotPassword> call, Throwable t) {
-
-                                            }
-                                        });
-
-                                    }
-                                }
-                            });
-
-                            dialog.show();
-
+                            dialog.dismiss();
+                            dailogHelper.dismissDailog();
+                            changePasswordPopUp();
                         } else {
+                            dailogHelper.dismissDailog();
+                            opt_phone_ed.setError(getString(R.string.otp_not_match));
+                            opt_phone_ed.setFocusable(true);
+                            opt_phone_ed.requestFocus();
 
                         }
                     }
                 });
+    }
+
+    private void changePasswordPopUp() {
+        final Dialog dialog=new Dialog(LoginActivity.this,android.R.style.Theme_Black);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.activity_change_password);
+        TextView oldpass_txt=dialog.findViewById(R.id.oldpass_txt);
+        oldpass_txt.setVisibility(View.GONE);
+        newpass_txt=dialog.findViewById(R.id.newpass_txt);
+        confirmpass_txt=dialog.findViewById(R.id.confirmpass_txt);
+        TouchListner();
+
+        TextView changePasswordTextView=dialog.findViewById(R.id.changePasswordTextView);
+
+        changePasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkValidationChangePassword())
+                {
+
+                    RetroInterface api_service=RetrofitInit.getConnect().createConnection();
+                    ForgotPassword password=new ForgotPassword();
+                    password.setUserId(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables._id));
+                    password.setPassword(newpass_txt.getText().toString().trim());
+                    password.setLangCode("en");
+                    Call<ForgotPassword> call= api_service.userResetPassword(password);
+                    call.enqueue(new Callback<ForgotPassword>() {
+                        @Override
+                        public void onResponse(Call<ForgotPassword> call, Response<ForgotPassword> response) {
+                            if(response.isSuccessful())
+                            {
+
+                                ForgotPassword server_response=response.body();
+                                if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
+                                {
+                                    dialog.dismiss();
+                                    setPreferencesForgotPassword(server_response);
+                                    Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                                }
+                                else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
+                                {
+                                    if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                        Toast.makeText(LoginActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                        finish();
+                                        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                                        SharedPreferenceWriter.getInstance(LoginActivity.this).clearPreferenceValues();
+                                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    // Log.w(TAG, "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
+
+                                                String auth_token = task.getResult().getToken();
+                                                Log.w("firebaese", "token: " + auth_token);
+                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                    dialog.dismiss();
+                                    Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                                }
+                                }
+
+                            }
+                        }
+
+                        private void setPreferencesForgotPassword(ForgotPassword server_response) {
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.profilePic,server_response.getData().getProfilePic());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.totalPoints, String.valueOf(server_response.getData().getTotalPoints()));
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.name,server_response.getData().getName());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.birthPlace,server_response.getData().getBirthPlace());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.email,server_response.getData().getEmail());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.mobileNumber,server_response.getData().getMobileNumber());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.dob,server_response.getData().getDob());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.gender,server_response.getData().getGender());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.countryCode,server_response.getData().getCountryCode());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.maritalStatus,server_response.getData().getMaritalStatus());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.createdAt,server_response.getData().getCreatedAt());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.updatedAt,server_response.getData().getUpdatedAt());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeIntValue(GlobalVariables.__v,server_response.getData().getV());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables._id,server_response.getData().getId());
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.jwtToken,server_response.getData().getJwtToken());
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ForgotPassword> call, Throwable t) {
+
+                        }
+                    });
+
+                }
+            }
+        });
+
+        dialog.show();
     }
 
     private void TouchListner() {
@@ -703,33 +790,32 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private boolean checkValidationChangePassword() {
         boolean ret=true;
 
-        if(newpass_txt.getText().toString().trim().isEmpty())
+        if(!Validation.hasText(newpass_txt,getString(R.string.please_enter_new_password))
+        || !Validation.hasText(confirmpass_txt,getString(R.string.please_enter_confirm_password))
+        || !confirmpass_txt.getText().toString().equalsIgnoreCase(newpass_txt.getText().toString().trim())
+        )
         {
+            if(!Validation.hasText(newpass_txt,getString(R.string.please_enter_new_password)))
+            {
+                ret=false;
+                newpass_txt.requestFocus();
 
-           newpass_txt.setError("Please enter new password");
-           newpass_txt.setFocusable(true);
-           newpass_txt.requestFocus();
-           ret=false;
-
-        }
-        if(confirmpass_txt.getText().toString().trim().isEmpty() || confirmpass_txt.getText().toString().equalsIgnoreCase(newpass_txt.getText().toString().trim()))
-        {
-            if(confirmpass_txt.getText().toString().trim().isEmpty()) {
-                confirmpass_txt.setError("Please enter confirm password");
-                confirmpass_txt.setFocusable(true);
+            }else if(!Validation.hasText(confirmpass_txt,getString(R.string.please_enter_confirm_password)))
+            {
+                ret=false;
                 confirmpass_txt.requestFocus();
-                ret = false;
             }
             else if(!confirmpass_txt.getText().toString().equalsIgnoreCase(newpass_txt.getText().toString().trim()))
             {
-                confirmpass_txt.setError("Confirm password do not match");
+                confirmpass_txt.setError(getString(R.string.confirm_password_not_match));
                 confirmpass_txt.setFocusable(true);
                 confirmpass_txt.requestFocus();
                 ret = false;
 
             }
-        }
 
+
+        }
 
         return ret;
     }
@@ -767,6 +853,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
             Log.d("Code Sent", "onCodeSent:" + verificationId);
             verificationCode = verificationId;
+           // Toast.makeText(LoginActivity.this,getString(R.string.otp_send_successfully),Toast.LENGTH_LONG).show();
         }
     };
 
@@ -775,7 +862,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.profilePic,server_response.getData().getProfilePic());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
-        SharedPreferenceWriter.getInstance(LoginActivity.this).writeIntValue(GlobalVariables.totalPoints,server_response.getData().getTotalPoints());
+        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.totalPoints, String.valueOf(server_response.getData().getTotalPoints()));
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.name,server_response.getData().getName());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.birthPlace,server_response.getData().getBirthPlace());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.email,server_response.getData().getEmail());
@@ -797,50 +884,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private boolean checkValidation() {
         boolean ret=true;
-        if(mobile_number_ed.getText().toString().equalsIgnoreCase("") && mobile_number_ed.getText().toString().length()==0)
+        if(!Validation.hasText(mobile_number_ed,getString(R.string.enter_mobile_number))
+        || !Validation.isPhoneNumber(mobile_number_ed,true)
+        || !Validation.hasText(password_ed,getString(R.string.enter_password))
+        )
         {
-            mobile_number_ed.setError("Please enter mobile number");
-            mobile_number_ed.setFocusable(true);
-            mobile_number_ed.requestFocus();
-            ret=false;
+            if(!Validation.hasText(mobile_number_ed,getString(R.string.enter_mobile_number)))
+            {
+                ret=false;
+                mobile_number_ed.requestFocus();
+            }
+            else if(!Validation.isPhoneNumber(mobile_number_ed,true))
+            {
+                ret=false;
+                mobile_number_ed.requestFocus();
 
-        }
-        else if(mobile_number_ed.getText().toString().length()<10 || mobile_number_ed.getText().toString().length()>10)
-        {
-
-            AlertDialog.Builder dialog=new AlertDialog.Builder(LoginActivity.this);
-            dialog.setMessage("Please enter valid mobile number");
-            dialog.setCancelable(false);
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.dismiss();
-                    mobile_number_ed.setError("");
-                    mobile_number_ed.setFocusable(true);
-                    mobile_number_ed.requestFocus();
-
-
-                }
-            });
-            dialog.show();
-
-
-            ret=false;
-
-
+            }
+            else if(!Validation.hasText(password_ed,getString(R.string.enter_password)))
+            {
+                ret=false;
+                password_ed.requestFocus();
+            }
         }
 
-        if(password_ed.getText().toString().trim().isEmpty())
-        {
-            password_ed.setError("Please enter password");
-            password_ed.setFocusable(true);
-            password_ed.requestFocus();
-            ret=false;
-
-        }
-        return ret;
+           return ret;
     }
 
 
@@ -897,10 +964,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
                         }
-                        else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
-                        {
+                        else if(server_response.getStatus().equalsIgnoreCase("FAILURE")) {
                             progressDialog.dismiss();
-                            Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                            if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                Toast.makeText(LoginActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(LoginActivity.this).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese", "token: " + auth_token);
+                                        SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                    }
+                                });
+                            } else {
+
+                                Toast.makeText(LoginActivity.this, "" + server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
 
 

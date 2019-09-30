@@ -13,7 +13,7 @@ public class BookForcaster {
     private String userId;
     @SerializedName("points")
     @Expose
-    private Integer points;
+    private Float points;
     @SerializedName("categoryName")
     @Expose
     private String categoryName;
@@ -87,11 +87,11 @@ public class BookForcaster {
         this.userId = userId;
     }
 
-    public Integer getPoints() {
+    public Float getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(Float points) {
         this.points = points;
     }
 

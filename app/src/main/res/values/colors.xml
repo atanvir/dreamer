@@ -9,5 +9,7 @@
     <color name="black">#123</color>
     <color name="colorGrayType2">#ECECEC</color>
     <color name="blue">#3466FF</color>
+    <color name="red">#F44336</color>
+    <color name="green">#418778</color>
 
 </resources>

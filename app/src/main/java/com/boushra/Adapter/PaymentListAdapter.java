@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.boushra.Activity.LoginActivity;
 import com.boushra.Activity.MyWalletActivity;
 import com.boushra.Activity.SettingsActivity;
 import com.boushra.Activity.TermsandConditionsActivity;
@@ -30,6 +31,10 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.List;
 
@@ -66,7 +71,7 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
         if(positon==2)
         {
             myViewHolder.walletpointtxtView.setVisibility(View.VISIBLE);
-            myViewHolder.walletpointtxtView.setText(""+SharedPreferenceWriter.getInstance(context).getInt(GlobalVariables.totalPoints));
+            myViewHolder.walletpointtxtView.setText(""+SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.totalPoints));
         }
         else
         {
@@ -151,8 +156,28 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                                     }
                                     else if(server_resposne.getStatus().equalsIgnoreCase("FAILURE"))
                                     {
-                                        Toast.makeText(context,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
+                                        if (server_resposne.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                            Toast.makeText(context, context.getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
 
+                                            context.startActivity(new Intent(context, LoginActivity.class));
+                                            SharedPreferenceWriter.getInstance(context).clearPreferenceValues();
+                                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        // Log.w(TAG, "getInstanceId failed", task.getException());
+                                                        return;
+                                                    }
+
+                                                    String auth_token = task.getResult().getToken();
+                                                    Log.w("firebaese", "token: " + auth_token);
+                                                    SharedPreferenceWriter.getInstance(context).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Toast.makeText(context, "" + server_resposne.getResponseMessage(), Toast.LENGTH_LONG).show();
+                                        }
 
                                     }
 

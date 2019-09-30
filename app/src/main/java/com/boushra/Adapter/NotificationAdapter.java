@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -66,10 +67,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             long differenceDate=startDate.getTime()-endDate.getTime();
             Log.e("differnce", String.valueOf(differenceDate));
             String[] completeDate=splitted[0].split("-");
+            String date1=completeDate[0];
             String month=completeDate[1];
             String year=completeDate[2];
-            YearMonth yearMonth=YearMonth.of(Integer.parseInt(year),Integer.parseInt(month));
-            int days_in_months=yearMonth.lengthOfMonth();
+//            YearMonth yearMonth=YearMonth.of(Integer.parseInt(year),Integer.parseInt(month));
+//            int days_in_months=yearMonth.lengthOfMonth();
+            int days_in_months=new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(date1)).getActualMaximum(Calendar.DAY_OF_MONTH);
+
 
             long secounds=1000;    // 1 secound
             long min=60*secounds;  // 1 min

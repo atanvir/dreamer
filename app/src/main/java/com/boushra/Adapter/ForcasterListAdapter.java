@@ -100,7 +100,7 @@ public class ForcasterListAdapter extends RecyclerView.Adapter<ForcasterListAdap
             cardview_main.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("points", String.valueOf(SharedPreferenceWriter.getInstance(context).getInt(GlobalVariables.totalPoints)));
+                    Log.e("points", String.valueOf(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.totalPoints)));
                             ForcasterforPricePopUp(getAdapterPosition());
                 }
             });
@@ -148,7 +148,7 @@ public class ForcasterListAdapter extends RecyclerView.Adapter<ForcasterListAdap
             public void onClick(View v) {
                 if(lists.get(position).getPricePerQues() != null) {
                     dialog.dismiss();
-                    if (SharedPreferenceWriter.getInstance(context).getInt(GlobalVariables.totalPoints) < Integer.parseInt(lists.get(position).getPricePerQues())) {
+                    if (Float.parseFloat(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.totalPoints)) < Float.parseFloat(lists.get(position).getPricePerQues())) {
                         Intent intent = new Intent(context, StoreActivity.class);
                         context.startActivity(intent);
                     }

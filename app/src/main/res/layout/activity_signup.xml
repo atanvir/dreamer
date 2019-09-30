@@ -57,6 +57,7 @@
         android:textSize="@dimen/text_size_regular"
         android:inputType="number"
         android:textStyle="bold"
+        android:maxLength="10"
         android:imeOptions="actionNext"
         android:background="@android:color/transparent"
         android:layout_weight="1.8"

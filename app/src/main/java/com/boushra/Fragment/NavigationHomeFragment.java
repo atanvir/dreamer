@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 
@@ -27,6 +28,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.boushra.Activity.LoginActivity;
 import com.boushra.Activity.MyWalletActivity;
 import com.boushra.Activity.PsychologicalListFragment;
 import com.boushra.Adapter.ImageSliderAdapter;
@@ -38,6 +40,10 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.InternetCheck;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.List;
 import java.util.Timer;
@@ -65,7 +71,7 @@ public class NavigationHomeFragment extends Fragment {
         ButterKnife.bind(this,view);
         notification_im.setOnClickListener(this::onClick);
         pointtxt.setOnClickListener(this::onClick);
-        pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getInt(GlobalVariables.totalPoints));
+        pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.totalPoints));
         getBannerListApi();
         return view;
     }
@@ -92,11 +98,30 @@ public class NavigationHomeFragment extends Fragment {
 
 
 
-                        }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
-                        {
-                            Toast toast=Toast.makeText(getActivity(),server_response.getResponseMessage(),Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER,0,0);
-                            toast.show();
+                        }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
+                            if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                                Toast.makeText(getActivity(), getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                                getActivity().finish();
+                                startActivity(new Intent(getActivity(), LoginActivity.class));
+                                SharedPreferenceWriter.getInstance(getActivity()).clearPreferenceValues();
+                                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            // Log.w(TAG, "getInstanceId failed", task.getException());
+                                            return;
+                                        }
+
+                                        String auth_token = task.getResult().getToken();
+                                        Log.w("firebaese", "token: " + auth_token);
+                                        SharedPreferenceWriter.getInstance(getActivity()).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                    }
+                                });
+                            } else {
+                                Toast toast = Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
                         }
                     }
                 }
