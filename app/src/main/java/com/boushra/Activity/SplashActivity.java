@@ -84,21 +84,8 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        fcm=getIntent().getStringExtra("body");
-        if(fcm!=null)
-        {
-            Log.e("fcm",fcm);
-            Intent intent=new Intent(this,CategorySelectionActivity.class);
-            intent.putExtra("FCM","Yes");
-            startActivity(intent);
 
-
-
-        }
-        else
-        {
             startMethod();
-        }
 
     }
 
@@ -136,11 +123,29 @@ public class SplashActivity extends AppCompatActivity {
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(SharedPreferenceWriter.getInstance(SplashActivity.this).getString(GlobalVariables.islogin).equalsIgnoreCase("Yes"))
-                                        {
-                                         Intent intent=new Intent(SplashActivity.this,CategorySelectionActivity.class);
-                                         finish();
-                                         startActivity(intent);
+                                        if(SharedPreferenceWriter.getInstance(SplashActivity.this).getString(GlobalVariables.islogin).equalsIgnoreCase("Yes")) {
+                                            fcm = getIntent().getStringExtra("body");
+                                            if (fcm != null) {
+                                                Log.e("fcm", fcm);
+                                                if(getIntent().getStringExtra("type").equalsIgnoreCase("chat"))
+                                                {
+                                                    Intent intent=new Intent(SplashActivity.this,CategorySelectionActivity.class);
+                                                    intent.putExtra("chat","yes");
+                                                    startActivity(intent);
+
+
+                                                }
+                                                else {
+                                                    Intent intent = new Intent(SplashActivity.this, CategorySelectionActivity.class);
+                                                    intent.putExtra("FCM", "Yes");
+                                                    startActivity(intent);
+                                                }
+
+                                            } else {
+                                                Intent intent = new Intent(SplashActivity.this, CategorySelectionActivity.class);
+                                                finish();
+                                                startActivity(intent);
+                                            }
                                         }
                                         else {
 

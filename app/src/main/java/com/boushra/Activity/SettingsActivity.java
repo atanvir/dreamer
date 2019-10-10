@@ -498,11 +498,19 @@ public class SettingsActivity extends AppCompatActivity {
                                         //deprecated in API 26
                                         v.vibrate(200);
                                     }
+                                    Toast.makeText(SettingsActivity.this,getString(R.string.password_not_match),Toast.LENGTH_LONG).show();
+                                    count_image=0;
+                                    code="";
+                                    Log.e("count", String.valueOf(code));
+                                    first_iv.setBackground(getDrawable(R.drawable.pin_circle_background));
+                                    secound_iv.setBackground(getDrawable(R.drawable.pin_circle_background));
+                                    third_iv.setBackground(getDrawable(R.drawable.pin_circle_background));
+                                    fourth_iv.setBackground(getDrawable(R.drawable.pin_circle_background));
 
 
                                     touch_id_iv.setImageDrawable(getDrawable(R.drawable.off));
                                     SharedPreferenceWriter.getInstance(SettingsActivity.this).writeBooleanValue(GlobalVariables.touchid, false);
-                                    Toast.makeText(SettingsActivity.this, getString(R.string.confirm_password_not_match), Toast.LENGTH_LONG).show();
+                                   // Toast.makeText(SettingsActivity.this, getString(R.string.confirm_password_not_match), Toast.LENGTH_LONG).show();
                                     touch_id = false;
                                 }
                             }

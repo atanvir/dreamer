@@ -1,10 +1,15 @@
 package com.boushra.Retrofit;
 
 
+import com.boushra.Model.BankDetail;
+import com.boushra.Model.Common;
+import com.boushra.Model.ApplyPromocode;
 import com.boushra.Model.BannerList;
 import com.boushra.Model.BookForcaster;
 import com.boushra.Model.ChangePassword;
 import com.boushra.Model.Chat;
+import com.boushra.Model.ChatHistory;
+import com.boushra.Model.Chatlist;
 import com.boushra.Model.ForcasterDetails;
 import com.boushra.Model.ForcasterList;
 import com.boushra.Model.ForecasterRating.ForecasterRating;
@@ -13,6 +18,7 @@ import com.boushra.Model.Login;
 import com.boushra.Model.Logout;
 import com.boushra.Model.MyBooking.MyBooking;
 import com.boushra.Model.Notification;
+import com.boushra.Model.Payment;
 import com.boushra.Model.Rating;
 import com.boushra.Model.Signup;
 import com.boushra.Model.SocialLogin;
@@ -111,4 +117,24 @@ public interface RetroInterface {
 
     @POST("getNotificationList")
     Call<Notification> getNotificationList(@Body Notification notification, @Header("token") String token);
+
+    @POST("chatListForDreamer")
+    Call<Chatlist> getchatList(@Body Chatlist chatlist);
+
+    @POST("chatHistory")
+    Call<ChatHistory> getchatHistory(@Body ChatHistory  history,@Header("token") String token);
+
+
+    @POST("getAdminBankDetail")
+    Call<BankDetail> getAdminBankDetail();
+
+    @POST("applyPromocode")
+    Call<ApplyPromocode> applyPromocode(@Body ApplyPromocode promocode,@Header("token") String token);
+
+    @POST("getStoreList")
+    Call<Common> getStoreList();
+
+    @Multipart
+    @POST("payment")
+    Call<Payment> payment(@Part MultipartBody.Part photo,@PartMap Map<String, RequestBody> data);
 }

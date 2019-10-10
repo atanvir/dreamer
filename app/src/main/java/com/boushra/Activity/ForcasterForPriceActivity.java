@@ -192,22 +192,12 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                         User server_response=response.body();
                         if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
                         {
-                            if(server_response.getData().getName()==null || server_response.getData().getName().equalsIgnoreCase(""))
-                            {
-                                updateprofileApi=true;
-                            }
-                            else {
-                                name_ed.setText(server_response.getData().getName());
-                                pob_ed.setText(server_response.getData().getBirthPlace());
-                                dob_ed.setText(server_response.getData().getDob());
-                                gender_txt.setText(server_response.getData().getGender());
-                                maritalstatus_txt.setText(server_response.getData().getMaritalStatus());
-                                name_ed.setFocusable(false);
-                                pob_ed.setFocusable(false);
-                                dob_ed.setOnClickListener(null);
-                                gender_txt.setEnabled(false);
-                                maritalstatus_txt.setEnabled(false);
-                            }
+                            name_ed.setText(server_response.getData().getName());
+                            pob_ed.setText(server_response.getData().getBirthPlace());
+                            dob_ed.setText(server_response.getData().getDob());
+                            gender_txt.setText(server_response.getData().getGender());
+                            maritalstatus_txt.setText(server_response.getData().getMaritalStatus());
+
 
                         }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
@@ -278,14 +268,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             case R.id.continuetxt:
                 if(checkValidation())
                 {
-                    if(updateprofileApi)
-                    {
-                       updateProfileAPi();
-                    }
-                    else {
-
                       intent();
-                    }
                 }
 
 
@@ -442,7 +425,10 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         intent.putExtra(GlobalVariables.categoryName, categoryName);
         intent.putExtra(GlobalVariables.dream, dream_ed.getText().toString());
         intent.putExtra(GlobalVariables.voice, fileName);
-        finish();
+        intent.putExtra(GlobalVariables.name,name_ed.getText().toString().trim());
+        intent.putExtra(GlobalVariables.dob,dob_ed.getText().toString().trim());
+        intent.putExtra(GlobalVariables.gender,gender_txt.getText().toString().trim());
+        intent.putExtra(GlobalVariables.maritalStatus,maritalstatus_txt.getText().toString().trim());
         startActivity(intent);
     }
 
@@ -626,8 +612,8 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                 || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
                 || gender_txt.getText().toString().equalsIgnoreCase(getString(R.string.gender))
                 || maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status))
-                || !Validation.hasText(dream_ed,getString(R.string.write_dream))
-                || audio==null
+                || (!Validation.hasText(dream_ed,getString(R.string.write_dream)) && audio==null)
+
         )
         {
             if(!Validation.hasText(name_ed,getString(R.string.please_enter_full_name)))
@@ -663,18 +649,19 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                 gender_txt.setError(null);
 
             }
-            else if(!Validation.hasText(dream_ed,getString(R.string.write_dream)))
+            else if(!Validation.hasText(dream_ed,getString(R.string.write_dream)) && audio==null)
             {
-                ret=false;
-                maritalstatus_txt.setError(null);
-                gender_txt.setError(null);
-                dream_ed.requestFocus();
+
+                    ret = false;
+                    maritalstatus_txt.setError(null);
+                    gender_txt.setError(null);
+                    dream_ed.requestFocus();
+
+
+
             }
-            else if(audio==null)
-            {
-                ret=false;
-                Toast.makeText(ForcasterForPriceActivity.this,"Please record your voice note",Toast.LENGTH_LONG).show();
-            }
+
+
         }
         return ret;
     }

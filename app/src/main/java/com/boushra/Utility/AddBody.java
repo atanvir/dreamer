@@ -27,6 +27,10 @@ public class AddBody {
             requestBodyMap.put("categoryName",RequestBody.create(mediaType,bookForcaster.getCategoryName()));
         }
         requestBodyMap.put("question",RequestBody.create(mediaType,bookForcaster.getQuestion()));
+        requestBodyMap.put("dob",RequestBody.create(mediaType,bookForcaster.getDob()));
+        requestBodyMap.put("gender",RequestBody.create(mediaType,bookForcaster.getGender()));
+        requestBodyMap.put("maritalStatus",RequestBody.create(mediaType,bookForcaster.getMaritalStatus()));
+        requestBodyMap.put("name",RequestBody.create(mediaType,bookForcaster.getName()));
 
 
     }

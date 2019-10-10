@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/chat_bg">
+    >
 
 
 
@@ -53,13 +53,12 @@
             app:layout_constraintStart_toEndOf="@+id/profile_image_im"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginRight="@dimen/dp_10"
             android:id="@+id/profile_image_im"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
             android:layout_gravity="end"
-            android:background="@drawable/img_d"
             android:padding="@dimen/dp_8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,210 +68,30 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
+        android:id="@+id/view14"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#CBCBCB"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView6"
+        app:layout_constraintBottom_toTopOf="@+id/chatRV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
 
-    <ScrollView
-        android:id="@+id/scrollView6"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRV"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/chat_bg"
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/view14">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+    </androidx.recyclerview.widget.RecyclerView>
 
 
-            <TextView
-                android:id="@+id/text3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/chat_background"
-                android:padding="@dimen/dp_18"
-                android:text=" every thing is finevery thing is finevery thing is finevery thing is fine thing is finevery thing is fine ,
-lorem sp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/text4"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Today 10:10 pm"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/text3"
-                app:layout_constraintTop_toBottomOf="@+id/text3" />
-
-
-            <TextView
-                android:id="@+id/text5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="@dimen/dp_20"
-                android:background="@drawable/chat_background"
-                android:padding="@dimen/dp_18"
-                android:text="thing is fine ,lorem sp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/text4" />
-
-            <TextView
-                android:id="@+id/text6"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Today 10:10 pm"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/text5"
-                app:layout_constraintTop_toBottomOf="@+id/text5" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-
-                android:id="@+id/subConstraint"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/progressbackground"
-                android:padding="@dimen/dp_30"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text6">
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/dp_18"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView5"
-                    app:layout_constraintLeft_toLeftOf="@+id/seekBar"
-                    app:layout_constraintStart_toStartOf="@+id/subConstraint"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/audio_bar" />
-
-
-                <!--<ImageView-->
-                <!--android:id="@+id/imageView6"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="8dp"-->
-                <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--app:layout_constraintEnd_toStartOf="@+id/textView5"-->
-                <!--app:layout_constraintRight_toLeftOf="@+id/seekBar"-->
-                <!--app:layout_constraintTop_toTopOf="parent"-->
-                <!--app:srcCompat="@drawable/audio_bar" />-->
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0:23"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/imageView5" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:text="10:02 pm"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/subConstraint"
-                app:layout_constraintTop_toBottomOf="@+id/subConstraint" />
-
-            <TextView
-                android:id="@+id/text7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/chat_background"
-                android:padding="@dimen/dp_18"
-                android:text="thing is fine ,lorem sp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/subConstraint" />
-
-            <TextView
-                android:id="@+id/text8"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Today 10:10 pm"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/text7"
-                app:layout_constraintTop_toBottomOf="@+id/text7" />
-
-            <TextView
-                android:id="@+id/text9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/progressbackground"
-                android:padding="@dimen/dp_20"
-                android:text="thing is fine ,lorem sp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text8" />
-
-            <TextView
-                android:id="@+id/text10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="32dp"
-                android:background="@drawable/progressbackground"
-                android:padding="@dimen/dp_20"
-                android:text=" finevery thing is fine thing is finevery thing is fine ,lorem sp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/text9"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text9" />
-            <!--</ScrollView>-->
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
 
 
     <include

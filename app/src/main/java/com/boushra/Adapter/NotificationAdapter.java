@@ -47,7 +47,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.timing_txt.setText(dataList.get(position).getNotiTitle());
+
+
+
+        holder.title_txt.setText(dataList.get(position).getNotiMessage());
 
         String getDate = dataList.get(position).getCreatedAt();
         String server_format = getDate;    //server comes format ?

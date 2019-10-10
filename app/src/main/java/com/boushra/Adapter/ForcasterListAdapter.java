@@ -150,6 +150,7 @@ public class ForcasterListAdapter extends RecyclerView.Adapter<ForcasterListAdap
                     dialog.dismiss();
                     if (Float.parseFloat(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.totalPoints)) < Float.parseFloat(lists.get(position).getPricePerQues())) {
                         Intent intent = new Intent(context, StoreActivity.class);
+                        intent.putExtra("StoreActivity","yes");
                         context.startActivity(intent);
                     }
                     else

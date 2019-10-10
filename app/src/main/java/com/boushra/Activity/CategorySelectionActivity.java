@@ -34,8 +34,8 @@ public class CategorySelectionActivity extends AppCompatActivity{
     @BindView(R.id.profile_im) ImageView profile_im;
     @BindView(R.id.more_im) ImageView more_im;
     int clickcount=0;
-    String fcm="";
-
+    String fcm="",chat="";
+    String activity="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +48,22 @@ public class CategorySelectionActivity extends AppCompatActivity{
         home_iv.setImageDrawable(null);
 
 
+
+
        fcm=getIntent().getStringExtra("FCM");
+       chat=getIntent().getStringExtra("chat");
        if(fcm!=null)
        {
            if(fcm.equalsIgnoreCase("Yes")) {
                getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NotificationFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
            }
 
+       }else if(chat!=null)
+       {
+           if(chat.equalsIgnoreCase("yes"))
+           {
+               getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationChatFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
+           }
        }
 
        else {

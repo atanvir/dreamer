@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
@@ -27,10 +28,12 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class FirebaseMessageService extends FirebaseMessagingService {
+    private String TAG=FirebaseMessagingService.class.getSimpleName();
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -39,13 +42,23 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.e("server_name",remoteMessage.getFrom());
         Map<String,String> dataMap=remoteMessage.getData();
-        Log.e("Data:", String.valueOf(remoteMessage.getData()));
-
-
+        Log.e(TAG, String.valueOf(remoteMessage.getData()));
 
 
         if(NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {
+            if(Objects.requireNonNull(remoteMessage.getData().get("type")).equalsIgnoreCase("chat"))
+            {
+                Intent intent=new Intent("FCM");
+                intent.putExtra("chat","yes");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                Intent push=new Intent(this,CategorySelectionActivity.class);
+                sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
+            }
+            else
+            {
+
+            }
             Intent intent=new Intent("FCM");
             intent.putExtra("FCM","yes");
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
@@ -53,11 +66,23 @@ public class FirebaseMessageService extends FirebaseMessagingService {
             sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
         }else
         {
-            Intent intent=new Intent(this,CategorySelectionActivity.class);
-            intent.putExtra("FCM","yes");
-            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-            sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),intent);
+            if(remoteMessage.getData().get("type")!=null)
+            {
+                if(remoteMessage.getData().get("type").equalsIgnoreCase("chat")) {
+                    Intent intent = new Intent("FCM");
+                    intent.putExtra("chat", "yes");
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                    Intent push = new Intent(this, CategorySelectionActivity.class);
+                    sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+                }
+            }
+            else {
 
+                Intent intent = new Intent(this, CategorySelectionActivity.class);
+                intent.putExtra("FCM", "yes");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), intent);
+            }
         }
 
 
@@ -68,10 +93,12 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     private void sendNotification(String title, String message,Intent intent) {
 
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
         int notificationId = 1;
         String channelId = "channel-01";
         String channelName = "Channel Name";
         int importance = NotificationManager.IMPORTANCE_HIGH;
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(
                     channelId, channelName, importance);
@@ -94,7 +121,6 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         mBuilder.setContentIntent(resultPendingIntent);
 
         notificationManager.notify(notificationId, mBuilder.build());
-
 
 
     }

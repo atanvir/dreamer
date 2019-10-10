@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.boushra.Model.Chat;
 import com.boushra.R;
 
 import butterknife.BindView;
@@ -37,7 +36,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
         switch (view.getId())
         {
             case R.id.backLL:
-                Intent intent=new Intent(ProfileSetupActivity.this, ChatActivity.class);
+                Intent intent=new Intent(ProfileSetupActivity.this, ChatDetailsActivity.class);
                 startActivity(intent);
                 finish();
                 break;

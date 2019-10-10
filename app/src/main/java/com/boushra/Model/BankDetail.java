@@ -1,18 +1,11 @@
-package com.boushra.Model.MyBooking;
+package com.boushra.Model;
 
-import com.boushra.Model.MyBooking.Data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MyBooking {
-
-    @SerializedName("userId")
-    @Expose
-    private String userId;
-
-
+public class BankDetail {
     @SerializedName("status")
     @Expose
     private String status;
@@ -21,20 +14,8 @@ public class MyBooking {
     private String responseMessage;
     @SerializedName("Data")
     @Expose
-    private List<Data> data = null;
-    @SerializedName("langCode")
-    @Expose
-    private String langCode;
+    private Data data;
 
-
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getStatus() {
         return status;
@@ -52,19 +33,11 @@ public class MyBooking {
         this.responseMessage = responseMessage;
     }
 
-    public List<Data> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<Data> data) {
+    public void setData(Data data) {
         this.data = data;
-    }
-
-    public String getLangCode() {
-        return langCode;
-    }
-
-    public void setLangCode(String langCode) {
-        this.langCode = langCode;
     }
 }

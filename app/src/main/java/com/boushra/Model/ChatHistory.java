@@ -1,18 +1,11 @@
-package com.boushra.Model.MyBooking;
+package com.boushra.Model;
 
-import com.boushra.Model.MyBooking.Data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MyBooking {
-
-    @SerializedName("userId")
-    @Expose
-    private String userId;
-
-
+public class ChatHistory {
     @SerializedName("status")
     @Expose
     private String status;
@@ -22,19 +15,10 @@ public class MyBooking {
     @SerializedName("Data")
     @Expose
     private List<Data> data = null;
-    @SerializedName("langCode")
+
+    @SerializedName("roomId")
     @Expose
-    private String langCode;
-
-
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    private  String roomId;
 
     public String getStatus() {
         return status;
@@ -60,11 +44,11 @@ public class MyBooking {
         this.data = data;
     }
 
-    public String getLangCode() {
-        return langCode;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public void setLangCode(String langCode) {
-        this.langCode = langCode;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 }

@@ -47,6 +47,13 @@ public class GlobalVariables {
     public static String invalidoken="Invalid Token";
     public static String old_passcode="old_passcode";
     public static String touchid="touchid";
+    public static String senderId="senderId";
+    public static String receiverId="receiverId";
+    public static String message="message";
+    public static String messageType="messageType";
+    public static String username="username";
+    public static String totalPrice="totalPrice";
+    public static String storeId="storeId";
 
     public static String getType() {
         return type;

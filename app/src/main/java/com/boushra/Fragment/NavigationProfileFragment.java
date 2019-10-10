@@ -333,7 +333,7 @@ public class NavigationProfileFragment extends Fragment {
         userSetting.setUsername(username_ed.getText().toString().trim());
         userSetting.setGender(gendertxt.getText().toString());
         userSetting.setMaritalStatus(maritalstatus_txt.getText().toString());
-        userSetting.setBirthPlace(pob_ed.getText().toString().trim());
+        userSetting.setBirthPlace("");
         userSetting.setDob(dob_ed.getText().toString().trim());
         AddServiceBody body = new AddServiceBody(userSetting);
 
@@ -345,8 +345,6 @@ public class NavigationProfileFragment extends Fragment {
             profile_body = RequestBody.create(MediaType.parse("image/*"), file);
             prfpic = MultipartBody.Part.createFormData("profilePic", file.getName(), profile_body);
         }
-
-
 
             Call<UpdateUserProfile> call = api_service.updateUserProfile(prfpic, body.getBody());
             call.enqueue(new Callback<UpdateUserProfile>() {
@@ -482,7 +480,7 @@ public class NavigationProfileFragment extends Fragment {
         || !Validation.hasText(username_ed,getString(R.string.enter_username))
         || !Validation.email(email_ed,getString(R.string.enter_email))
         || !Validation.isPhoneNumber(phone_ed,true)
-        || !Validation.hasText(pob_ed,getString(R.string.please_enter_pob))
+
         || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
         || gendertxt.getText().toString().equalsIgnoreCase("Gender")
         || maritalstatus_txt.getText().toString().equalsIgnoreCase("Marital status")
@@ -510,11 +508,7 @@ public class NavigationProfileFragment extends Fragment {
                 phone_ed.requestFocus();
 
             }
-            else if(!Validation.hasText(pob_ed,getString(R.string.please_enter_pob)))
-            {
-                ret=false;
-                pob_ed.requestFocus();
-            }
+
             else if(!Validation.hasText(dob_ed,getString(R.string.please_enter_dob)))
             {
                 ret=false;

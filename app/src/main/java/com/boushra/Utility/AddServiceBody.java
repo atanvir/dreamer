@@ -26,10 +26,10 @@ public class AddServiceBody
         requestBodyMap.put("gender",RequestBody.create(mediaType,userProfile.getGender()));
         if(userProfile.getUsername()!=null) {
             requestBodyMap.put("username", RequestBody.create(mediaType, userProfile.getUsername()));
-        }requestBodyMap.put("birthPlace",RequestBody.create(mediaType,userProfile.getBirthPlace()));
+        }
+        requestBodyMap.put("birthPlace",RequestBody.create(mediaType,userProfile.getBirthPlace()));
         requestBodyMap.put("maritalStatus",RequestBody.create(mediaType,userProfile.getMaritalStatus()));
         requestBodyMap.put("dob",RequestBody.create(mediaType,userProfile.getDob()));
-
 
     }
 

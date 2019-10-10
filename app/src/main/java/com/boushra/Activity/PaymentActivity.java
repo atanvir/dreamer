@@ -113,6 +113,10 @@ public class PaymentActivity extends AppCompatActivity {
             BookForcaster bookforcaster=new BookForcaster();
             bookforcaster.setForecasterId(getIntent().getStringExtra(GlobalVariables.forecasterId));
             bookforcaster.setUserId(getIntent().getStringExtra(GlobalVariables.userId));
+            bookforcaster.setName(getIntent().getStringExtra(GlobalVariables.name));
+            bookforcaster.setDob(getIntent().getStringExtra(GlobalVariables.dob));
+            bookforcaster.setGender(getIntent().getStringExtra(GlobalVariables.gender));
+            bookforcaster.setMaritalStatus(getIntent().getStringExtra(GlobalVariables.maritalStatus));
 
             if(getIntent().getStringExtra(GlobalVariables.points)!=null) {
                 bookforcaster.setPoints(Float.valueOf(getIntent().getStringExtra(GlobalVariables.points)));
@@ -123,7 +127,13 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
             bookforcaster.setCategoryName(getIntent().getStringExtra(GlobalVariables.categoryName));
-            bookforcaster.setQuestion(getIntent().getStringExtra(GlobalVariables.dream));
+            if(getIntent().getStringExtra(GlobalVariables.dream)!=null) {
+                bookforcaster.setQuestion(getIntent().getStringExtra(GlobalVariables.dream));
+            }
+            else
+            {
+                bookforcaster.setQuestion("");
+            }
             AddBody body=new AddBody(bookforcaster);
 
             RequestBody requestBody;

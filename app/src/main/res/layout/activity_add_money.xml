@@ -58,14 +58,14 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#9C9C9C"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView4"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
 
     <ScrollView
-        android:id="@+id/scrollView4"
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +80,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/scrollView4">
+            app:layout_constraintTop_toTopOf="@+id/scrollView">
 
 
             <androidx.cardview.widget.CardView
@@ -104,36 +104,39 @@
                         android:id="@+id/linearLayout4"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_50"
+                        android:layout_marginHorizontal="@dimen/dp_5"
                         android:layout_marginTop="16dp"
                         android:orientation="horizontal"
                         android:weightSum="2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginHorizontal="@dimen/dp_5"
-                        >
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <com.boushra.View.SegoeRegularTextView
+                        <com.boushra.View.SegoeRegularEditText
+                            android:id="@+id/promocode_ed"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp_50"
+                            android:cursorVisible="false"
                             android:layout_marginLeft="@dimen/dp_10"
                             android:layout_marginRight="@dimen/dp_40"
                             android:layout_weight="1"
                             android:background="@drawable/promocode_background2"
                             android:gravity="center"
-                            android:text="@string/promo_code"
-                            android:textSize="@dimen/text_size_medium"
-                            android:textAlignment="center" />
+                            android:hint="@string/promo_code"
+                            android:textColorHint="@color/black"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/text_size_medium" />
 
 
                         <com.boushra.View.SegoeRegularTextView
+                            android:id="@+id/apply_txt"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp_50"
                             android:layout_gravity="center"
+                            android:layout_marginRight="@dimen/dp_10"
                             android:layout_weight="1"
                             android:background="@drawable/btnbackground"
-                            android:gravity="center"
-
+                            android:gravity="center_vertical"
                             android:text="@string/apply"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -149,13 +152,13 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="32dp"
                         android:text="@string/total_price"
-                        android:textSize="@dimen/text_size_medium_large"
                         android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium_large"
                         app:layout_constraintStart_toStartOf="@+id/linearLayout4"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
                     <com.boushra.View.SegoeRegularTextView
-                        android:id="@+id/textView43"
+                        android:id="@+id/total_price_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
@@ -163,6 +166,7 @@
                         android:text="Rs.3000"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_medium_large"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView41"
                         app:layout_constraintEnd_toEndOf="@+id/linearLayout4"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
@@ -171,29 +175,48 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="16dp"
                         android:text="Discounted Price"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_medium_large"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/textView41"
-                        app:layout_constraintTop_toBottomOf="@+id/textView41"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView41" />
+
 
                     <TextView
-                        android:id="@+id/textView47"
+                        android:id="@+id/discount_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="16dp"
                         android:text="Rs.-900"
                         android:textColor="@color/app_theme"
                         android:textSize="@dimen/text_size_medium_large"
+                        app:layout_constraintEnd_toEndOf="@+id/total_price_txt"
+                        app:layout_constraintTop_toTopOf="@+id/textView46" />
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/segoeRegularTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/net_total_price"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dp_17"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/textView43"
-                        app:layout_constraintTop_toBottomOf="@+id/textView43" />
+                        app:layout_constraintStart_toStartOf="@+id/textView46"
+                        app:layout_constraintTop_toBottomOf="@+id/textView46"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/netTotal_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rs 140"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dp_17"
+                        app:layout_constraintBottom_toBottomOf="@+id/segoeRegularTextView"
+                        app:layout_constraintStart_toStartOf="@+id/total_price_txt"
+                        app:layout_constraintTop_toTopOf="@+id/segoeRegularTextView" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -219,20 +242,21 @@
 
                     <com.boushra.View.SegoeRegularTextView
                         android:id="@+id/textView48"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:text="@string/please_select_payment_method"
-                        android:textSize="@dimen/text_size_medium_large"
                         android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium_large"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.boushra.View.SegoeRegularTextView
-                        android:id="@+id/fredokaTextView2"
+                        android:id="@+id/paymentgateway_txt"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_50"
                         android:layout_marginStart="16dp"
@@ -242,14 +266,15 @@
                         android:gravity="center"
                         android:text="@string/payment_gateway"
                         android:textAlignment="center"
-                        android:textSize="@dimen/text_size_medium"
                         android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_medium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/textView48"
                         app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
 
                     <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/banktransfer_txt"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_50"
                         android:layout_marginStart="16dp"
@@ -260,13 +285,13 @@
                         android:gravity="center"
                         android:text="@string/bank_transfer"
                         android:textAlignment="center"
-                        android:textSize="@dimen/text_size_medium"
                         android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_medium"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="@+id/textView48"
-                        app:layout_constraintTop_toBottomOf="@+id/fredokaTextView2" />
+                        app:layout_constraintTop_toBottomOf="@+id/paymentgateway_txt" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -279,6 +304,9 @@
                 android:id="@+id/cardView12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp_7"
+                app:cardCornerRadius="@dimen/dp_4"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView10">
@@ -295,8 +323,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/admin_bank_detail"
-                        android:textSize="@dimen/text_size_large"
                         android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_large"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -314,14 +342,14 @@
 
 
                     <com.boushra.View.SegoeRegularTextView
-                        android:id="@+id/segoeRegularTextView9"
+                        android:id="@+id/admin_bankname_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
                         android:layout_marginTop="4dp"
                         android:text="@string/state_bank_of_india"
-                        android:textSize="@dimen/text_size_medium"
                         android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium"
                         app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView8"
                         app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView8" />
 
@@ -334,18 +362,18 @@
                         android:text="@string/bank_account_holder_name"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/text_size_medium"
-                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView9"
-                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView9" />
+                        app:layout_constraintStart_toStartOf="@+id/admin_bankname_txt"
+                        app:layout_constraintTop_toBottomOf="@+id/admin_bankname_txt" />
 
 
                     <com.boushra.View.SegoeRegularTextView
-                        android:id="@+id/segoeRegularTextView13"
+                        android:id="@+id/admin_accountholder_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Prashant Choudhary"
-                        android:textSize="@dimen/text_size_medium"
                         android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_medium"
                         app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView11"
                         app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView11" />
 
@@ -358,11 +386,12 @@
                         android:text="@string/bank_account_number"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/text_size_medium"
-                        app:layout_constraintStart_toStartOf="@+id/segoeRegularTextView13"
-                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView13" />
+                        app:layout_constraintStart_toStartOf="@+id/admin_accountholder_txt"
+                        app:layout_constraintTop_toBottomOf="@+id/admin_accountholder_txt" />
 
 
                     <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/admin_accountno_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -382,12 +411,13 @@
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView11"
+                android:id="@+id/banktransfer_cv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="@dimen/dp_5"
                 app:cardElevation="@dimen/dp_7"
                 app:cardUseCompatPadding="true"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -397,11 +427,11 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/cardView11"
+                    app:layout_constraintBottom_toBottomOf="@+id/banktransfer_cv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView10"
+                    app:layout_constraintTop_toBottomOf="@+id/banktransfer_cv"
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.boushra.View.SegoeRegularTextView
@@ -409,7 +439,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:text="@string/your_bank_details"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_medium_large"
@@ -419,93 +449,112 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
 
-                    <Spinner
-                        android:id="@+id/spinner"
+                    <com.boushra.View.SegoeRegularTextView
+                        android:id="@+id/selectbank_txt"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_60"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/promocode_background"
-                        android:entries="@array/select_bank"
+                        android:text="@string/select_bank"
+                        android:textSize="@dimen/dp_17"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        android:paddingLeft="@dimen/dp_10"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/segoeRegularTextView7">
 
 
-                    </Spinner>
+                    </com.boushra.View.SegoeRegularTextView>
 
                     <ImageView
                         android:layout_width="@dimen/dp_30"
                         android:layout_height="0dp"
                         android:layout_marginEnd="8dp"
                         android:src="@drawable/down_arrow"
-                        app:layout_constraintBottom_toBottomOf="@+id/spinner"
-                        app:layout_constraintEnd_toEndOf="@+id/spinner"
-                        app:layout_constraintTop_toTopOf="@+id/spinner" />
+                        app:layout_constraintBottom_toBottomOf="@+id/selectbank_txt"
+                        app:layout_constraintEnd_toEndOf="@+id/selectbank_txt"
+                        app:layout_constraintTop_toTopOf="@+id/selectbank_txt" />
+
+
+                    <Spinner
+                        android:id="@+id/selectbank_spn"
+                        android:layout_width="0dp"
+                        android:layout_height="0.1dp"
+                        android:background="@drawable/spinner_background"
+                        app:layout_constraintEnd_toEndOf="@+id/selectbank_txt"
+                        app:layout_constraintStart_toStartOf="@+id/selectbank_txt"
+                        app:layout_constraintTop_toBottomOf="@+id/selectbank_txt"></Spinner>
 
 
                     <com.boushra.View.SegoeRegularEditText
-                        android:id="@+id/segoeRegularEditText6"
+                        android:id="@+id/bankaccountholder_ed"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_60"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
+                        android:maxLength="60"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/promocode_background"
                         android:hint="@string/bank_holder_account"
-                        android:textSize="@dimen/text_size_medium"
+                        android:textSize="@dimen/dp_17"
 
                         android:textColorHint="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+                        app:layout_constraintTop_toBottomOf="@+id/selectbank_txt" />
 
                     <com.boushra.View.SegoeRegularEditText
+                        android:id="@+id/accountno_ed"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_60"
                         android:layout_marginStart="8dp"
-
+                        android:maxLength="16"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="24dp"
+                        android:inputType="number"
                         android:background="@drawable/promocode_background"
                         android:hint="@string/bank_account_number"
-                        android:textSize="@dimen/text_size_medium"
+                        android:textSize="@dimen/dp_17"
                         android:textColorHint="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/segoeRegularEditText6" />
+                        app:layout_constraintTop_toBottomOf="@+id/bankaccountholder_ed" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:id="@+id/imageView299"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/attach_photo_iv"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 android:src="@drawable/attachment"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView11" />
+                app:layout_constraintTop_toBottomOf="@+id/banktransfer_cv" />
 
             <com.boushra.View.SegoeRegularTextView
+                android:id="@+id/attach_photo_txt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:visibility="gone"
                 android:layout_marginEnd="16dp"
                 android:text="@string/please_attach_photo"
                 android:textSize="@dimen/text_size_medium_large"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView299"
+                app:layout_constraintBottom_toBottomOf="@+id/attach_photo_iv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView299"
-                app:layout_constraintTop_toTopOf="@+id/imageView299" />
+                app:layout_constraintStart_toEndOf="@+id/attach_photo_iv"
+                app:layout_constraintTop_toTopOf="@+id/attach_photo_iv" />
 
             <com.boushra.View.fredokaTextView
                 android:id="@+id/submittxt"
@@ -525,7 +574,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView299" />
+                app:layout_constraintTop_toBottomOf="@+id/attach_photo_iv" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

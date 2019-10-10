@@ -39,6 +39,59 @@ public class BookForcaster {
     @Expose
     private Data data;
 
+    @SerializedName("gender")
+    @Expose
+    private  String gender;
+
+    @SerializedName("dob")
+    @Expose
+    private String dob;
+
+    @SerializedName("maritalStatus")
+    @Expose
+    private String maritalStatus;
+
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
+
+
+
     public String getStatus() {
         return status;
     }

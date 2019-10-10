@@ -71,7 +71,7 @@
     <string name="add_money">Add Money</string>
     <string name="apply">Apply</string>
     <string name="promo_code">Promocode</string>
-    <string name="total_price">Total Price:</string>
+    <string name="total_price">Total Price</string>
     <string name="please_select_payment_method">Please Select the Payment Method:</string>
     <string name="payment_gateway">Payment Gateway</string>
     <string name="bank_transfer">Bank Transfer</string>
@@ -129,7 +129,19 @@
     <string name="create_your_passcode">Create your passcode</string>
     <string name="please_reenter_confirm_password">Please re-enter confirm passcode</string>
     <string name="fingerprint_configured">Fingerprint configured</string>
-
+    <string name="password_not_match">Password not match</string>
+    <string name="login_successfull">Login successfull</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="just_now">Just now</string>
+    <string name="enter_your_msg">Enter your message...</string>
+    <string name="notification_channel_id">channel-01</string>
+    <string name="net_total_price">Net Total Price</string>
+    <string name="select_bank">Select Bank</string>
+    <string name="please_enter_account_holder_name">Please enter account holder name</string>
+    <string name="please_enter_account_number">Please enter account number</string>
+    <string name="please_enter_valid_account_no">Please enter valid account number</string>
+    <string name="please_attach_photo_transfer_receipt">Please attach photo of transfer receipts</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>
