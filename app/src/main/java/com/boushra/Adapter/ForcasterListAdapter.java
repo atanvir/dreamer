@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -51,7 +53,11 @@ public class ForcasterListAdapter extends RecyclerView.Adapter<ForcasterListAdap
     @NonNull
     @Override
     public ForcasterListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
+
         View view = LayoutInflater.from(context).inflate(R.layout.adapter_forcaster_list, parent, false);
+
         return new ForcasterListAdapter.MyViewHolder(view);
     }
 

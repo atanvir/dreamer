@@ -560,7 +560,6 @@ public class AddMoneyActivity extends AppCompatActivity {
             PaymentServiceBody serviceBody=new PaymentServiceBody(payment);
 
 
-
             RetroInterface api_service=RetrofitInit.getConnect().createConnection();
             Call<Payment> call=api_service.payment(photo,serviceBody.getData());
             call.enqueue(new Callback<Payment>() {

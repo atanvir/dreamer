@@ -4,16 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.boushra.Activity.CategorySelectionActivity;
@@ -127,7 +130,10 @@ public class ForecasterListFragment extends Fragment {
     }
 
     private void settingAdapter() {
+
+
         ForcasterRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         listAdapter=new ForcasterListAdapter(getActivity(),List);
         ForcasterRecyclerView.setAdapter(listAdapter);
     }

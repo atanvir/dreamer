@@ -959,7 +959,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
                         {
                             progressDialog.dismiss();
-                            Toast.makeText(LoginActivity.this,"You have successfully logged in",Toast.LENGTH_LONG).show();
+                           // Toast.makeText(LoginActivity.this,"You have successfully logged in",Toast.LENGTH_LONG).show();
 
 
 

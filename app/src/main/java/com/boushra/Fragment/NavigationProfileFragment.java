@@ -555,7 +555,7 @@ public class NavigationProfileFragment extends Fragment {
 
                     }else {
 
-                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;

@@ -57,13 +57,14 @@ public class FirebaseMessageService extends FirebaseMessagingService {
             }
             else
             {
+                Intent intent=new Intent("FCM");
+                intent.putExtra("FCM","yes");
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                Intent push=new Intent(this,CategorySelectionActivity.class);
+                sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
 
             }
-            Intent intent=new Intent("FCM");
-            intent.putExtra("FCM","yes");
-            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-            Intent push=new Intent(this,CategorySelectionActivity.class);
-            sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
+
         }else
         {
             if(remoteMessage.getData().get("type")!=null)

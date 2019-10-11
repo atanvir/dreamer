@@ -240,7 +240,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         }
         else
         {
-            Toast.makeText(this,"Please check your internet connection",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getString(R.string.check_internet),Toast.LENGTH_LONG).show();
         }
 
     }
