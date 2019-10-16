@@ -13,8 +13,8 @@
     <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/canvas_rating_bar</item>
 
-        <item name="android:minHeight">30dip</item>
-        <item name="android:minWidth">30dip</item>
+        <item name="android:minHeight">@dimen/dp_8</item>
+        <item name="android:minWidth">@dimen/dp_60</item>
     </style>
 
 

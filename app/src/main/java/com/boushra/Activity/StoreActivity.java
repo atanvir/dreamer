@@ -49,6 +49,8 @@ public class StoreActivity extends AppCompatActivity {
     @BindView(R.id.avail_points_cv) CardView avail_points_cv;
     @BindView(R.id.avail_points_txt) TextView avail_points_txt;
     private ProgressDailogHelper dailogHelper;
+    String fragment="";
+    String StoreActivity="";
 
 
     @Override
@@ -121,6 +123,8 @@ public class StoreActivity extends AppCompatActivity {
         backLL.setOnClickListener(this::OnClick);
         avail_points_cv.setOnClickListener(this::OnClick);
         dailogHelper=new ProgressDailogHelper(this,"");
+        fragment=getIntent().getStringExtra("Fragment");
+        StoreActivity=getIntent().getStringExtra("StoreActivity");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -130,7 +134,14 @@ public class StoreActivity extends AppCompatActivity {
        switch (view.getId())
        {
            case R.id.backLL:
-               if(getIntent().getStringExtra("StoreActivity").equalsIgnoreCase("yes"))
+               if(fragment!=null)
+               {
+                   super.onBackPressed();
+                   finish();
+
+               }
+
+               else if(StoreActivity!=null)
                {
 
                   super.onBackPressed();

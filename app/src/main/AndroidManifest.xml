@@ -73,19 +73,31 @@
         <activity android:name=".Activity.PaymentActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.ForecasterDetailsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.ForcasterForPriceActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.CategorySelectionActivity"
+
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Activity.ProvideRatingActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.ChatDetailsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.StoreActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.SettingsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.SignupActivity"

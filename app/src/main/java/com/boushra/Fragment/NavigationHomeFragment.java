@@ -31,6 +31,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.boushra.Activity.LoginActivity;
 import com.boushra.Activity.MyWalletActivity;
 import com.boushra.Activity.PsychologicalListFragment;
+import com.boushra.Activity.StoreActivity;
 import com.boushra.Adapter.ImageSliderAdapter;
 import com.boushra.Model.BannerList;
 import com.boushra.Model.Data;
@@ -168,7 +169,8 @@ public class NavigationHomeFragment extends Fragment {
                 break;
 
             case R.id.pointtxt:
-                Intent intent=new Intent(getActivity(), MyWalletActivity.class);
+                Intent intent=new Intent(getActivity(),StoreActivity.class);
+                intent.putExtra("Fragment","yes");
                 startActivity(intent);
                 break;
 

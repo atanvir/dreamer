@@ -149,6 +149,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=0)
                 gender_txt.setText(genderlist.get(position));
             }
 
@@ -160,6 +161,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         maritalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=0)
                 maritalstatus_txt.setText(martailList.get(position));
             }
 
@@ -434,7 +436,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
     private void MaritalStatusSpinner() {
         martailList = new ArrayList<>();
-        martailList.add("Please select");
+        martailList.add(getString(R.string.marital_status));
         martailList.add("Single");
         martailList.add("Married");
 
@@ -473,7 +475,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
 
     private void GenderSpinner() {
         genderlist = new ArrayList<>();
-        genderlist.add("Please select");
+        genderlist.add(getString(R.string.gender));
         genderlist.add("Male");
         genderlist.add("Female");
 
@@ -608,7 +610,6 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
     private boolean checkValidation() {
         boolean ret=true;
         if(     !Validation.hasText(name_ed,getString(R.string.please_enter_full_name))
-                || !Validation.hasText(pob_ed,getString(R.string.please_enter_pob))
                 || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
                 || gender_txt.getText().toString().equalsIgnoreCase(getString(R.string.gender))
                 || maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status))
@@ -621,11 +622,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                 ret=false;
                 name_ed.requestFocus();
             }
-            else if(!Validation.hasText(pob_ed,getString(R.string.please_enter_pob)))
-            {
-                ret=false;
-                pob_ed.requestFocus();
-            }
+
             else if(!Validation.hasText(dob_ed,getString(R.string.please_enter_dob)))
             {
                 ret=false;
@@ -643,7 +640,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             else if(maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status)))
             {
                 ret=false;
-                maritalstatus_txt.setError("Please select gender");
+                maritalstatus_txt.setError(getString(R.string.marital_status));
                 maritalstatus_txt.setFocusable(true);
                 maritalstatus_txt.requestFocus();
                 gender_txt.setError(null);

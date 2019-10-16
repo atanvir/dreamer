@@ -127,7 +127,15 @@ public class SplashActivity extends AppCompatActivity {
                                             fcm = getIntent().getStringExtra("body");
                                             if (fcm != null) {
                                                 Log.e("fcm", fcm);
-                                                if(getIntent().getStringExtra("type").equalsIgnoreCase("chat"))
+                                                if((getIntent().getStringExtra("title").equalsIgnoreCase("Oops! Chat Off")))
+                                                {
+                                                    Intent intent = new Intent(SplashActivity.this, ChatDetailsActivity.class);
+                                                    intent.putExtra("FCM", "Yes");
+                                                    startActivity(intent);
+
+
+                                                }
+                                                else if(getIntent().getStringExtra("type").equalsIgnoreCase("chat"))
                                                 {
                                                     Intent intent=new Intent(SplashActivity.this,CategorySelectionActivity.class);
                                                     intent.putExtra("chat","yes");
@@ -138,6 +146,7 @@ public class SplashActivity extends AppCompatActivity {
                                                 else {
                                                     Intent intent = new Intent(SplashActivity.this, CategorySelectionActivity.class);
                                                     intent.putExtra("FCM", "Yes");
+                                                    intent.putExtra(GlobalVariables.type,getIntent().getStringExtra(GlobalVariables.type));
                                                     startActivity(intent);
                                                 }
 

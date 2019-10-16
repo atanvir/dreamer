@@ -248,6 +248,10 @@ public class NotificationUtils extends ContextWrapper {
     /**
      * Method checks if the app is in background or not
      */
+
+
+
+
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

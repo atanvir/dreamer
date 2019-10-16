@@ -2,13 +2,20 @@ package com.boushra.Activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,7 +55,11 @@ import com.boushra.Utility.SharedPreferenceWriter;
 import com.boushra.Utility.TakeImage;
 import com.boushra.Utility.Validation;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,6 +79,7 @@ import retrofit2.Response;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.boushra.BuildConfig.DEBUG;
 
 public class AddMoneyActivity extends AppCompatActivity {
     @BindView(R.id.backLL) LinearLayout backLL;
@@ -89,6 +101,7 @@ public class AddMoneyActivity extends AppCompatActivity {
     @BindView(R.id.attach_photo_iv) ImageView attach_photo_iv;
     @BindView(R.id.attach_photo_txt) TextView attach_photo_txt;
     @BindView(R.id.banktransfer_cv) CardView banktransfer_cv;
+    @BindView(R.id.paymentmethod_txt) TextView paymentmethod_txt;
     @BindView(R.id.paymentgateway_txt) TextView paymentgateway_txt;
     List<String> bankList;
     private final int CAMERA_PIC_REQUEST = 11, REQ_CODE_PICK_IMAGE = 1;
@@ -99,6 +112,9 @@ public class AddMoneyActivity extends AppCompatActivity {
     private File attach_photo;
     private boolean promocode=false;
     String paymentType="";
+    int clickcount=0;
+    private static final int PICKFILE_REQUEST_CODE =18 ;
+    public static final String DOCUMENTS_DIR = "documents";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -187,9 +203,9 @@ public class AddMoneyActivity extends AppCompatActivity {
     private void init() {
         backLL.setOnClickListener(this::OnClick);
         submittxt.setOnClickListener(this::OnClick);
-        netTotal_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+"SAR");
-        discount_txt.setText("-0SAR");
-        total_price_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+"SAR");
+        netTotal_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+" SAR");
+        discount_txt.setText("-0 SAR");
+        total_price_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+" SAR");
         dailogHelper=new ProgressDailogHelper(this,"");
         apply_txt.setOnClickListener(this::OnClick);
         banktransfer_txt.setOnClickListener(this::OnClick);
@@ -227,11 +243,13 @@ public class AddMoneyActivity extends AppCompatActivity {
                 break;
 
             case R.id.banktransfer_txt:
-                banktransfer_cv.setVisibility(View.VISIBLE);
-                attach_photo_iv.setVisibility(View.VISIBLE);
-                attach_photo_txt.setVisibility(View.VISIBLE);
-                scrollView.fullScroll(View.FOCUS_DOWN);
-                paymentType="Bank";
+                    clickcount=clickcount+1;
+                    banktransfer_cv.setVisibility(View.VISIBLE);
+                    attach_photo_iv.setVisibility(View.VISIBLE);
+                    attach_photo_txt.setVisibility(View.VISIBLE);
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                    paymentType = "Bank";
+
 
                 break;
 
@@ -241,15 +259,18 @@ public class AddMoneyActivity extends AppCompatActivity {
 
             case R.id.attach_photo_iv:
                 if (checkingPermission()) {
-                    profileBottomLayout();
+                    intentForAttachDocument();
                 }
                 break;
             case R.id.paymentgateway_txt:
-                paymentType="Gateway";
-                banktransfer_cv.setVisibility(View.GONE);
-                attach_photo_iv.setVisibility(View.GONE);
-                attach_photo_txt.setVisibility(View.GONE);
-                break;
+
+                    paymentType = "Gateway";
+                    clickcount = clickcount + 1;
+                    banktransfer_cv.setVisibility(View.GONE);
+                    attach_photo_iv.setVisibility(View.GONE);
+                    attach_photo_txt.setVisibility(View.GONE);
+                    break;
+
         }
 
     }
@@ -292,7 +313,7 @@ public class AddMoneyActivity extends AppCompatActivity {
 
                         if (cameraAccepted && writeAccepted && readAccepted) {
                             //Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
-                               profileBottomLayout();
+                            intentForAttachDocument();
 
                     }
 
@@ -303,67 +324,53 @@ public class AddMoneyActivity extends AppCompatActivity {
         }
     }
 
-    private void profileBottomLayout() {
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = layoutInflater.inflate(R.layout.update_pic_layout, null);
-        ImageView camera = (ImageView) popupView.findViewById(R.id.camera);
-        ImageView gallery = (ImageView) popupView.findViewById(R.id.gallery);
+    private void intentForAttachDocument() {
+        String[] mimetypes = {"application/msword","application/pdf","image/jpeg","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.google-apps.document","application/vnd.google-apps.spreadsheet","text/plain"};
 
-        android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(this);
-        alertDialog.setTitle("Upload photo");
-        alertDialog.setView(popupView);
-        final AlertDialog dialog = alertDialog.show();
-        alertDialog.setCancelable(true);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                try {
-                    dialog.dismiss();
-                    Intent intent = new Intent(AddMoneyActivity.this, TakeImage.class);
-                    intent.putExtra("from", "camera");
-                    startActivityForResult(intent, CAMERA_PIC_REQUEST);
-                } catch (Exception ex) {
-                    Log.d("exp_result:", ex.getMessage().toString());
-                }
-            }
+            startActivityForResult(Intent.createChooser(intent,"ChooseFile"), PICKFILE_REQUEST_CODE);
 
 
-        });
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddMoneyActivity.this, TakeImage.class);
-                intent.putExtra("from", "gallery");
-                startActivityForResult(intent, REQ_CODE_PICK_IMAGE);
-                dialog.dismiss();
-            }
-        });
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == START_VERIFICATION) {
-            if (resultCode == RESULT_OK) {
-                setResult(RESULT_OK);
-                finish();
-            }
-        } else if (resultCode == RESULT_OK) {
-            if (data.getStringExtra("filePath") != null) {
-                imagePath = data.getStringExtra("filePath");
-                attach_photo = new File(data.getStringExtra("filePath"));
 
-                if (attach_photo.exists() && attach_photo != null) {
-                    attach_photo_iv.setImageURI(Uri.fromFile(attach_photo));
-                    attach_photo_txt.setText(attach_photo.getName());
+        if(requestCode == PICKFILE_REQUEST_CODE)
+        {
+            try
+            {
+
+                if (isGoogleDriveUri(data.getData()))
+                {
+                    imagePath =getDriveFilePath(data.getData(),this);
+
                 }
-            }
-        } else if (requestCode == 1 && resultCode == RESULT_CANCELED) {
-//            finish();
+                else
+                {
+                    imagePath=getPath(AddMoneyActivity.this,data.getData());
+                }
+                Log.e("path",imagePath);
+                attach_photo=new File(imagePath);
+                attach_photo_txt.setText(attach_photo.getName());
+                Log.e("data", String.valueOf(data.getData()));
 
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+
+            }
 
         }
+
 
 
 
@@ -372,17 +379,323 @@ public class AddMoneyActivity extends AppCompatActivity {
 
     }
 
+    public  String getPath(Context context, final Uri uri) {
+
+        // check here to KITKAT or new version
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/"
+                            + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+
+                if (id != null && id.startsWith("raw:")) {
+                    return id.substring(4);
+                }
+
+                String[] contentUriPrefixesToTry = new String[]{
+                        "content://downloads/public_downloads",
+                        "content://downloads/my_downloads",
+                        "content://downloads/all_downloads"
+                };
+
+                for (String contentUriPrefix : contentUriPrefixesToTry) {
+                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
+                    try {
+                        String path = getDataColumn(context, contentUri, null, null);
+                        if (path != null) {
+                            return path;
+                        }
+                    } catch (Exception e) {}
+                }
+
+                // path could not be retrieved using ContentResolver, therefore copy file to accessible cache using streams
+                String fileName = getFileName(uri);
+                File cacheDir = getDocumentCacheDir(context);
+                File file = generateFileName(fileName, cacheDir);
+
+                String destinationPath = null;
+                if (file != null) {
+                    destinationPath = file.getAbsolutePath();
+                    saveFileFromUri(context, uri, destinationPath);
+                }
+
+                return destinationPath;
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] { split[1] };
+
+                return getDataColumn(context, contentUri, selection,
+                        selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = this.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
+    }
+    public  File getDocumentCacheDir(@NonNull Context context) {
+        File dir = new File(context.getCacheDir(), DOCUMENTS_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        logDir(context.getCacheDir());
+        logDir(dir);
+
+        return dir;
+    }
+    private static void logDir(File dir) {
+        if(!DEBUG) return;
+        Log.d("Dir", "Dir=" + dir);
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            Log.d("File", "File=" + file.getPath());
+        }
+    }
+
+    public static File generateFileName(@Nullable String name, File directory) {
+        if (name == null) {
+            return null;
+        }
+
+        File file = new File(directory, name);
+
+        if (file.exists()) {
+            String fileName = name;
+            String extension = "";
+            int dotIndex = name.lastIndexOf('.');
+            if (dotIndex > 0) {
+                fileName = name.substring(0, dotIndex);
+                extension = name.substring(dotIndex);
+            }
+
+            int index = 0;
+
+            while (file.exists()) {
+                index++;
+                name = fileName + '(' + index + ')' + extension;
+                file = new File(directory, name);
+            }
+        }
+
+        try {
+            if (!file.createNewFile()) {
+                return null;
+            }
+        } catch (IOException e) {
+            Log.w("error", e);
+            return null;
+        }
+
+        logDir(directory);
+
+        return file;
+    }
+
+    private static void saveFileFromUri(Context context, Uri uri, String destinationPath) {
+        InputStream is = null;
+        BufferedOutputStream bos = null;
+        try {
+            is = context.getContentResolver().openInputStream(uri);
+            bos = new BufferedOutputStream(new FileOutputStream(destinationPath, false));
+            byte[] buf = new byte[1024];
+            is.read(buf);
+            do {
+                bos.write(buf);
+            } while (is.read(buf) != -1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) is.close();
+                if (bos != null) bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+
+
+    public static boolean isGoogleDriveUri(Uri uri) {
+        return "com.google.android.apps.docs.storage".equals(uri.getAuthority()) || "com.google.android.apps.docs.storage.legacy".equals(uri.getAuthority());
+    }
+
+    public static String getDriveFilePath(Uri uri, Context context) {
+        Uri returnUri = uri;
+        Cursor returnCursor = context.getContentResolver().query(returnUri, null, null, null, null);
+
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor.moveToFirst();
+        String name = (returnCursor.getString(nameIndex));
+        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
+        File file = new File(context.getCacheDir(), name);
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            int read = 0;
+            int maxBufferSize = 110241024;
+            int bytesAvailable = inputStream.available();
+
+            //int bufferSize = 1024;
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+
+            final byte[] buffers = new byte[bufferSize];
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+            Log.e("File Size", "Size " + file.length());
+            inputStream.close();
+            outputStream.close();
+            Log.e("File Path", "Path " + file.getPath());
+            Log.e("File Size", "Size " + file.length());
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage());
+        }
+        return file.getPath();
+    }
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return
+                "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return
+                "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+
+
     private boolean checkValidation() {
         boolean ret=true;
 
-        if(selectbank_txt.getText().toString().equalsIgnoreCase(getString(R.string.select_bank))
+        if(clickcount==0
+        ||selectbank_txt.getText().toString().equalsIgnoreCase(getString(R.string.select_bank))
         || !Validation.hasText(bankaccountholder_ed,getString(R.string.please_enter_account_holder_name))
         || !Validation.hasText(accountno_ed,getString(R.string.please_enter_account_number))
         || accountno_ed.getText().toString().length()!=16
         || imagePath==null
+
         )
         {
-            if(selectbank_txt.getText().toString().equalsIgnoreCase(getString(R.string.select_bank)))
+            if(clickcount==0) {
+                selectbank_txt.setError(null);
+                scrollView.fullScroll(View.FOCUS_UP);
+                ret=false;
+                Toast.makeText(this, getString(R.string.please_select_payment_method), Toast.LENGTH_SHORT).show();
+            }
+
+            else if(selectbank_txt.getText().toString().equalsIgnoreCase(getString(R.string.select_bank)))
             {
                 ret=false;
                 selectbank_txt.setError("");
@@ -392,12 +705,14 @@ public class AddMoneyActivity extends AppCompatActivity {
             else if(!Validation.hasText(bankaccountholder_ed,getString(R.string.please_enter_account_holder_name)))
             {
                 ret=false;
+                selectbank_txt.setError(null);
                 bankaccountholder_ed.setError(getString(R.string.please_enter_account_holder_name));
                 bankaccountholder_ed.requestFocus();
             }
             else if(!Validation.hasText(accountno_ed,getString(R.string.please_enter_account_number)))
             {
                 ret=false;
+                selectbank_txt.setError(null);
                 accountno_ed.setError(getString(R.string.please_enter_account_number));
                 accountno_ed.requestFocus();
 
@@ -406,12 +721,14 @@ public class AddMoneyActivity extends AppCompatActivity {
            else if(accountno_ed.getText().toString().length()!=16)
             {
                 ret=false;
+                selectbank_txt.setError(null);
                 accountno_ed.setError(getString(R.string.please_enter_valid_account_no));
                 accountno_ed.requestFocus();
             }
            else if(imagePath==null)
             {
                 ret=false;
+                selectbank_txt.setError(null);
                 Toast.makeText(this, getString(R.string.please_attach_photo_transfer_receipt), Toast.LENGTH_SHORT).show();
             }
 
@@ -478,7 +795,7 @@ public class AddMoneyActivity extends AppCompatActivity {
             Log.e("currentdate",current_date);
             promocode.setCurrentDate(current_date);
             promocode.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
-            promocode.setPrice(Long.parseLong(total_price_txt.getText().toString().split("S")[0]));
+            promocode.setPrice(Long.parseLong(total_price_txt.getText().toString().split(" ")[0]));
 
 
             RetroInterface api_service=RetrofitInit.getConnect().createConnection();
@@ -490,12 +807,12 @@ public class AddMoneyActivity extends AppCompatActivity {
                         dailogHelper.dismissDailog();
                         ApplyPromocode server_response = response.body();
                         if (server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                            discount_txt.setText("-"+server_response.getData().getDiscount()+"SAR");
-                            long netprice=Long.parseLong(total_price_txt.getText().toString().split("S")[0])-(server_response.getData().getDiscount());
-                            netTotal_txt.setText(netprice+"SAR");
+                            discount_txt.setText("-"+server_response.getData().getDiscount()+" SAR");
+                            long netprice=Long.parseLong(total_price_txt.getText().toString().split(" ")[0])-(server_response.getData().getDiscount());
+                            netTotal_txt.setText(netprice+" SAR");
                         } else if (server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
-                            discount_txt.setText("-0SAR");
+                            discount_txt.setText("-0 SAR");
                             netTotal_txt.setText(total_price_txt.getText().toString());
                             Toast.makeText(AddMoneyActivity.this, server_response.getResponseMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -506,7 +823,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                 public void onFailure(Call<ApplyPromocode> call, Throwable t) {
                     dailogHelper.dismissDailog();
                     Toast.makeText(AddMoneyActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                    discount_txt.setText("-0SAR");
+                    discount_txt.setText("-0 SAR");
                     netTotal_txt.setText(total_price_txt.getText().toString());
                 }
             });
@@ -528,10 +845,8 @@ public class AddMoneyActivity extends AppCompatActivity {
             Payment payment=new Payment();
             payment.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
             payment.setStoreId(getIntent().getStringExtra(GlobalVariables.storeId));
-            payment.setAmount(Integer.parseInt(getIntent().getStringExtra(GlobalVariables.totalPrice)));
+
             payment.setPoints(Integer.parseInt(getIntent().getStringExtra(GlobalVariables.points)));
-            payment.setTransactionId("1234567890");
-            payment.setTransactionStatus("Success");
             payment.setPaymentType(paymentType);
             RequestBody requestBody;
             MultipartBody.Part photo = null;
@@ -539,7 +854,7 @@ public class AddMoneyActivity extends AppCompatActivity {
             {
                 if(imagePath!=null)
                 {
-                    requestBody=RequestBody.create(MediaType.parse("image/*"),attach_photo);
+                    requestBody=RequestBody.create(MediaType.parse("*/*"),attach_photo);
                     photo=MultipartBody.Part.createFormData("receipt",attach_photo.getName(),requestBody);
 
                 }
@@ -548,16 +863,21 @@ public class AddMoneyActivity extends AppCompatActivity {
                 payment.setAccountHolderName(bankaccountholder_ed.getText().toString().trim());
 
             }
-            // promocode applied than only
 
             if(promocode) {
-                payment.setDiscountAmount(Integer.parseInt(discount_txt.getText().toString().split("S")[0].substring(1)));
+                payment.setDiscountAmount(Integer.parseInt(discount_txt.getText().toString().split(" ")[0].substring(1)));
                 payment.setPromoCode(promocode_ed.getText().toString().trim());
+                payment.setAmount(Integer.parseInt(netTotal_txt.getText().toString().split(" ")[0]));
 
             }
-            payment.setTransactionType("Demo");
+            else
+            {
+                payment.setAmount(Integer.parseInt(getIntent().getStringExtra(GlobalVariables.totalPrice)));
+            }
+
 
             PaymentServiceBody serviceBody=new PaymentServiceBody(payment);
+            Log.e("alldata::==>>>",serviceBody.toString());
 
 
             RetroInterface api_service=RetrofitInit.getConnect().createConnection();

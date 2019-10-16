@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment;
 import com.boushra.Activity.CategorySelectionActivity;
 import com.boushra.Activity.LoginActivity;
 import com.boushra.Activity.MyWalletActivity;
+import com.boushra.Activity.StoreActivity;
 import com.boushra.Model.Data;
 import com.boushra.Model.UpdateUserProfile;
 import com.boushra.Model.User;
@@ -151,6 +152,7 @@ public class NavigationProfileFragment extends Fragment {
         martialStatusSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=0)
                 maritalstatus_txt.setText(martailList.get(position));
                 maritalstatus_txt.setError(null);
             }
@@ -163,6 +165,7 @@ public class NavigationProfileFragment extends Fragment {
         genderSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=0)
                 gendertxt.setText(genderlist.get(position));
                 gendertxt.setError(null);
             }
@@ -316,7 +319,8 @@ public class NavigationProfileFragment extends Fragment {
                 break;
 
             case R.id.pointtxt:
-                Intent intent=new Intent(getActivity(), MyWalletActivity.class);
+                Intent intent=new Intent(getActivity(), StoreActivity.class);
+                intent.putExtra("Fragment","yes");
                 startActivity(intent);
                 break;
 
@@ -396,7 +400,7 @@ public class NavigationProfileFragment extends Fragment {
 
     private void MaritalStatusSpinner() {
         martailList = new ArrayList<>();
-        martailList.add("Marital status");
+        martailList.add(getString(R.string.marital_status));
         martailList.add("Single");
         martailList.add("Married");
 
@@ -404,9 +408,12 @@ public class NavigationProfileFragment extends Fragment {
             @Override
             public boolean isEnabled(int position) {
                 if(position==0)
+                {
                     return false;
-                else
+                }
+                else {
                     return true;
+                }
             }
 
             @Override
@@ -435,17 +442,20 @@ public class NavigationProfileFragment extends Fragment {
 
     private void GenderSpinner() {
         genderlist = new ArrayList<>();
-        genderlist.add("Gender");
+        genderlist.add(getString(R.string.gender));
         genderlist.add("Male");
         genderlist.add("Female");
 
         ArrayAdapter genderArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, genderlist) {
             @Override
             public boolean isEnabled(int position) {
-                if (position == 0)
+                if(position==0)
+                {
                     return false;
-                else
+                }
+                else {
                     return true;
+                }
             }
 
             @Override
@@ -482,8 +492,8 @@ public class NavigationProfileFragment extends Fragment {
         || !Validation.isPhoneNumber(phone_ed,true)
 
         || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
-        || gendertxt.getText().toString().equalsIgnoreCase("Gender")
-        || maritalstatus_txt.getText().toString().equalsIgnoreCase("Marital status")
+        || gendertxt.getText().toString().equalsIgnoreCase(getString(R.string.gender))
+        || maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status))
 
         )
         {
@@ -514,7 +524,7 @@ public class NavigationProfileFragment extends Fragment {
                 ret=false;
                 dob_ed.requestFocus();
             }
-            else if(gendertxt.getText().toString().equalsIgnoreCase("Gender"))
+            else if(gendertxt.getText().toString().equalsIgnoreCase(getString(R.string.gender)))
             {
                 ret=false;
                 gendertxt.setText(getString(R.string.please_select_gender));
@@ -523,7 +533,7 @@ public class NavigationProfileFragment extends Fragment {
                 gendertxt.setFocusable(true);
                 maritalstatus_txt.setError(null);
             }
-            else if(maritalstatus_txt.getText().toString().equalsIgnoreCase("Marital status"))
+            else if(maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status)))
             {
                 ret=false;
                 maritalstatus_txt.setText(getString(R.string.please_select_marital_status));

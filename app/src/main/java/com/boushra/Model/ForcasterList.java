@@ -31,6 +31,31 @@ public class ForcasterList {
     @Expose
     private String type;
 
+    @SerializedName("price")
+    @Expose
+    private boolean price;
+
+    @SerializedName("rating")
+    @Expose
+    private boolean rating;
+
+
+    public boolean isPrice() {
+        return price;
+    }
+
+    public void setPrice(boolean price) {
+        this.price = price;
+    }
+
+    public boolean isRating() {
+        return rating;
+    }
+
+    public void setRating(boolean rating) {
+        this.rating = rating;
+    }
+
     public String getType() {
         return type;
     }

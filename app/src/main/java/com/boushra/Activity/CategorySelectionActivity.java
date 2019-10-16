@@ -18,13 +18,20 @@ import com.boushra.Fragment.NavigationHomeFragment;
 import com.boushra.Fragment.NavigationMoreFragment;
 import com.boushra.Fragment.NavigationProfileFragment;
 import com.boushra.Fragment.NotificationFragment;
+import com.boushra.Model.User;
 import com.boushra.R;
+import com.boushra.Retrofit.RetroInterface;
+import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.SharedPreferenceWriter;
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategorySelectionActivity extends AppCompatActivity{
     private ActionBar toolbar;
@@ -55,6 +62,11 @@ public class CategorySelectionActivity extends AppCompatActivity{
        if(fcm!=null)
        {
            if(fcm.equalsIgnoreCase("Yes")) {
+               String type=getIntent().getStringExtra(GlobalVariables.type);
+               if(type.equalsIgnoreCase("paymentVerify"))
+               {
+                   getUserDetailsApi();
+               }
                getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NotificationFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
            }
 
@@ -74,6 +86,39 @@ public class CategorySelectionActivity extends AppCompatActivity{
         SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).writeStringValue(GlobalVariables.islogin,"Yes");
     }
 
+    private void getUserDetailsApi() {
+        User user=new User();
+        user.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
+        RetroInterface api_service=RetrofitInit.getConnect().createConnection();
+
+        Call<User> call=api_service.getUserDetails(user,SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).getString(GlobalVariables.jwtToken));
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful())
+                {
+                   User server_response= response.body();
+                   if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
+                   {
+                       SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).writeStringValue(GlobalVariables.totalPoints, String.valueOf(server_response.getData().getTotalPoints()));
+
+
+                   }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
+                   {
+                       Toast.makeText(CategorySelectionActivity.this, server_response.getResponseMessage(), Toast.LENGTH_SHORT).show();
+
+                   }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(CategorySelectionActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
 
     @OnClick({R.id.homeLL,R.id.chatLL,R.id.profileLL,R.id.moreLL})

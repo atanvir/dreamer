@@ -618,6 +618,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialog2.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog2.setContentView(R.layout.activity_select_language);
+        dialog2.setCancelable(true);
         TextView eng_txt=dialog2.findViewById(R.id.eng_txt);
         ImageView eng_im=dialog2.findViewById(R.id.eng_im);
         TextView arabic_txt=dialog2.findViewById(R.id.arabic_txt);
@@ -751,6 +752,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.activity_change_password);
+        dialog.setCancelable(true);
 
 
         TextView changePasswordTextView=dialog.findViewById(R.id.changePasswordTextView);

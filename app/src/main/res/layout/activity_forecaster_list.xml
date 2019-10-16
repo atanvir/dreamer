@@ -43,17 +43,30 @@
 
 
             <com.boushra.View.SegoeRegularTextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="-2dp"
+                android:layout_centerHorizontal="true"
                 android:textColor="@color/black"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="@string/forecaster_list"
                 android:textSize="@dimen/text_size_large" />
+
+
+            <ImageView
+                android:id="@+id/filter_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_8"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_18"
+                android:src="@drawable/filter"/>
 
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>

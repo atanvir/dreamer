@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Activity.MyWalletActivity;
+import com.boushra.Activity.StoreActivity;
 import com.boushra.Adapter.ChatListAdapter;
 import com.boushra.Model.Chat;
 import com.boushra.Model.Chatlist;
@@ -127,7 +128,8 @@ public class NavigationChatFragment extends Fragment {
                 break;
 
             case R.id.pointtxt:
-                Intent intent=new Intent(getActivity(), MyWalletActivity.class);
+                Intent intent=new Intent(getActivity(), StoreActivity.class);
+                intent.putExtra("Fragment","yes");
                 startActivity(intent);
 
                 break;

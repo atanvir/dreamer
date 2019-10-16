@@ -370,6 +370,16 @@ public class Data implements Parcelable {
         this.messageType = messageType;
     }
 
+
+    public Data(String roomId, String senderId, String receiverId,String name,String profilePic) {
+        this.roomId = roomId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.name=name;
+        this.profilePic=profilePic;
+    }
+
+
     public Data(String roomId, String senderId, String receiverId, String message, String messageType,String createdAt) {
        // this.profilePic = profilePic;
         this.roomId = roomId;

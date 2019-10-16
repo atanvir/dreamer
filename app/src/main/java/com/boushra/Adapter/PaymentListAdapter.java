@@ -16,9 +16,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.boushra.Activity.ContactUsActivity;
 import com.boushra.Activity.LoginActivity;
 import com.boushra.Activity.MyWalletActivity;
 import com.boushra.Activity.SettingsActivity;
+import com.boushra.Activity.StoreActivity;
 import com.boushra.Activity.TermsandConditionsActivity;
 import com.boushra.Activity.WebviewActivity;
 import com.boushra.Fragment.MyBookingFragment;
@@ -103,7 +105,8 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
             walletpointtxtView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(context,MyWalletActivity.class);
+                    Intent intent=new Intent(context, StoreActivity.class);
+                    intent.putExtra("Fragment","yes");
                     context.startActivity(intent);
                 }
             });
@@ -203,8 +206,11 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                     }
                     if(getAdapterPosition()==5)
                     {
-                        Intent intent=new Intent(context, WebviewActivity.class);
+//                        Intent intent=new Intent(context, WebviewActivity.class);
+//                        context.startActivity(intent);
+                        Intent intent=new Intent(context, ContactUsActivity.class);
                         context.startActivity(intent);
+
 
                     }
 

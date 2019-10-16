@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.ForecasterDetailsActivity"
-    android:background="#E9E9E9"
-
-    >
+    android:background="#E9E9E9">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -47,6 +45,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
             android:padding="8dp"
+            android:visibility="gone"
             android:src="@drawable/filter" />
 
         <com.boushra.View.SegoeRegularTextView
@@ -172,14 +171,14 @@
                     android:id="@+id/ratingBar"
                     style="@style/foodRatingBar"
                     android:layout_width="wrap_content"
-                    android:layout_height="9dp"
+                    android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:scaleX="1.8"
-                    android:scaleY="1.8"
+                    android:scaleX="1.4"
+                    android:scaleY="1.4"
                     app:layout_constraintBottom_toTopOf="@+id/seekBar"
                     app:layout_constraintEnd_toEndOf="@+id/name_txt"
                     app:layout_constraintStart_toStartOf="@+id/name_txt"
@@ -266,6 +265,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView5">

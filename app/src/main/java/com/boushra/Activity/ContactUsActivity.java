@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.boushra.R;
 
@@ -16,6 +17,8 @@ import butterknife.OnClick;
 public class ContactUsActivity extends AppCompatActivity {
 
     @BindView(R.id.backLL) LinearLayout backLL;
+    @BindView(R.id.contact_messsage_cl) ConstraintLayout contact_messsage_cl;
+    @BindView(R.id.contact_email_cl) ConstraintLayout contact_email_cl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,9 @@ public class ContactUsActivity extends AppCompatActivity {
 
     private void init() {
         backLL.setOnClickListener(this::OnClick);
+        contact_email_cl.setOnClickListener(this::OnClick);
+        contact_messsage_cl.setOnClickListener(this::OnClick);
+
     }
 
     @OnClick()
@@ -36,9 +42,7 @@ public class ContactUsActivity extends AppCompatActivity {
         switch (view.getId())
         {
             case R.id.backLL:
-                Intent intent=new Intent(ContactUsActivity.this,SettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                super.onBackPressed();
                 break;
         }
     }

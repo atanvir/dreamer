@@ -21,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.boushra.Activity.CategorySelectionActivity;
+import com.boushra.Activity.ChatDetailsActivity;
 import com.boushra.Fragment.NotificationFragment;
 import com.boushra.Model.Notification;
 import com.boushra.R;
@@ -42,48 +43,65 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.e("server_name",remoteMessage.getFrom());
         Map<String,String> dataMap=remoteMessage.getData();
-        Log.e(TAG, String.valueOf(remoteMessage.getData()));
-
+        Log.e("Data:", String.valueOf(remoteMessage.getData()));
 
         if(NotificationUtils.isAppIsInBackground(getApplicationContext()))
         {
             if(Objects.requireNonNull(remoteMessage.getData().get("type")).equalsIgnoreCase("chat"))
             {
-                Intent intent=new Intent("FCM");
-                intent.putExtra("chat","yes");
+                Intent intent = new Intent("FCM");
+                intent.putExtra("FCM", "Yes");
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-                Intent push=new Intent(this,CategorySelectionActivity.class);
-                sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
-            }
-            else
-            {
-                Intent intent=new Intent("FCM");
-                intent.putExtra("FCM","yes");
+                Intent push = new Intent(this, ChatDetailsActivity.class);
+                Log.e("1","1");
+                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+
+            }else {
+                Intent intent = new Intent("FCM");
+                intent.putExtra("FCM", "Yes");
+                intent.putExtra(GlobalVariables.type,remoteMessage.getData().get("type"));
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-                Intent push=new Intent(this,CategorySelectionActivity.class);
-                sendNotification((dataMap.get("title")==null?"Boushra":dataMap.get("title")), dataMap.get("body"),push);
-
+                Intent push = new Intent(this, CategorySelectionActivity.class);
+                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+                Log.e("2","2");
             }
 
-        }else
+        }
+        else
         {
-            if(remoteMessage.getData().get("type")!=null)
+            if(remoteMessage.getData().get("title").equalsIgnoreCase("Oops! Chat Off"))
             {
-                if(remoteMessage.getData().get("type").equalsIgnoreCase("chat")) {
-                    Intent intent = new Intent("FCM");
-                    intent.putExtra("chat", "yes");
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-                    Intent push = new Intent(this, CategorySelectionActivity.class);
-                    sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
-                }
+                Intent push = new Intent(this, CategorySelectionActivity.class);
+                push.putExtra("FCM", "Yes");
+                Log.e("4","4");
+                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+
+            }
+            else if(remoteMessage.getData().get("type").equalsIgnoreCase("chat"))
+            {
+
+                Intent push = new Intent(this, ChatDetailsActivity.class);
+
+                push.putExtra("FCM","Yes");
+                push.putExtra(GlobalVariables.roomId,remoteMessage.getData().get("roomId"));
+                push.putExtra(GlobalVariables.senderId,remoteMessage.getData().get("senderId"));
+                push.putExtra(GlobalVariables.receiverId,remoteMessage.getData().get("receiverId"));
+                push.putExtra(GlobalVariables.name,remoteMessage.getData().get("name"));
+                push.putExtra(GlobalVariables.profile,remoteMessage.getData().get("profile"));
+                Log.e("6","6");
+                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+
             }
             else {
 
-                Intent intent = new Intent(this, CategorySelectionActivity.class);
-                intent.putExtra("FCM", "yes");
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), intent);
+                Intent push = new Intent(this, CategorySelectionActivity.class);
+                push.putExtra("FCM", "Yes");
+                push.putExtra(GlobalVariables.type,remoteMessage.getData().get("type"));
+                Log.e("4","4");
+                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+
             }
+
         }
 
 
@@ -91,11 +109,12 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void sendNotification(String title, String message,Intent intent) {
-
+    private void sendNotification(String title, String body,Intent intent) {
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         int notificationId = 1;
+
         String channelId = "channel-01";
         String channelName = "Channel Name";
         int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -109,24 +128,21 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.mipmap.round_noty)
                 .setContentTitle(title)
-                .setContentText(message)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                .setContentText(body)
+                .setSound(uri);
 
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntent(intent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
-                0,
+                400,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
         mBuilder.setContentIntent(resultPendingIntent);
 
         notificationManager.notify(notificationId, mBuilder.build());
 
-
     }
-
-
 
 
 }

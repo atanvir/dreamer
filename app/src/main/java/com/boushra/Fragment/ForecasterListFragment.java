@@ -2,19 +2,25 @@ package com.boushra.Fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -45,11 +51,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForecasterListFragment extends Fragment {
+public class ForecasterListFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
     @BindView(R.id.ForcasterRecyclerView) RecyclerView ForcasterRecyclerView;
+    @BindView(R.id.filter_iv) ImageView filter_iv;
     @BindView(R.id.backLL) LinearLayout backLL;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     private ForcasterListAdapter listAdapter;
     List<Data> List;
+    private boolean price=false,rating=false;
     LinearLayoutManager layoutManager;
 
     @Nullable
@@ -57,22 +66,26 @@ public class ForecasterListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.activity_forecaster_list,container,false);
         ButterKnife.bind(this,view);
+        setHasOptionsMenu(true);
+        toolbar.inflateMenu(R.menu.filter_menu);
+        toolbar.setOverflowIcon(getActivity().getDrawable(R.drawable.filter));
+        toolbar.setOnMenuItemClickListener(this);
+
         init();
-        getForcasterListApi();
+        getForcasterListApi(price,rating);
         return view;
  }
 
 
-
-
-
-    private void getForcasterListApi() {
+    private void getForcasterListApi(boolean price,boolean rating) {
         ProgressDailogHelper dailog=new ProgressDailogHelper(getActivity(),"Getting forecaster list");
         dailog.showDailog();
         RetroInterface api_service= RetrofitInit.getConnect().createConnection();
         ForcasterList forcasterList=new ForcasterList();
         forcasterList.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
         forcasterList.setLangCode("en");
+        forcasterList.setPrice(price);
+        forcasterList.setRating(rating);
         forcasterList.setType(GlobalVariables.getType());
         Call<ForcasterList> call=api_service.getForecasterList(forcasterList,SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.jwtToken));
         call.enqueue(new Callback<ForcasterList>() {
@@ -81,6 +94,7 @@ public class ForecasterListFragment extends Fragment {
                 if(response.isSuccessful())
                 {
                     dailog.dismissDailog();
+
                     ForcasterList server_response=response.body();
                     if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
                     {
@@ -130,10 +144,7 @@ public class ForecasterListFragment extends Fragment {
     }
 
     private void settingAdapter() {
-
-
         ForcasterRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         listAdapter=new ForcasterListAdapter(getActivity(),List);
         ForcasterRecyclerView.setAdapter(listAdapter);
     }
@@ -142,6 +153,7 @@ public class ForecasterListFragment extends Fragment {
     private void init() {
         backLL.setOnClickListener(this::OnClick);
         List=new ArrayList<>();
+        filter_iv.setOnClickListener(this::OnClick);
     }
 
 
@@ -153,9 +165,42 @@ public class ForecasterListFragment extends Fragment {
             case R.id.backLL:
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).commit();
                 break;
+
+
+            case R.id.filter_iv:
+
+
+
+                break;
         }
     }
 
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
 
+
+
+        switch (item.getItemId())
+        {
+            case R.id.price_menu:
+
+            price=true;
+            rating=false;
+            getForcasterListApi(price,rating);
+            item.setChecked(true);
+
+            break;
+
+            case R.id.rating_menu:
+            rating=true;
+            price=false;
+            getForcasterListApi(price,rating);
+            item.setChecked(true);
+            break;
+
+        }
+
+        return false;
+    }
 }

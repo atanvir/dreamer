@@ -2,6 +2,8 @@ package com.boushra.Utility;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.boushra.Model.Payment;
 
 import java.util.HashMap;
@@ -21,11 +23,17 @@ public class PaymentServiceBody {
         bodyMap.put("storeId",RequestBody.create(mediaType,payment.getStoreId()));
         bodyMap.put("amount",RequestBody.create(mediaType, String.valueOf(payment.getAmount())));
         bodyMap.put("points",RequestBody.create(mediaType, String.valueOf(payment.getPoints())));
-        bodyMap.put("transactionId",RequestBody.create(mediaType, payment.getTransactionId()));
-        bodyMap.put("transactionStatus",RequestBody.create(mediaType, payment.getTransactionStatus()));
+        if(!payment.getPaymentType().equalsIgnoreCase("Bank"))
+        {
+            bodyMap.put("transactionId",RequestBody.create(mediaType, payment.getTransactionId()));
+            bodyMap.put("transactionStatus",RequestBody.create(mediaType, payment.getTransactionStatus()));
+            bodyMap.put("transactionType", RequestBody.create(mediaType, payment.getTransactionType()));
+
+
+        }
         bodyMap.put("paymentType",RequestBody.create(mediaType, payment.getPaymentType()));
-        Log.e("discountAmount", String.valueOf(payment.getDiscountAmount()));
-        Log.e("promocode", payment.getPromoCode());
+
+
         if(payment.getDiscountAmount()!=0) {
 
             bodyMap.put("discountAmount", RequestBody.create(mediaType, String.valueOf(payment.getDiscountAmount())));
@@ -41,7 +49,6 @@ public class PaymentServiceBody {
 
         }
 
-        bodyMap.put("transactionType", RequestBody.create(mediaType, payment.getTransactionType()));
 
     }
 
@@ -49,4 +56,22 @@ public class PaymentServiceBody {
         return bodyMap;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return        "userId:"+bodyMap.get("userId")
+                +"\n"+"storeId:"+bodyMap.get("storeId")
+                +"\n"+ "amount:"+bodyMap.get("amount")
+                +"\n"+"points:"+bodyMap.get("points")
+               // +"\n"+"transactionId:"+bodyMap.get("transactionId")
+              //  +"\n"+"transactionStatus:"+bodyMap.get("transactionStatus")
+                +"\n"+"paymentType:"+bodyMap.get("paymentType")
+                +"\n"+"discountAmount:"+bodyMap.get("discountAmount")
+                +"\n"+"promocode:"+bodyMap.get("promoCode")
+               // +"\n"+"transactionType:"+bodyMap.get("transactionType")
+                +"\n"+"accountNumber:"+bodyMap.get("accountNumber")
+                +"\n"+"accountHolderName:"+bodyMap.get("accountHolderName");
+
+
+    }
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +80,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
     @BindView(R.id.chronometer) Chronometer chronometer;
     @BindView(R.id.pause_iv) ImageView pause_iv;
     @BindView(R.id.zoom_in) ImageView zoom_in;
+    @BindView(R.id.scrollView3) ScrollView scrollView3;
     Uri video_uri,audio_uri;
     MediaPlayer mediaPlayer;
     boolean playing=false;
@@ -100,7 +103,24 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         init();
+        scrollView3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN: {
+                        if (mediacontroller != null) {
+                            videoview.stopPlayback();
+                            play_iv.setVisibility(View.VISIBLE);
+                            videoview.clearFocus();
+                            mediacontroller.hide();
 
+                        }
+                    }
+                }
+
+                return false;
+            }
+        });
         getForecasterDetailsApi();
 
 
@@ -393,6 +413,8 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
 
     }
 
+
+
     private void pauseAudio() {
         pause=true;
         try
@@ -428,35 +450,24 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
     }
 
     private void stoppingAudio() {
-        try
-        {
-            if(mediaPlayer==null) {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(this, audio_uri);
-                mediaPlayer.prepare();
-                if (mediaPlayer.getDuration() / 1000 < 10) {
-                    timer_txt.setText("0:0" + mediaPlayer.getDuration() / 1000);
-                } else {
-                    timer_txt.setText("0:" + mediaPlayer.getDuration() / 1000);
+        if(playing) {
+            pause_iv.setVisibility(View.GONE);
+            playaudio_iv.setVisibility(View.VISIBLE);
+            try {
+                lastplay_position=mediaPlayer.getCurrentPosition();
+                pause=true;
+                playing = false;
+                if (mediaPlayer != null) {
+                    mediaPlayer.release();
                 }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-
-
-            seekBar.getProgress();
-
-
-            playing=false;
-            if(mediaPlayer!=null) {
-                mediaPlayer.release();
-            }
-            seekBar.setProgress(0);
-            seekBar.setMax(300);
-
-
-        }catch (Exception e)
+        }else
         {
-            e.printStackTrace();
+            Toast.makeText(this, getString(R.string.please_play_audio_first), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -531,15 +542,17 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
 
     private void settingThumbnail() {
         progress_bar.setVisibility(View.VISIBLE);
+        mediacontroller = new MediaController(ForecasterDetailsActivity.this);
+        videoview.setMediaController(mediacontroller);
+        mediacontroller.setAnchorView(videoview);
+        Log.e("controller", String.valueOf(mediacontroller.getHeight()));
+        Log.e("video", String.valueOf(videoview.getHeight()));
+        final int topContainerId1 = getResources().getIdentifier("mediacontroller_progress", "id", "android");
+        media_seekbar = (SeekBar) mediacontroller.findViewById(topContainerId1);
+        media_seekbar.setOnSeekBarChangeListener(ForecasterDetailsActivity.this);
+        mediacontroller_seekbar=true;
         try {
-            mediacontroller = new MediaController(ForecasterDetailsActivity.this);
-            mediacontroller.setAnchorView(videoview);
-            videoview.setMediaController(mediacontroller);
             videoview.setVideoURI(video_uri);
-            final int topContainerId1 = getResources().getIdentifier("mediacontroller_progress", "id", "android");
-            media_seekbar = (SeekBar) mediacontroller.findViewById(topContainerId1);
-            media_seekbar.setOnSeekBarChangeListener(this);
-            mediacontroller_seekbar=true;
 
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
@@ -556,8 +569,12 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
 
 
 
+
+
             }
         });
+
+
 
         videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -568,6 +585,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
         });
 
     }
+
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

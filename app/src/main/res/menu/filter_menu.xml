@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group  android:checkableBehavior="single">
+    <item
+        android:id="@+id/price_menu"
+        android:title="@string/price"
+        android:orderInCategory="101"
+        app:showAsAction="collapseActionView|never|withText"
+        />
+    <item
+        android:id="@+id/rating_menu"
+        android:title="@string/rating"
+        />
+
+    </group>
+
+</menu>

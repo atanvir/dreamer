@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.boushra.Activity.MyWalletActivity;
+import com.boushra.Activity.StoreActivity;
 import com.boushra.Adapter.PaymentListAdapter;
 import com.boushra.Model.Menus;
 import com.boushra.R;
@@ -62,14 +63,12 @@ public class NavigationMoreFragment extends Fragment implements View.OnClickList
 
     private void SettingMenusValues() {
         menusList=new ArrayList<>();
-        menusList.add(new Menus("My Booking"));
-        menusList.add(new Menus("My Payments"));
-        menusList.add(new Menus("My Wallet"));
-        menusList.add(new Menus("Terms & Conditions"));
-        menusList.add(new Menus("Settings"));
-        menusList.add(new Menus("Help"));
-
-
+        menusList.add(new Menus(getString(R.string.my_booking)));
+        menusList.add(new Menus(getString(R.string.my_payment)));
+        menusList.add(new Menus(getString(R.string.my_wallet)));
+        menusList.add(new Menus(getString(R.string.terms_and_conditions)));
+        menusList.add(new Menus(getString(R.string.settings)));
+        menusList.add(new Menus(getString(R.string.contact_us)));
     }
 
     @Override
@@ -82,7 +81,8 @@ public class NavigationMoreFragment extends Fragment implements View.OnClickList
 
             break;
             case R.id.pointtxt:
-                Intent intent=new Intent(getActivity(), MyWalletActivity.class);
+                Intent intent=new Intent(getActivity(), StoreActivity.class);
+                intent.putExtra("Fragment","yes");
                 startActivity(intent);
                 break;
         }

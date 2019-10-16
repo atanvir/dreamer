@@ -42,6 +42,7 @@ import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.InternetCheck;
+import com.boushra.Utility.NotificationUtils;
 import com.boushra.Utility.ProgressDailogHelper;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.boushra.Utility.socketFileUploader.FileUploadManager;
@@ -100,6 +101,8 @@ public class ChatDetailsActivity extends AppCompatActivity {
     int clickcount=0;
     private HashMap<String, String> media_path = new HashMap<>();
     final int PERMISSION_REQUEST_CODE2 = 400;
+    String fcm;
+    boolean login=false;
 
 
     @Override
@@ -109,8 +112,9 @@ public class ChatDetailsActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         init();
-        getChatHistoryApi();
         connectSockettest();
+        getChatHistoryApi();
+
         Log.e("user_id",SharedPreferenceWriter.getInstance(ChatDetailsActivity.this).getString(GlobalVariables._id));
 
     }
@@ -129,13 +133,13 @@ public class ChatDetailsActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("room join", onLogin);
         mSocket.on("message", onNewMessage);
+        mSocket.on("room leave",onRoomLeave);
         mSocket.connect();
 
         try {
             JSONObject object = new JSONObject();
             object.put("roomId", chatData.getRoomId());
             Log.e("roomId",chatData.getRoomId());
-            mSocket.emit("room join", object);
             mSocket.emit("room join", object);
             Log.e("sendData", String.valueOf(object));
 
@@ -147,7 +151,41 @@ public class ChatDetailsActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        Log.e("stop","yes");
+//        try
+//        {
+//            JSONObject object=new JSONObject();
+//            object.put(GlobalVariables.roomId,chatData.getRoomId());
+//            mSocket.emit("room leave",object);
+//        }
+//        catch (Exception e)
+//        {
+//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//
+//    }
+//
+
+    private Emitter.Listener onRoomLeave=new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("room leave","Yes");
+
+                }
+            });
+        }
+    };
+
     private Emitter.Listener onConnect = args -> runOnUiThread(() -> {
+
+
+        //Toast.makeText(ChatDetailsActivity.this, "Connected", Toast.LENGTH_SHORT).show();
 
     });
 
@@ -157,8 +195,9 @@ public class ChatDetailsActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
                     //DialogFactory.showToast(getApplicationContext(), getString(R.string.disconnected));
-                   // Toast.makeText(ChatDetailsActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(ChatDetailsActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -171,15 +210,15 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     // DialogFactory.showLog("ERROR CONNECT", "ERROR CONNECT");
-                   // Toast.makeText(ChatDetailsActivity.this, "NETWORK ERROR", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(ChatDetailsActivity.this, "NETWORK ERROR", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     };
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
 
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT, onConnect);
@@ -188,6 +227,7 @@ public class ChatDetailsActivity extends AppCompatActivity {
         mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.off("message", onNewMessage);
         mSocket.off("room join", onLogin);
+        mSocket.off("room leave",onRoomLeave);
     }
 
     private Emitter.Listener onLogin = new Emitter.Listener() {
@@ -196,7 +236,10 @@ public class ChatDetailsActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                //    Toast.makeText(ChatDetailsActivity.this, getString(R.string.login_successfull), Toast.LENGTH_SHORT).show();
+                    login=true;
+
+
+                   // Toast.makeText(ChatDetailsActivity.this, getString(R.string.login_successfull), Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -380,9 +423,25 @@ public class ChatDetailsActivity extends AppCompatActivity {
         send_iv.setOnClickListener(this::OnClick);
         chatData=getIntent().getParcelableExtra("chat_detail");
         dailogHelper=new ProgressDailogHelper(this,"");
-        Glide.with(this).load(chatData.getForecasterData().getProfilePic()).into(profile_image_im);
-        textname.setText(chatData.getForecasterData().getName());
         dataList=new ArrayList<>();
+        fcm=getIntent().getStringExtra("FCM");
+        if(fcm!=null) {
+            if (fcm.equalsIgnoreCase("YES")) {
+                NotificationUtils.clearNotifications(this);
+                chatData=new Data(getIntent().getStringExtra(GlobalVariables.roomId),
+                        getIntent().getStringExtra(GlobalVariables.receiverId),
+                        getIntent().getStringExtra(GlobalVariables.senderId),
+                        getIntent().getStringExtra(GlobalVariables.name),
+                        getIntent().getStringExtra(GlobalVariables.profile));
+
+                textname.setText(chatData.getName());
+                Glide.with(this).load(chatData.getProfilePic()).into(profile_image_im);
+            }
+        }
+        else {
+            Glide.with(this).load(chatData.getForecasterData().getProfilePic()).into(profile_image_im);
+            textname.setText(chatData.getForecasterData().getName());
+        }
         mic_iv.setOnClickListener(this::OnClick);
 
     }
@@ -403,11 +462,19 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 break;
 
             case R.id.send_iv:
-                if(!mesage_ed.getText().toString().isEmpty())
+                if(login)
                 {
-                    sendMessage(mesage_ed.getText().toString());
+                    if(!mesage_ed.getText().toString().trim().isEmpty())
+                    {
+                        sendMessage(mesage_ed.getText().toString());
 
+                    }
                 }
+                else
+                {
+                    Toast.makeText(this, getString(R.string.socket_error), Toast.LENGTH_SHORT).show();
+                }
+
 
 
                 break;
@@ -846,6 +913,7 @@ public class ChatDetailsActivity extends AppCompatActivity {
             object.put(GlobalVariables.receiverId,chatData.getReceiverId());
             object.put(GlobalVariables.message,message);
             object.put(GlobalVariables.messageType,"Text");
+            Log.e("socketdata:", String.valueOf(object));
             mSocket.emit("message",object);
 
 
