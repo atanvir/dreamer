@@ -19,11 +19,10 @@
 
         <ImageView
             android:id="@+id/backImageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
             android:layout_gravity="start"
-            android:padding="6dp"
-            android:src="@drawable/back" />
+            android:src="@drawable/back_bitmap" />
 
 
 

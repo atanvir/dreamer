@@ -1,0 +1,3 @@
+<bitmap android:src="@drawable/media_play_symbol"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:autoMirrored="true"/>

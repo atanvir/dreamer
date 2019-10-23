@@ -54,6 +54,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 Intent push = new Intent(this, ChatDetailsActivity.class);
                 Log.e("1","1");
+
                 sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
 
             }else {
@@ -89,7 +90,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 push.putExtra(GlobalVariables.name,remoteMessage.getData().get("name"));
                 push.putExtra(GlobalVariables.profile,remoteMessage.getData().get("profile"));
                 Log.e("6","6");
-                sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
+              //  sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
 
             }
             else {

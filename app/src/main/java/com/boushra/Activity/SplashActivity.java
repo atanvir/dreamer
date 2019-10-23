@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -137,10 +139,14 @@ public class SplashActivity extends AppCompatActivity {
                                                 }
                                                 else if(getIntent().getStringExtra("type").equalsIgnoreCase("chat"))
                                                 {
-                                                    Intent intent=new Intent(SplashActivity.this,CategorySelectionActivity.class);
-                                                    intent.putExtra("chat","yes");
+                                                    Intent intent=new Intent(SplashActivity.this,ChatDetailsActivity.class);
+                                                    intent.putExtra("FCM","Yes");
+                                                    intent.putExtra(GlobalVariables.roomId,getIntent().getStringExtra("roomId"));
+                                                    intent.putExtra(GlobalVariables.receiverId,getIntent().getStringExtra("receiverId"));
+                                                    intent.putExtra(GlobalVariables.senderId,getIntent().getStringExtra("senderId"));
+                                                    intent.putExtra(GlobalVariables.name,getIntent().getStringExtra("name"));
+                                                    intent.putExtra(GlobalVariables.profile,getIntent().getStringExtra("profile"));
                                                     startActivity(intent);
-
 
                                                 }
                                                 else {
@@ -159,6 +165,7 @@ public class SplashActivity extends AppCompatActivity {
                                         else {
 
                                             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                            SharedPreferenceWriter.getInstance(SplashActivity.this).writeStringValue(GlobalVariables.langCode,"ar");
                                             finish();
                                             startActivity(intent);
                                         }

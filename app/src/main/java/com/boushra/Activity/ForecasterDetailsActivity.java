@@ -134,7 +134,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
             ForcasterDetails details=new ForcasterDetails();
             details.setForecasterId(getIntent().getStringExtra(GlobalVariables.forecasterId));
             details.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
-            details.setLangCode("en");
+            details.setLangCode(SharedPreferenceWriter.getInstance(ForecasterDetailsActivity.this).getString(GlobalVariables.langCode));
             Call<ForcasterDetails> call= api_service.getForecasterDetails(details,SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.jwtToken));
             call.enqueue(new Callback<ForcasterDetails>() {
                 @Override

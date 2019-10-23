@@ -140,7 +140,7 @@ public class PaymentListAdapter extends RecyclerView.Adapter<PaymentListAdapter.
                         RetroInterface api_service= RetrofitInit.getConnect().createConnection();
                         UserSetting setting=new UserSetting();
                         setting.setUserId(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables._id));
-                        setting.setLangCode("en");
+                        setting.setLangCode(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.langCode));
                         Call<UserSetting> call=api_service.getUserSettings(setting,SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.jwtToken));
                         call.enqueue(new Callback<UserSetting>() {
                             @Override

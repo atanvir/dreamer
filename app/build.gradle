@@ -69,6 +69,8 @@ dependencies {
 
     implementation 'android.arch.work:work-runtime:1.0.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1'
+    implementation 'com.hbb20:ccp:1.8.1'
+
     implementation ('io.socket:socket.io-client:0.6.3') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'

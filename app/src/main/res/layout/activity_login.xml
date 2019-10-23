@@ -28,7 +28,7 @@
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         android:background="@drawable/edittextshapeshadow"
-
+        android:paddingStart="@dimen/dp_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -41,12 +41,32 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.2"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="+91"
+
+            android:visibility="gone"
             android:textColor="@color/black">
 
 
+
+
+
         </com.boushra.View.fredokaTextView>
+        <com.boushra.View.fredokaCountryCodePicker
+            android:id="@+id/ccode"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_60"
+            android:textAlignment="center"
+            android:layout_marginTop="-20dp"
+            android:visibility="visible"
+            app:hideNameCode="true"
+            app:contentColor="@color/black"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:showFlag="false"
+            app:textSize="@dimen/dp_14" />
 
 
 
@@ -79,11 +99,15 @@
         android:layout_marginEnd="16dp"
         android:inputType="textPassword"
         android:background="@drawable/edittextshapeshadow"
+        android:paddingStart="@dimen/dp_25"
+
         android:hint="@string/password"
         android:textColorHint="#123"
-        android:drawableRight="@mipmap/un_view"
+        android:drawableEnd="@mipmap/un_view"
         android:imeOptions="actionDone"
         android:textSize="@dimen/text_size_regular"
+        android:paddingEnd="@dimen/dp_10"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

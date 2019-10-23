@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -58,10 +59,12 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.hbb20.CountryCodePicker;
 import com.heetch.countrypicker.Country;
 import com.heetch.countrypicker.CountryPickerCallbacks;
 import com.heetch.countrypicker.CountryPickerDialog;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -71,7 +74,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, CountryCodePicker.OnCountryChangeListener {
 
     @BindView(R.id.singup) TextView singup;
     @BindView(R.id.googleLL) LinearLayout googleLL;
@@ -80,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @BindView(R.id.password_ed) EditText password_ed;
     @BindView(R.id.forgetPasswordtxt) TextView forgetPasswordtxt;
     @BindView(R.id.countryCodePicker) TextView countryCodePicker;
+    @BindView(R.id.ccode) CountryCodePicker ccode;
     @BindView(R.id.log_in) Button log_in;
     String deviceToken;
     ProgressDialog progressDialog;
@@ -97,9 +101,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     EditText opt_phone_ed;
     ProgressDailogHelper dailogHelper;
     int clickcount2=0,clickcount3=0;
+    String langCode="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale locale=new Locale(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.langCode));
+        Locale.setDefault(locale);
+        Configuration config=new Configuration();
+        config.locale=locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
@@ -124,25 +134,53 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (password_ed.getRight() - password_ed.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if(clickcount % 2 ==0)
-                        {
-                            clickcount=clickcount+1;
-                            password_ed.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                            password_ed.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
-                            return true;
-                        }
-                        else
-                        {
-                            clickcount=clickcount+1;
-                            password_ed.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            password_ed.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
-                            return true;
+                    if(langCode.equalsIgnoreCase("ar"))
+                    {
+                        if (event.getRawX()  <= (password_ed.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())+password_ed.getPaddingLeft()+password_ed.getPaddingBottom()+password_ed.getPaddingTop()+password_ed.getPaddingEnd()) {
+                            if(clickcount % 2 ==0)
+                            {
+                                clickcount=clickcount+1;
+                                password_ed.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                password_ed.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.view, 0, 0, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount=clickcount+1;
+                                password_ed.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                password_ed.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.un_view, 0, 0, 0);
+                                return true;
 
 
+                            }
+
                         }
+
 
                     }
+                    else
+                    {
+                        if (event.getRawX() >= (password_ed.getRight() - password_ed.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if(clickcount % 2 ==0)
+                            {
+                                clickcount=clickcount+1;
+                                password_ed.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                password_ed.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount=clickcount+1;
+                                password_ed.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                password_ed.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                                return true;
+
+
+                            }
+
+                        }
+                    }
+
                 }
 
 
@@ -160,6 +198,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         googleLL.setOnClickListener(this::click);
         facebookll.setOnClickListener(this::click);
         countryCodePicker.setOnClickListener(this::click);
+        langCode=SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.langCode);
+        ccode.setOnCountryChangeListener(this);
 
     }
 
@@ -179,85 +219,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
             case R.id.log_in:
                 if(checkValidation()) {
-                    ProgressDailogHelper dailogHelper=new ProgressDailogHelper(this,"");
-                    dailogHelper.showDailog();
-                    Login login=new Login();
-                    if(countrycode.equalsIgnoreCase(""))
-                    {
-                        countrycode="+91";
-                        login.setCountryCode(countrycode);
-
-
-                    }
-                    else
-                    {
-                        login.setCountryCode(countrycode);
-                    }
-
-                    login.setDeviceType("Android");
-                    login.setMobileNumber(mobile_number_ed.getText().toString().trim());
-                    login.setPassword(password_ed.getText().toString().trim());
-                    login.setDeviceToken(deviceToken);
-                    login.setLangCode("en");
-                    RetroInterface api_service =RetrofitInit.getConnect().createConnection();
-                    Call<Login> call=api_service.checkLogin(login);
-                    call.enqueue(new Callback<Login>() {
-                        @Override
-                        public void onResponse(Call<Login> call, Response<Login> response) {
-                            if(response.isSuccessful())
-                            {
-                                dailogHelper.dismissDailog();
-                                Login server_response=response.body();
-                                if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
-                                {
-                                    setPreferences(server_response);
-                                    Intent intent=new Intent(LoginActivity.this,CategorySelectionActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                }
-                                else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
-                                {
-                                    if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
-                                        Toast.makeText(LoginActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
-                                        finish();
-                                        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                                        SharedPreferenceWriter.getInstance(LoginActivity.this).clearPreferenceValues();
-                                        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                                if (!task.isSuccessful()) {
-                                                    // Log.w(TAG, "getInstanceId failed", task.getException());
-                                                    return;
-                                                }
-
-                                                String auth_token = task.getResult().getToken();
-                                                Log.w("firebaese", "token: " + auth_token);
-                                                SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
-                                            }
-                                        });
-                                    }else
-                                    {
-                                    Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
-                                }
-                                }
-
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<Login> call, Throwable t) {
-                            Log.e("error",t.getMessage());
-
-                        }
-                    });
-
+                    loginApi();
                 }
 
                 break;
             case R.id.googleLL:
-//                signIn();
                 Intent intent=new Intent(LoginActivity.this,CategorySelectionActivity.class);
                 startActivity(intent);
 
@@ -271,27 +237,93 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             case R.id.forgetPasswordtxt:
                 forgotPasswordPopup();
-//                changePasswordPopUp();
                 break;
 
             case R.id.countryCodePicker:
-                CountryPickerDialog countryPicker = new CountryPickerDialog(LoginActivity.this, new CountryPickerCallbacks() {
-                            @Override
-                            public void onCountrySelected(Country country, int flagResId) {
-                                //country.toString();
-                                countryCodePicker.setText("+"+country.getDialingCode());
-                                countrycode=countryCodePicker.getText().toString();
-
-
-                                // TODO handle callback
-                            }
-                        });
-                countryPicker.show();
-
+                ccode.performClick();
 
                 break;
 
+
         }
+    }
+
+    private void loginApi() {
+        ProgressDailogHelper dailogHelper=new ProgressDailogHelper(this,"");
+        dailogHelper.showDailog();
+        Login login=new Login();
+        if(countrycode.equalsIgnoreCase(""))
+        {
+            countrycode="+91";
+            login.setCountryCode(countrycode);
+
+
+        }
+        else
+        {
+            login.setCountryCode(countrycode);
+        }
+
+        login.setDeviceType("Android");
+        login.setMobileNumber(mobile_number_ed.getText().toString().trim());
+        login.setPassword(password_ed.getText().toString().trim());
+        login.setDeviceToken(deviceToken);
+        login.setLangCode(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.langCode));
+        RetroInterface api_service =RetrofitInit.getConnect().createConnection();
+        Call<Login> call=api_service.checkLogin(login);
+        call.enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                if(response.isSuccessful())
+                {
+                    dailogHelper.dismissDailog();
+                    Login server_response=response.body();
+                    if(server_response.getStatus().equalsIgnoreCase("SUCCESS"))
+                    {
+                        setPreferences(server_response);
+                        Intent intent=new Intent(LoginActivity.this,CategorySelectionActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                    else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
+                    {
+                        if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
+                            Toast.makeText(LoginActivity.this, getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();
+                            finish();
+                            startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                            SharedPreferenceWriter.getInstance(LoginActivity.this).clearPreferenceValues();
+                            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        // Log.w(TAG, "getInstanceId failed", task.getException());
+                                        return;
+                                    }
+
+                                    String auth_token = task.getResult().getToken();
+                                    Log.w("firebaese", "token: " + auth_token);
+                                    SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.firebase_token, auth_token);
+                                }
+                            });
+                        }else
+                        {
+                            Toast.makeText(LoginActivity.this,""+server_response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Login> call, Throwable t) {
+                Log.e("error",t.getMessage());
+
+            }
+        });
+
+
     }
 
     private void forgotPasswordPopup() {
@@ -300,28 +332,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.activity_forget_password);
-        TextView countrycode_txt=dialog.findViewById(R.id.countrycode_txt);
+
         LinearLayout closell=dialog.findViewById(R.id.closell);
         TextView forgetPasswordtxt=dialog.findViewById(R.id.forgetPasswordtxt);
         EditText phone_editText=dialog.findViewById(R.id.phone_editText);
         Button submitBtn=dialog.findViewById(R.id.submitBtn);
+        CountryCodePicker ccPicker=dialog.findViewById(R.id.ccPicker);
 
-        countrycode_txt.setOnClickListener(new View.OnClickListener() {
+        ccPicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
-            public void onClick(View v) {
-                CountryPickerDialog countryPicker = new CountryPickerDialog(LoginActivity.this, new CountryPickerCallbacks() {
-                    @Override
-                    public void onCountrySelected(Country country, int flagResId) {
-                        countrycode_txt.setText("+"+country.getDialingCode());
-                        countrycode="+"+country.getDialingCode();
-                        // TODO handle callback
-                    }
-                });
-                countryPicker.show();
+            public void onCountrySelected() {
 
-
+                countrycode=ccPicker.getSelectedCountryCodeWithPlus();
             }
         });
+
 
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -344,7 +369,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
 
                     signup.setType("Forgot");
-                    signup.setLangCode("en");
+                    signup.setLangCode(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.langCode));
 //                           signup.setUserId(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables._id));
                     Call<Signup> call=api_service.checkUserPhoneNumber(signup);
                     call.enqueue(new Callback<Signup>() {
@@ -360,49 +385,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     if(server_response.getResponse_message().equalsIgnoreCase("Mobile number is registered")) {
                                         setPreferencesForSignup(server_response);
                                         sendVerificationCode(phone_editText.getText().toString().trim());
-                                        final Dialog dialog=new Dialog(LoginActivity.this,android.R.style.Theme_Black);
-                                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        dialog.setContentView(R.layout.activity_otp_verify);
-                                        LinearLayout closell=dialog.findViewById(R.id.closell);
-                                        opt_phone_ed=dialog.findViewById(R.id.opt_phone_ed);
-                                        resend_code_txt=dialog.findViewById(R.id.resend_code_txt);
-
-                                        startCountDown();
-                                        closell.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-
-                                        resend_code_txt.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                sendVerificationCode(phone_editText.getText().toString());
-                                            }
-                                        });
-
-
-
-
-                                        Button verifyBtn=dialog.findViewById(R.id.verifyBtn);
-
-                                        verifyBtn.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                if(checkValidationOtp())
-                                                {
-                                                    dailogHelper.showDailog();
-                                                    verifyVerificationCode(opt_phone_ed.getText().toString().trim(),dialog);
-
-                                                }
-
-                                            }
-                                        });
-
-                                        dialog.show();
+                                        OtpPopUpScreen(phone_editText);
                                     }
                                 }
                                 else if(server_response.getStatus().equalsIgnoreCase("FAILURE"))
@@ -458,13 +441,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     {
                         if(phone_editText.getText().toString().isEmpty())
                         {
-                            phone_editText.setError("Please enter mobile number");
+                            phone_editText.setError(getString(R.string.enter_mobile_number));
                             phone_editText.setFocusable(true);
                             phone_editText.requestFocus();
                         }
                         else if(phone_editText.getText().toString().trim().length()!=10)
                         {
-                            phone_editText.setError("Please enter valid mobile number");
+                            phone_editText.setError(getString(R.string.please_enter_valid_mobile_number));
                             phone_editText.setFocusable(true);
                             phone_editText.requestFocus();
                         }
@@ -483,6 +466,52 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
         dialog.show();
 
+    }
+
+    private void OtpPopUpScreen(EditText phone_editText) {
+        final Dialog dialog=new Dialog(LoginActivity.this,android.R.style.Theme_Black);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.activity_otp_verify);
+        LinearLayout closell=dialog.findViewById(R.id.closell);
+        opt_phone_ed=dialog.findViewById(R.id.opt_phone_ed);
+        resend_code_txt=dialog.findViewById(R.id.resend_code_txt);
+
+        startCountDown();
+        closell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        resend_code_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendVerificationCode(phone_editText.getText().toString());
+            }
+        });
+
+
+
+
+        Button verifyBtn=dialog.findViewById(R.id.verifyBtn);
+
+        verifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkValidationOtp())
+                {
+                    dailogHelper.showDailog();
+                    verifyVerificationCode(opt_phone_ed.getText().toString().trim(),dialog);
+
+                }
+
+            }
+        });
+
+        dialog.show();
     }
 
     private boolean checkValidationOtp() {
@@ -514,8 +543,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-    private void otpVerifyPopup() {
-    }
 
     private void startCountDown() {
         CountDownTimer countDownTimer = null;
@@ -543,7 +570,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                                                    dialog.show();
 //                                                    //here mnext is the button from which we can get next question.
 //
-                    resend_code_txt.setText("Resend code");
+                    resend_code_txt.setText(getString(R.string.resend_code));
                     //  resend_code_txt.performClick();//this is used to perform clik automatically
 
                 }
@@ -633,7 +660,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     ForgotPassword password=new ForgotPassword();
                     password.setUserId(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables._id));
                     password.setPassword(newpass_txt.getText().toString().trim());
-                    password.setLangCode("en");
+                    password.setLangCode(SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.langCode));
                     Call<ForgotPassword> call= api_service.userResetPassword(password);
                     call.enqueue(new Callback<ForgotPassword>() {
                         @Override
@@ -725,25 +752,52 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (newpass_txt.getRight() - newpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if(clickcount3 % 2 ==0)
-                        {
-                            clickcount3=clickcount3+1;
-                            newpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                            newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
-                            return true;
-                        }
-                        else
-                        {
-                            clickcount3=clickcount3+1;
-                            newpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
-                            return true;
+                    if(langCode.equalsIgnoreCase("ar"))
+                    {
+                        if (event.getRawX()  <= (newpass_txt.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())+newpass_txt.getPaddingLeft()+newpass_txt.getPaddingBottom()+newpass_txt.getPaddingTop()+newpass_txt.getPaddingEnd()) {
+                            if(clickcount3 % 2 ==0)
+                            {
+                                clickcount3=clickcount3+1;
+                                newpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                newpass_txt.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.view, 0, 0, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount3=clickcount3+1;
+                                newpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                newpass_txt.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.un_view, 0, 0, 0);
+                                return true;
 
+
+                            }
 
                         }
 
                     }
+                    else
+                    {
+                        if (event.getRawX() >= (newpass_txt.getRight() - newpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if(clickcount3 % 2 ==0)
+                            {
+                                clickcount3=clickcount3+1;
+                                newpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount3=clickcount3+1;
+                                newpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                newpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                                return true;
+
+
+                            }
+
+                        }
+                    }
+
                 }
 
 
@@ -760,25 +814,52 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (confirmpass_txt.getRight() - confirmpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if(clickcount2 % 2 ==0)
-                        {
-                            clickcount2=clickcount2+1;
-                            confirmpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                            confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
-                            return true;
+                    if(langCode.equalsIgnoreCase("ar"))
+                    {
+                        if (event.getRawX()  <= (confirmpass_txt.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())+confirmpass_txt.getPaddingLeft()+confirmpass_txt.getPaddingBottom()+confirmpass_txt.getPaddingTop()+confirmpass_txt.getPaddingEnd()) {
+                            if(clickcount2 % 2 ==0)
+                            {
+                                clickcount2=clickcount2+1;
+                                confirmpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.view, 0, 0, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount2=clickcount2+1;
+                                confirmpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.un_view, 0, 0, 0);
+                                return true;
+
+
+                            }
+
                         }
-                        else
-                        {
-                            clickcount2=clickcount2+1;
-                            confirmpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
-                            return true;
-
-
-                        }
-
                     }
+                    else
+                    {
+
+                        if (event.getRawX() >= (confirmpass_txt.getRight() - confirmpass_txt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if(clickcount2 % 2 ==0)
+                            {
+                                clickcount2=clickcount2+1;
+                                confirmpass_txt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount2=clickcount2+1;
+                                confirmpass_txt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                confirmpass_txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                                return true;
+
+
+                            }
+
+                        }
+                    }
+
                 }
 
 
@@ -884,23 +965,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private boolean checkValidation() {
         boolean ret=true;
-        if(!Validation.hasText(mobile_number_ed,getString(R.string.enter_mobile_number))
-        || !Validation.isPhoneNumber(mobile_number_ed,true)
-        || !Validation.hasText(password_ed,getString(R.string.enter_password))
+        Validation validation=new Validation(this);
+        if(!validation.hasText(mobile_number_ed,getString(R.string.enter_mobile_number))
+        || !validation.isPhoneNumber(mobile_number_ed,true)
+        || !validation.hasText(password_ed,getString(R.string.enter_password))
         )
         {
-            if(!Validation.hasText(mobile_number_ed,getString(R.string.enter_mobile_number)))
+            if(!validation.hasText(mobile_number_ed,getString(R.string.enter_mobile_number)))
             {
                 ret=false;
                 mobile_number_ed.requestFocus();
             }
-            else if(!Validation.isPhoneNumber(mobile_number_ed,true))
+            else if(!validation.isPhoneNumber(mobile_number_ed,true))
             {
                 ret=false;
                 mobile_number_ed.requestFocus();
 
             }
-            else if(!Validation.hasText(password_ed,getString(R.string.enter_password)))
+            else if(!validation.hasText(password_ed,getString(R.string.enter_password)))
             {
                 ret=false;
                 password_ed.requestFocus();
@@ -1048,6 +1130,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
 
+
+    }
+
+    @Override
+    public void onCountrySelected() {
+       countrycode=ccode.getSelectedCountryCodeWithPlus();
 
     }
 }

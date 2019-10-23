@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.fingerprint.FingerprintManager;
@@ -15,6 +16,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -51,6 +53,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -541,7 +545,7 @@ public class SettingsActivity extends AppCompatActivity {
         dailogHelper.showDailog();
         RetroInterface api_service=RetrofitInit.getConnect().createConnection();
         UserSetting userSetting=new UserSetting();
-        userSetting.setLangCode("en");
+        userSetting.setLangCode(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.langCode));
         userSetting.setNotificationStatus(notificationStatus);
         userSetting.setLanguage("English");
         userSetting.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
@@ -688,7 +692,15 @@ public class SettingsActivity extends AppCompatActivity {
         UserSetting userSetting=new UserSetting();
         userSetting.setLanguage(language);
         userSetting.setNotificationStatus(SharedPreferenceWriter.getInstance(SettingsActivity.this).getBoolean(GlobalVariables.notificationStatus));
-        userSetting.setLangCode("en");
+        if(language.equalsIgnoreCase("English"))
+        {
+            userSetting.setLangCode("en");
+        }
+        else if(language.equalsIgnoreCase("Arabic"))
+        {
+            userSetting.setLangCode("ar");
+        }
+
         userSetting.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
         Call<UserSetting> call=api_service.updateUserSetting(userSetting,SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.jwtToken));
         call.enqueue(new Callback<UserSetting>() {
@@ -700,7 +712,24 @@ public class SettingsActivity extends AppCompatActivity {
                     if(server_resposne.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
                         dailogHelper.dismissDailog();
-                        //Toast.makeText(SettingsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
+                        String langCode="";
+                        if(server_resposne.getData().getLanguage().equalsIgnoreCase("English"))
+                        {
+                            langCode="en";
+
+
+                        }else if(server_resposne.getData().getLanguage().equalsIgnoreCase("Arabic"))
+                        {
+                            langCode="ar";
+
+                        }
+                        Locale locale=new Locale(langCode);
+                        Locale.setDefault(locale);
+                        Configuration config=new Configuration();
+                        config.locale=locale;
+                        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+                        SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.langCode,langCode);
+
                         settingPreferences(server_resposne);
                         Intent intent=new Intent(SettingsActivity.this,CategorySelectionActivity.class);
                         startActivity(intent);
@@ -770,7 +799,7 @@ public class SettingsActivity extends AppCompatActivity {
                     password.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
                     password.setPassword(oldpass_txt.getText().toString().trim());
                     password.setNewPassword(newpass_txt.getText().toString().trim());
-                    password.setLangCode("en");
+                    password.setLangCode(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.langCode));
                     Call<ChangePassword> call = api_service.userChangePassword(password, SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.jwtToken));
                     call.enqueue(new Callback<ChangePassword>() {
                         @Override
@@ -938,7 +967,7 @@ public class SettingsActivity extends AppCompatActivity {
         RetroInterface api_service =RetrofitInit.getConnect().createConnection();
         Logout logout=new Logout();
         logout.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
-        logout.setLangCode("en");
+        logout.setLangCode(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.langCode));
         Call<Logout> call= api_service.userLogout(logout);
         call.enqueue(new Callback<Logout>() {
             @Override
@@ -948,6 +977,7 @@ public class SettingsActivity extends AppCompatActivity {
                     Logout server_resposne=response.body();
                     if(server_resposne.getStatus().equalsIgnoreCase("SUCCESS"))
                     {
+
                         dailogHelper.dismissDailog();
                         Toast.makeText(SettingsActivity.this,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
                         SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.islogin,"No");

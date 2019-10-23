@@ -172,7 +172,7 @@
             android:layout_marginBottom="40dp"
             android:background="@drawable/btnbackground"
             android:gravity="center"
-            android:text="save"
+            android:text="@string/save"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@color/white"

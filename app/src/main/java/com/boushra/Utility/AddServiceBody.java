@@ -30,6 +30,7 @@ public class AddServiceBody
         requestBodyMap.put("birthPlace",RequestBody.create(mediaType,userProfile.getBirthPlace()));
         requestBodyMap.put("maritalStatus",RequestBody.create(mediaType,userProfile.getMaritalStatus()));
         requestBodyMap.put("dob",RequestBody.create(mediaType,userProfile.getDob()));
+        requestBodyMap.put("langCode",RequestBody.create(mediaType,userProfile.getLangCode()));
 
     }
 

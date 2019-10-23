@@ -83,7 +83,7 @@ public class ForecasterListFragment extends Fragment implements Toolbar.OnMenuIt
         RetroInterface api_service= RetrofitInit.getConnect().createConnection();
         ForcasterList forcasterList=new ForcasterList();
         forcasterList.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
-        forcasterList.setLangCode("en");
+        forcasterList.setLangCode(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.langCode));
         forcasterList.setPrice(price);
         forcasterList.setRating(rating);
         forcasterList.setType(GlobalVariables.getType());

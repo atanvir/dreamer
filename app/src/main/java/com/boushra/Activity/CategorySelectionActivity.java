@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ import com.boushra.Retrofit.RetrofitInit;
 import com.boushra.Utility.GlobalVariables;
 import com.boushra.Utility.SharedPreferenceWriter;
 import com.bumptech.glide.Glide;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,20 +50,23 @@ public class CategorySelectionActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale locale=new Locale(SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).getString(GlobalVariables.langCode));
+        Locale.setDefault(locale);
+        Configuration config=new Configuration();
+        config.locale=locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_category_selection);
+
         ButterKnife.bind(this);
         getSupportActionBar().hide();
         toolbar = getSupportActionBar();
         home_iv.setBackground(getDrawable(R.drawable.home_gradient));
         home_iv.setImageDrawable(null);
 
-
-
-
-       fcm=getIntent().getStringExtra("FCM");
-       chat=getIntent().getStringExtra("chat");
-       if(fcm!=null)
-       {
+        fcm=getIntent().getStringExtra("FCM");
+        chat=getIntent().getStringExtra("chat");
+        if(fcm!=null)
+        {
            if(fcm.equalsIgnoreCase("Yes")) {
                String type=getIntent().getStringExtra(GlobalVariables.type);
                if(type.equalsIgnoreCase("paymentVerify"))
@@ -70,15 +76,15 @@ public class CategorySelectionActivity extends AppCompatActivity{
                getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NotificationFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
            }
 
-       }else if(chat!=null)
-       {
+        }else if(chat!=null)
+        {
            if(chat.equalsIgnoreCase("yes"))
            {
                getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationChatFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
            }
-       }
+        }
 
-       else {
+        else {
 
 
            getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NavigationHomeFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();

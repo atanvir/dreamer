@@ -1,8 +1,11 @@
 package com.boushra.Utility;
 
+import android.content.Context;
 import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.RadioButton;
+
+import com.boushra.R;
 
 import java.util.regex.Pattern;
 
@@ -17,8 +20,15 @@ public class Validation {
     // Error Messages
     private static final String REQUIRED_MSG = "required field";
     private static final String EMAIL_MSG = "invalid email";
-    private static final String PHONE_MSG = "Please enter valid mobile number";
     private static String usernametext;
+    private static Context context;
+
+
+    public Validation(Context context)
+    {
+        this.context=context;
+    }
+
 
 
     // call this method when you need to check email validation
@@ -28,7 +38,7 @@ public class Validation {
 
     // call this method when you need to check phone number validation
     public static boolean isPhoneNumber(EditText editText, boolean required) {
-        return isValid(editText, PHONE_REGEX, PHONE_MSG, required);
+        return isValid(editText, PHONE_REGEX, context.getString(R.string.please_enter_valid_mobile_number), required);
     }
 
     public static boolean isRadioButton(RadioButton radioButton){

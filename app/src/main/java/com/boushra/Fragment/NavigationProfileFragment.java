@@ -198,7 +198,7 @@ public class NavigationProfileFragment extends Fragment {
         RetroInterface api_service = RetrofitInit.getConnect().createConnection();
         User user = new User();
         user.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
-        user.setLangCode("en");
+        user.setLangCode(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.langCode));
         Call<User> call = api_service.getUserDetails(user, SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.jwtToken));
         call.enqueue(new Callback<User>() {
             @Override
@@ -339,6 +339,7 @@ public class NavigationProfileFragment extends Fragment {
         userSetting.setMaritalStatus(maritalstatus_txt.getText().toString());
         userSetting.setBirthPlace("");
         userSetting.setDob(dob_ed.getText().toString().trim());
+        userSetting.setLangCode(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.langCode));
         AddServiceBody body = new AddServiceBody(userSetting);
 
         RequestBody profile_body;
@@ -359,7 +360,7 @@ public class NavigationProfileFragment extends Fragment {
                         dailogHelper.dismissDailog();
                        // getFragmentManager().beginTransaction().replace(R.id.replace,new Cate()).commit();
                         startActivity(new Intent(getActivity(), CategorySelectionActivity.class));
-                        Toast.makeText(getActivity(), server_response.getResponseMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getActivity().getString(R.string.profile_updated_successfully), Toast.LENGTH_LONG).show();
 
                     } else if (server_response.getStatus().equalsIgnoreCase("FAILURE")) {
                         dailogHelper.dismissDailog();
@@ -401,8 +402,8 @@ public class NavigationProfileFragment extends Fragment {
     private void MaritalStatusSpinner() {
         martailList = new ArrayList<>();
         martailList.add(getString(R.string.marital_status));
-        martailList.add("Single");
-        martailList.add("Married");
+        martailList.add(getString(R.string.single));
+        martailList.add(getString(R.string.married));
 
         ArrayAdapter genderArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, martailList){
             @Override
@@ -443,8 +444,8 @@ public class NavigationProfileFragment extends Fragment {
     private void GenderSpinner() {
         genderlist = new ArrayList<>();
         genderlist.add(getString(R.string.gender));
-        genderlist.add("Male");
-        genderlist.add("Female");
+        genderlist.add(getString(R.string.male));
+        genderlist.add(getString(R.string.female));
 
         ArrayAdapter genderArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, genderlist) {
             @Override
@@ -485,41 +486,42 @@ public class NavigationProfileFragment extends Fragment {
 
     private boolean checkValidation() {
         boolean ret=true;
+        Validation validation=new Validation(getActivity());
 
-        if(!Validation.hasText(full_name_ed,getString(R.string.please_enter_full_name))
-        || !Validation.hasText(username_ed,getString(R.string.enter_username))
-        || !Validation.email(email_ed,getString(R.string.enter_email))
-        || !Validation.isPhoneNumber(phone_ed,true)
+        if(!validation.hasText(full_name_ed,getString(R.string.please_enter_full_name))
+        || !validation.hasText(username_ed,getString(R.string.enter_username))
+        || !validation.email(email_ed,getString(R.string.enter_email))
+        || !validation.isPhoneNumber(phone_ed,true)
 
-        || !Validation.hasText(dob_ed,getString(R.string.please_enter_dob))
+        || !validation.hasText(dob_ed,getString(R.string.please_enter_dob))
         || gendertxt.getText().toString().equalsIgnoreCase(getString(R.string.gender))
         || maritalstatus_txt.getText().toString().equalsIgnoreCase(getString(R.string.marital_status))
 
         )
         {
-            if(!Validation.hasText(full_name_ed,getString(R.string.please_enter_full_name)))
+            if(!validation.hasText(full_name_ed,getString(R.string.please_enter_full_name)))
             {
                 ret=false;
                 full_name_ed.requestFocus();
             }
-            else if(!Validation.hasText(username_ed,getString(R.string.enter_username)))
+            else if(!validation.hasText(username_ed,getString(R.string.enter_username)))
             {
                 ret=false;
                 username_ed.requestFocus();
             }
-            else if(!Validation.email(email_ed,getString(R.string.enter_email)))
+            else if(!validation.email(email_ed,getString(R.string.enter_email)))
             {
                 ret=false;
                 email_ed.requestFocus();
             }
-            else if(!Validation.isPhoneNumber(phone_ed,true))
+            else if(!validation.isPhoneNumber(phone_ed,true))
             {
                 ret=false;
                 phone_ed.requestFocus();
 
             }
 
-            else if(!Validation.hasText(dob_ed,getString(R.string.please_enter_dob)))
+            else if(!validation.hasText(dob_ed,getString(R.string.please_enter_dob)))
             {
                 ret=false;
                 dob_ed.requestFocus();
@@ -578,7 +580,7 @@ public class NavigationProfileFragment extends Fragment {
         ImageView gallery = (ImageView) popupView.findViewById(R.id.gallery);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Upload photo");
+        alertDialog.setTitle(getString(R.string.upload_photo));
         alertDialog.setView(popupView);
         final AlertDialog dialog = alertDialog.show();
         alertDialog.setCancelable(true);

@@ -56,6 +56,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.hbb20.CountryCodePicker;
 import com.heetch.countrypicker.Country;
 import com.heetch.countrypicker.CountryPickerCallbacks;
 import com.heetch.countrypicker.CountryPickerDialog;
@@ -76,13 +77,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements CountryCodePicker.OnCountryChangeListener {
     Spinner genderSpinner,maritalSpinner;
     List<String> martailList;
     List<String> genderlist ;
     @BindView(R.id.phone_editText) EditText phone_editText;
     @BindView(R.id.password_editText) EditText password_editText;
     @BindView(R.id.cpasswd_editText) EditText cpasswd_editText;
+    @BindView(R.id.ccode) CountryCodePicker ccode;
     EditText opt_phone_ed;
     TextView maritalTextView,genderTextView;
     EditText name_editText,email_edittext,dob_editText,pob_editText;
@@ -98,6 +100,7 @@ public class SignupActivity extends AppCompatActivity {
     TextView resend_code_txt;
     private ProgressDailogHelper dailogHelper;
     private DatePickerDialog.OnDateSetListener datePickerListener;
+    String langCode="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +108,9 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
+        ccode.setOnCountryChangeListener(this);
         auth_token=SharedPreferenceWriter.getInstance(SignupActivity.this).getString(GlobalVariables.firebase_token);
+        langCode=SharedPreferenceWriter.getInstance(SignupActivity.this).getString(GlobalVariables.langCode);
         auth=FirebaseAuth.getInstance();
         dailogHelper=new ProgressDailogHelper(this,"");
         signup=new Signup();
@@ -143,25 +148,53 @@ public class SignupActivity extends AppCompatActivity {
 
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (password_editText.getRight() - password_editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if(clickcount % 2 ==0)
-                        {
-                            clickcount=clickcount+1;
-                            password_editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                            password_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
-                            return true;
-                        }
-                        else
-                        {
-                            clickcount=clickcount+1;
-                            password_editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            password_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
-                            return true;
+                    if(langCode.equalsIgnoreCase("ar"))
+                    {
+                        if (event.getRawX()  <= (password_editText.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())+password_editText.getPaddingLeft()+password_editText.getPaddingBottom()+password_editText.getPaddingTop()+password_editText.getPaddingEnd()) {
+                            if(clickcount % 2 ==0)
+                            {
+                                clickcount=clickcount+1;
+                                password_editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                password_editText.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.view, 0, 0, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount=clickcount+1;
+                                password_editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                password_editText.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.un_view, 0, 0, 0);
+                                return true;
 
+
+                            }
 
                         }
 
                     }
+                    else
+                    {
+                        if (event.getRawX() >= (password_editText.getRight() - password_editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if(clickcount % 2 ==0)
+                            {
+                                clickcount=clickcount+1;
+                                password_editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                password_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount=clickcount+1;
+                                password_editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                password_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                                return true;
+
+
+                            }
+
+                        }
+                    }
+
+
                 }
 
 
@@ -178,25 +211,52 @@ public class SignupActivity extends AppCompatActivity {
 
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (cpasswd_editText.getRight() - cpasswd_editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        if(clickcount2 % 2 ==0)
-                        {
-                            clickcount2=clickcount2+1;
-                            cpasswd_editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                            cpasswd_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
-                            return true;
-                        }
-                        else
-                        {
-                            clickcount2=clickcount2+1;
-                            cpasswd_editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            cpasswd_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
-                            return true;
+                    if(langCode.equalsIgnoreCase("ar"))
+                    {
+                        if (event.getRawX()  <= (cpasswd_editText.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())+cpasswd_editText.getPaddingLeft()+cpasswd_editText.getPaddingBottom()+cpasswd_editText.getPaddingTop()+cpasswd_editText.getPaddingEnd()) {
+                            if(clickcount2 % 2 ==0)
+                            {
+                                clickcount2=clickcount2+1;
+                                cpasswd_editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                cpasswd_editText.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.view, 0, 0, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount2=clickcount2+1;
+                                cpasswd_editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                cpasswd_editText.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.un_view, 0, 0, 0);
+                                return true;
 
+
+                            }
 
                         }
 
                     }
+                    else
+                    {
+                        if (event.getRawX() >= (cpasswd_editText.getRight() - cpasswd_editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if(clickcount2 % 2 ==0)
+                            {
+                                clickcount2=clickcount2+1;
+                                cpasswd_editText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                cpasswd_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.view, 0);
+                                return true;
+                            }
+                            else
+                            {
+                                clickcount2=clickcount2+1;
+                                cpasswd_editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                cpasswd_editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.un_view, 0);
+                                return true;
+
+
+                            }
+
+                        }
+                    }
+
                 }
 
 
@@ -282,7 +342,7 @@ public class SignupActivity extends AppCompatActivity {
             }
             // signup.setCountryCode(countrycode);
             signup.setType("Signup");
-            signup.setLangCode("en");
+            signup.setLangCode(SharedPreferenceWriter.getInstance(SignupActivity.this).getString(GlobalVariables.langCode));
             Call<Signup> call=apiService.checkUserPhoneNumber(signup);
             call.enqueue(new Callback<Signup>() {
                 @Override
@@ -459,7 +519,7 @@ public class SignupActivity extends AppCompatActivity {
 //                                                    dialog.show();
 //                                                    //here mnext is the button from which we can get next question.
 //
-                    resend_code_txt.setText("Resend code");
+                    resend_code_txt.setText(getString(R.string.resend_code));
                     //  resend_code_txt.performClick();//this is used to perform clik automatically
 
                 }
@@ -808,31 +868,31 @@ public class SignupActivity extends AppCompatActivity {
 
     private boolean checkValidation() {
         boolean ret=true;
-
-        if(!Validation.hasText(phone_editText,getString(R.string.enter_mobile_number))
-        || !Validation.isPhoneNumber(phone_editText,true)
-        || !Validation.hasText(password_editText,getString(R.string.please_enter_password))
-        || !Validation.hasText(cpasswd_editText,getString(R.string.please_enter_confirm_password))
+        Validation validation=new Validation(SignupActivity.this);
+        if(!validation.hasText(phone_editText,getString(R.string.enter_mobile_number))
+        || !validation.isPhoneNumber(phone_editText,true)
+        || !validation.hasText(password_editText,getString(R.string.please_enter_password))
+        || !validation.hasText(cpasswd_editText,getString(R.string.please_enter_confirm_password))
         || !cpasswd_editText.getText().toString().trim().equalsIgnoreCase(password_editText.getText().toString().trim())
         )
         {
-           if(!Validation.hasText(phone_editText,getString(R.string.enter_mobile_number)))
+           if(!validation.hasText(phone_editText,getString(R.string.enter_mobile_number)))
             {
                 ret=false;
                 phone_editText.requestFocus();
             }
-            else if(!Validation.isPhoneNumber(phone_editText,true))
+            else if(!validation.isPhoneNumber(phone_editText,true))
            {
                ret=false;
                phone_editText.requestFocus();
            }
-           else if(!Validation.hasText(password_editText,getString(R.string.please_enter_password)))
+           else if(!validation.hasText(password_editText,getString(R.string.please_enter_password)))
             {
                 ret=false;
                 password_editText.requestFocus();
 
             }
-           else if(!Validation.hasText(cpasswd_editText,getString(R.string.please_enter_confirm_password)))
+           else if(!validation.hasText(cpasswd_editText,getString(R.string.please_enter_confirm_password)))
             {
                 ret=false;
                 cpasswd_editText.requestFocus();
@@ -928,4 +988,8 @@ public class SignupActivity extends AppCompatActivity {
         genderSpinner.performClick();
     }
 
+    @Override
+    public void onCountrySelected() {
+        countrycode=ccode.getSelectedCountryCodeWithPlus();
+    }
 }

@@ -96,9 +96,6 @@ public class NavigationHomeFragment extends Fragment {
                                 image_viewpager.setAdapter(adapter);
 
 
-
-
-
                         }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE)) {
                             if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {
                                 Toast.makeText(getActivity(), getString(R.string.other_device_logged_in), Toast.LENGTH_LONG).show();

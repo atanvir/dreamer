@@ -69,7 +69,7 @@ public class MyBookingFragment extends Fragment {
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             MyBooking booking=new MyBooking();
             booking.setUserId(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables._id));
-            booking.setLangCode("en");
+            booking.setLangCode(SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.langCode));
             Call<MyBooking> call=api_service.getMyBooking(booking,SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.jwtToken));
             call.enqueue(new Callback<MyBooking>() {
                 @Override

@@ -16,7 +16,7 @@ public class AppInfo {
     //auth information for headers
     private static String authToken;
     private static LinkedHashMap<Object, Object> applicationInfo;
-    private static String localeString = "en";
+    private static String localeString = ;
 
     /**
      * Sets auth token.
@@ -95,7 +95,7 @@ public class AppInfo {
         /**
          * En supported locales.
          */
-        EN("en");
+        EN();
 
         private String language;
 

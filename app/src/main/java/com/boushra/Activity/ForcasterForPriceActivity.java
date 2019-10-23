@@ -183,7 +183,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             User user=new User();
             user.setUserId(SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).getString(GlobalVariables._id));
-            user.setLangCode("en");
+            user.setLangCode(SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).getString(GlobalVariables.langCode));
             Call<User> call=api_service.getUserDetails(user,SharedPreferenceWriter.getInstance(ForcasterForPriceActivity.this).getString(GlobalVariables.jwtToken));
             call.enqueue(new Callback<User>() {
                 @Override

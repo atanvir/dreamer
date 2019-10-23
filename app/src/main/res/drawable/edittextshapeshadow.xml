@@ -16,7 +16,8 @@
                 android:radius="10dp"/>
             <padding android:top="@dimen/dp_18"
                 android:bottom="@dimen/dp_18"
-                android:left="25dp"
+
+
 
                 />
             <stroke android:color="@color/colorAccent" />

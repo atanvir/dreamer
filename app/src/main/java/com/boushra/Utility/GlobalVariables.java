@@ -55,6 +55,7 @@ public class GlobalVariables {
     public static String totalPrice="totalPrice";
     public static String storeId="storeId";
     public static String profile="profile";
+    public static String langCode="langCode";
 
     public static String getType() {
         return type;
