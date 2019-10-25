@@ -31,6 +31,18 @@ public class Rating {
     @Expose
     private Boolean isRate;
 
+    @SerializedName("langCode")
+    @Expose
+    private String langCode;
+
+    public String getLangCode() {
+        return langCode;
+    }
+
+    public void setLangCode(String langCode) {
+        this.langCode = langCode;
+    }
+
     public Boolean getRate() {
         return isRate;
     }

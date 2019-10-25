@@ -76,7 +76,7 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
     public void onBindViewHolder(@NonNull MyBookingsListAdapter.MyViewHolder myViewHolder, int i) {
         Glide.with(context).load(bookinglist.get(i).getForecasterData().getProfilePic()).into(myViewHolder.profilepic_iv);
         myViewHolder.name_txt.setText(bookinglist.get(i).getForecasterData().getName());
-        myViewHolder.price_txt.setText("Price "+bookinglist.get(i).getForecasterData().getPricePerQues());
+        myViewHolder.price_txt.setText(context.getString(R.string.price)+" "+bookinglist.get(i).getForecasterData().getPricePerQues());
 
         String getDate = bookinglist.get(i).getCreatedAt();
         String server_format = getDate;    //server comes format ?
@@ -166,6 +166,7 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
                                     rating.setBookingId(bookinglist.get(getAdapterPosition()).getId());
                                     rating.setRating((int) ratingBar2.getRating());
                                     rating.setRatingMessage(rating_cmt_ed.getText().toString());
+                                    rating.setLangCode(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.langCode));
                                     rating.setRate(true);
 
                                     Call<Rating> call=api_service.rating(rating,SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.jwtToken));
@@ -237,23 +238,15 @@ public class MyBookingsListAdapter extends RecyclerView.Adapter<MyBookingsListAd
                             }
                             else
                             {
-                                rating_cmt_ed.setError("Please write your comment");
+                                rating_cmt_ed.setError(context.getString(R.string.write_your_comment));
                                 rating_cmt_ed.setFocusable(true);
                                 rating_cmt_ed.requestFocus();
-                                please_rate_txt.setError("");
 
 
 
                             }
 
                             ratingBar2.getRating();
-
-
-
-
-//                            Intent intent=new Intent(context, CategorySelectionActivity.class);
-//                            context.startActivity(intent);
-
                         }
                     });
                     closell.setOnClickListener(new View.OnClickListener() {

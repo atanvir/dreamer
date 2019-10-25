@@ -78,18 +78,30 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
 
             }
-            else if(remoteMessage.getData().get("type").equalsIgnoreCase("chat"))
+            else if(remoteMessage.getData().get("type")!=null)
             {
+                if(remoteMessage.getData().get("type").equalsIgnoreCase("chat"))
+                {
+                    Intent push = new Intent(this, ChatDetailsActivity.class);
 
-                Intent push = new Intent(this, ChatDetailsActivity.class);
+                    push.putExtra("FCM","Yes");
+                    push.putExtra(GlobalVariables.roomId,remoteMessage.getData().get("roomId"));
+                    push.putExtra(GlobalVariables.senderId,remoteMessage.getData().get("senderId"));
+                    push.putExtra(GlobalVariables.receiverId,remoteMessage.getData().get("receiverId"));
+                    push.putExtra(GlobalVariables.name,remoteMessage.getData().get("name"));
+                    push.putExtra(GlobalVariables.profile,remoteMessage.getData().get("profile"));
+                    Log.e("6","6");
+                }
+                else
+                {
+                    Intent push = new Intent(this, CategorySelectionActivity.class);
+                    push.putExtra("FCM", "Yes");
+                    push.putExtra(GlobalVariables.type,remoteMessage.getData().get("type"));
+                    Log.e("4","4");
+                    sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
 
-                push.putExtra("FCM","Yes");
-                push.putExtra(GlobalVariables.roomId,remoteMessage.getData().get("roomId"));
-                push.putExtra(GlobalVariables.senderId,remoteMessage.getData().get("senderId"));
-                push.putExtra(GlobalVariables.receiverId,remoteMessage.getData().get("receiverId"));
-                push.putExtra(GlobalVariables.name,remoteMessage.getData().get("name"));
-                push.putExtra(GlobalVariables.profile,remoteMessage.getData().get("profile"));
-                Log.e("6","6");
+                }
+
               //  sendNotification((dataMap.get("title") == null ? "Boushra" : dataMap.get("title")), dataMap.get("body"), push);
 
             }

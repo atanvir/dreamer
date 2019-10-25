@@ -163,7 +163,7 @@ public class ForecasterListFragment extends Fragment implements Toolbar.OnMenuIt
         switch (view.getId())
         {
             case R.id.backLL:
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.replace,new NavigationHomeFragment()).commit();
+                getActivity().getSupportFragmentManager().popBackStack();
                 break;
 
 

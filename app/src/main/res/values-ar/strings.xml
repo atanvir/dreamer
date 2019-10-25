@@ -95,7 +95,7 @@
     <string name="about_us">نبذة عنا</string>
     <string name="write_here">اكتب هنا...</string>
     <string name="check_internet">الرجاء التحقق من اتصال الانترنت الخاص بك</string>
-    <string name="family_counselling2">الاستشارة n\ العائلية</string>
+    <string name="family_counselling2">الاستشارة \n العائلية</string>
     <string name="gender">الجنس</string>
     <string name="marital_status">الحالة العائلية</string>
     <string name="write_here_comment">اكتب تعليق هنا ...</string>
@@ -166,6 +166,27 @@
     <string name="single">غير مرتبطة</string>
     <string name="married">متزوج</string>
     <string name="profile_updated_successfully">تم تحديث الملف الشخصي بنجاح</string>
+    <string name="available_points">النقاط المتاحة</string>
+    <string name="purchase">شراء</string>
+    <string name="sar">ر. س</string>
+    <string name="discounted_price">السعر المخفّض</string>
+    <string name="coming_soon">قريبا</string>
+    <string name="store">متجر</string>
+    <string name="parenting_counselling">اتستشارات \n التربية</string>
+    <string name="psychological_counselling2">الاستشارة \n النفسية</string>
+    <string name="self_devolpment2">استشارات التنمية \n الذاتية</string>
+    <string name="write_your_comment">من فضلك اكتب تعليقك</string>
+    <string name="details">Details</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="in_progress">In Progress</string>
+    <string name="completed_request">Completed Request</string>
+    <string name="spended_points">Spended Points</string>
+    <string name="record_audio_first">يرجى تسجيل الصوت أولا</string>
+    <string name="record_upto_30sec">يمكنك تسجيل حوالي 30 ثانية</string>
+    <string name="payment">دفع</string>
+    <string name="forecaster_s_fee">Forecaster\'s Fee</string>
+    <string name="forecaster_details">Forecaster Details</string>
+    <string name="ask_a_question">Ask a Question</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

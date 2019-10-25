@@ -1,0 +1,3 @@
+<bitmap android:src="@drawable/right_arrow"
+    android:autoMirrored="true"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -979,6 +979,7 @@ public class SettingsActivity extends AppCompatActivity {
                     {
 
                         dailogHelper.dismissDailog();
+                        SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.langCode);
                         Toast.makeText(SettingsActivity.this,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
                         SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.islogin,"No");
                         Intent intent=new Intent(SettingsActivity.this,LoginActivity.class);

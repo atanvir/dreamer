@@ -55,7 +55,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull StoreAdapter.MyViewHolder myViewHolder, int position) {
         myViewHolder.pointtxt.setText(""+storePointsList.get(position).getPoints());
-        myViewHolder.pushase_sr_txt.setText("Purchase "+storePointsList.get(position).getAmount()+" SAR");
+        myViewHolder.pushase_sr_txt.setText(context.getString(R.string.purchase)+" "+storePointsList.get(position).getAmount()+" "+context.getString(R.string.sar));
 
 
     }
@@ -92,7 +92,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.MyViewHolder
                     TextView total_price_txt=dialog.findViewById(R.id.total_price_txt);
 
                     pointtxt.setText(storePointsList.get(getAdapterPosition()).getPoints());
-                    total_price_txt.setText(""+storePointsList.get(getAdapterPosition()).getAmount()+" SAR");
+                    total_price_txt.setText(""+storePointsList.get(getAdapterPosition()).getAmount()+" "+context.getString(R.string.sar));
 
 
                     paymentmethodIm.setOnClickListener(new View.OnClickListener() {

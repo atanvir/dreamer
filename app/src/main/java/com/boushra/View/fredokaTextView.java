@@ -1,11 +1,16 @@
 package com.boushra.View;
 
 import android.content.Context;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
+
+import com.boushra.R;
 
 public class fredokaTextView extends AppCompatTextView {
     public fredokaTextView(Context context) {
@@ -27,5 +32,7 @@ public class fredokaTextView extends AppCompatTextView {
         Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/fredoka/FredokaOne-Regular.otf");
         setTypeface(font);
     }
+
+
 
 }

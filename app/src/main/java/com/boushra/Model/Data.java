@@ -75,6 +75,13 @@ public class Data implements Parcelable {
     @Expose
     private String aboutUs;
 
+    @SerializedName("descriptionArabic")
+    @Expose
+    private String descriptionArabic;
+
+    @SerializedName("titleArabic")
+    @Expose
+    private String titleArabic;
 
 
    @SerializedName("title")
@@ -309,6 +316,22 @@ public class Data implements Parcelable {
     @SerializedName("amount")
     @Expose
     private long amount;
+
+    public String getDescriptionArabic() {
+        return descriptionArabic;
+    }
+
+    public void setDescriptionArabic(String descriptionArabic) {
+        this.descriptionArabic = descriptionArabic;
+    }
+
+    public String getTitleArabic() {
+        return titleArabic;
+    }
+
+    public void setTitleArabic(String titleArabic) {
+        this.titleArabic = titleArabic;
+    }
 
     public long getAmount() {
         return amount;

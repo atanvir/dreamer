@@ -20,7 +20,7 @@
         <LinearLayout
             android:id="@+id/backLL"
             android:layout_width="@dimen/dp_70"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:text="Forecaster Details"
+            android:text="@string/forecaster_details"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>
@@ -144,10 +144,11 @@
                 <ImageView
                     android:id="@+id/playaudio_iv"
                     android:layout_width="@dimen/dp_20"
-                    android:layout_height="@dimen/dp_15"
+                    android:layout_height="@dimen/dp_20"
                     android:layout_marginEnd="4dp"
-                    android:src="@drawable/media_play_symbol"
+                    android:src="@drawable/media_play_symbol_bitmap"
                     android:visibility="visible"
+
                     app:layout_constraintBottom_toBottomOf="@+id/seekBar"
                     app:layout_constraintEnd_toStartOf="@+id/timer_txt"
                     app:layout_constraintTop_toTopOf="@+id/seekBar"
@@ -296,7 +297,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/rr"
                     app:layout_constraintStart_toStartOf="@+id/rr"
                     app:layout_constraintTop_toTopOf="@+id/rr"
-                    app:srcCompat="@android:drawable/ic_media_play" />
+                    android:src="@drawable/play_bitmap" />
 
 
                 <ProgressBar
@@ -373,6 +374,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="16dp"
+                            android:textAlignment="viewStart"
                             android:background="@drawable/cardviewback"
                             android:text="Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. "
                             android:textColor="@color/black"
@@ -447,7 +449,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/buttongradient"
         android:gravity="center"
-        android:text="Ask a Question"
+        android:text="@string/ask_a_question"
         android:textColor="@android:color/white"
         android:textSize="@dimen/dp_20"
         android:textStyle="bold"

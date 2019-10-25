@@ -15,6 +15,9 @@ import com.boushra.Model.StaticContent;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
+import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.SharedPreferenceWriter;
+import com.bumptech.glide.load.model.GenericLoaderFactory;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.io.IOException;
@@ -49,10 +52,6 @@ public class TermsandConditionsActivity extends AppCompatActivity {
         init();
         getStaticContent();
 
-
-
-
-
     }
 
     private void init() {
@@ -66,6 +65,8 @@ public class TermsandConditionsActivity extends AppCompatActivity {
 
     private void getStaticContent() {
        RetroInterface api_serice= RetrofitInit.getConnect().createConnection();
+       StaticContent staticContent=new StaticContent();
+       staticContent.setLangCode(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.langCode));
        Call<StaticContent> call=api_serice.getStaticContent();
        call.enqueue(new Callback<StaticContent>() {
            @Override
@@ -73,9 +74,6 @@ public class TermsandConditionsActivity extends AppCompatActivity {
 
                    StaticContent server_response=response.body();
                    List<Data> alldata=server_response.getData();
-
-               Log.e("size", String.valueOf(alldata.size()));
-
                    for(int i=0;i<alldata.size();i++)
                    {
                        if(alldata.get(i).getType()!=null) {

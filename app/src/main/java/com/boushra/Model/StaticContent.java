@@ -17,6 +17,18 @@ public class StaticContent {
     @Expose
     private List<Data> data = null;
 
+    @SerializedName("langCode")
+    @Expose
+    private String langCode;
+
+    public String getLangCode() {
+        return langCode;
+    }
+
+    public void setLangCode(String langCode) {
+        this.langCode = langCode;
+    }
+
     public String getStatus() {
         return status;
     }

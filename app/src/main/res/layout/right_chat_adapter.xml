@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -39,20 +40,19 @@
         android:id="@+id/mesage_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="Hi"
-        android:visibility="gone"
         android:textColor="@color/black"
         android:textSize="@dimen/dp_15"
+        android:visibility="gone"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="@+id/imageView4"
         app:layout_constraintVertical_bias="0.0" />
@@ -65,18 +65,27 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Hi"
-        android:visibility="visible"
         android:textColor="@color/black"
         android:textSize="@dimen/dp_15"
+        android:visibility="visible"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/progressbar"
         app:layout_constraintTop_toTopOf="@+id/imageView4"
         app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:text="blah"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/stop_iv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/stop_iv"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
@@ -86,34 +95,36 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/stop"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/seekBar2"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
 
         <SeekBar
             android:id="@+id/seekBar2"
-            android:layout_width="@dimen/dp_200"
+            android:layout_width="195dp"
             android:layout_height="wrap_content"
             android:progressDrawable="@drawable/progress"
             android:thumb="@drawable/thumb"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@+id/stop_iv"
             app:layout_constraintStart_toEndOf="@+id/stop_iv"
-            app:layout_constraintTop_toTopOf="@+id/stop_iv" />
+            app:layout_constraintTop_toTopOf="@+id/stop_iv"
+            app:layout_constraintVertical_bias="0.333" />
 
         <ImageView
             android:id="@+id/play_iv"
             android:layout_width="@dimen/dp_18"
             android:layout_height="@dimen/dp_18"
             android:layout_marginEnd="4dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/seekBar2"
             app:layout_constraintEnd_toStartOf="@+id/timer_txt"
             app:layout_constraintStart_toEndOf="@+id/seekBar2"
             app:layout_constraintTop_toTopOf="@+id/seekBar2"
-            app:srcCompat="@drawable/media_play_symbol" />
+            app:srcCompat="@drawable/media_play_symbol_bitmap" />
 
         <ImageView
             android:id="@+id/pause_iv"
@@ -130,13 +141,11 @@
         <TextView
             android:id="@+id/timer_txt"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
+            android:layout_height="16dp"
             android:text="0:30"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/play_iv"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/play_iv" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.boushra.Model.Data;
 import com.boushra.R;
+import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.SharedPreferenceWriter;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -47,8 +49,19 @@ public class ImageSliderAdapter extends PagerAdapter {
        TextView titletxt=view.findViewById(R.id.titletxt);
        TextView desc_txt=view.findViewById(R.id.desc_txt);
        Glide.with(context).load(data.get(position).getImage()).into(icon_iv);
-       titletxt.setText(data.get(position).getTitle());
-       desc_txt.setText(data.get(position).getDescription());
+        if(SharedPreferenceWriter.getInstance(context).getString(GlobalVariables.langCode).equalsIgnoreCase("ar"))
+        {
+            titletxt.setText(data.get(position).getTitleArabic());
+            desc_txt.setText(data.get(position).getDescriptionArabic());
+
+        }
+        else {
+            titletxt.setText(data.get(position).getTitle());
+            desc_txt.setText(data.get(position).getDescription());
+
+        }
+
+
        ((ViewPager) container).addView(view, 0);
        return view;
     }

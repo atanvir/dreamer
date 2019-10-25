@@ -49,6 +49,8 @@ public class PaymentServiceBody {
 
         }
 
+        bodyMap.put("langCode",RequestBody.create(mediaType,payment.getLangCode()));
+
 
     }
 

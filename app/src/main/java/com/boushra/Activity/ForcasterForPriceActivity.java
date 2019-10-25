@@ -437,8 +437,8 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
     private void MaritalStatusSpinner() {
         martailList = new ArrayList<>();
         martailList.add(getString(R.string.marital_status));
-        martailList.add("Single");
-        martailList.add("Married");
+        martailList.add(getString(R.string.single));
+        martailList.add(getString(R.string.married));
 
         ArrayAdapter genderArrayAdapter = new ArrayAdapter(ForcasterForPriceActivity.this, android.R.layout.simple_spinner_dropdown_item, martailList){
             @Override
@@ -476,8 +476,8 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
     private void GenderSpinner() {
         genderlist = new ArrayList<>();
         genderlist.add(getString(R.string.gender));
-        genderlist.add("Male");
-        genderlist.add("Female");
+        genderlist.add(getString(R.string.male));
+        genderlist.add(getString(R.string.female));
 
         ArrayAdapter genderArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderlist) {
             @Override
@@ -534,7 +534,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                     mPlayer.start();
                     seekBar.setMax(mPlayer.getDuration());
                 } else {
-                    Toast toast = Toast.makeText(ForcasterForPriceActivity.this, "Please record your audio first", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(ForcasterForPriceActivity.this, getString(R.string.record_audio_first), Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     seekBar.setMax(0);
@@ -782,7 +782,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
                     recording_im.setImageDrawable(getDrawable(R.drawable.mike_ic));
                     stopPlaying();
                     stoppingAudio();
-                    Toast.makeText(ForcasterForPriceActivity.this, "You can record upto 30 secounds", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ForcasterForPriceActivity.this, getString(R.string.record_upto_30sec), Toast.LENGTH_LONG).show();
                 }
             }
         }.start();

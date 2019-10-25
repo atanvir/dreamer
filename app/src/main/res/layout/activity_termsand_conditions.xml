@@ -19,20 +19,21 @@
         <LinearLayout
             android:id="@+id/backLL"
             android:layout_width="@dimen/dp_70"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_40"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/backImageView"
-                android:layout_width="@dimen/dp_50"
-                android:layout_height="@dimen/dp_40"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:layout_gravity="center"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
 
                 android:layout_centerVertical="true"
-                android:src="@drawable/back"
+                android:src="@drawable/back_bitmap"
 
                 />
         </LinearLayout>
@@ -44,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:text="Terms and Conditions"
+            android:text="@string/terms_and_conditions"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>

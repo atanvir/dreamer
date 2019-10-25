@@ -203,9 +203,9 @@ public class AddMoneyActivity extends AppCompatActivity {
     private void init() {
         backLL.setOnClickListener(this::OnClick);
         submittxt.setOnClickListener(this::OnClick);
-        netTotal_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+" SAR");
-        discount_txt.setText("-0 SAR");
-        total_price_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+" SAR");
+        netTotal_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+" "+getString(R.string.sar));
+        discount_txt.setText("-0 "+getString(R.string.sar));
+        total_price_txt.setText(getIntent().getStringExtra(GlobalVariables.totalPrice)+" "+getString(R.string.sar));
         dailogHelper=new ProgressDailogHelper(this,"");
         apply_txt.setOnClickListener(this::OnClick);
         banktransfer_txt.setOnClickListener(this::OnClick);
@@ -264,14 +264,36 @@ public class AddMoneyActivity extends AppCompatActivity {
                 break;
             case R.id.paymentgateway_txt:
 
-                    paymentType = "Gateway";
-                    clickcount = clickcount + 1;
+
                     banktransfer_cv.setVisibility(View.GONE);
                     attach_photo_iv.setVisibility(View.GONE);
                     attach_photo_txt.setVisibility(View.GONE);
+                    showPopUp(getString(R.string.coming_soon));
                     break;
 
         }
+
+    }
+
+    private void showPopUp(String message) {
+        final Dialog dialog=new Dialog(AddMoneyActivity.this,android.R.style.Theme_Black);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.activity_bank_transfer_payment_popup);
+        LinearLayout closell=dialog.findViewById(R.id.closell);
+        TextView response_txt=dialog.findViewById(R.id.response_txt);
+        response_txt.setText(message);
+        dialog.setCancelable(true);
+        closell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+
 
     }
 
@@ -683,7 +705,7 @@ public class AddMoneyActivity extends AppCompatActivity {
         ||selectbank_txt.getText().toString().equalsIgnoreCase(getString(R.string.select_bank))
         || !Validation.hasText(bankaccountholder_ed,getString(R.string.please_enter_account_holder_name))
         || !Validation.hasText(accountno_ed,getString(R.string.please_enter_account_number))
-        || accountno_ed.getText().toString().length()!=16
+        || accountno_ed.getText().toString().length()<8
         || imagePath==null
 
         )
@@ -718,7 +740,7 @@ public class AddMoneyActivity extends AppCompatActivity {
 
 
             }
-           else if(accountno_ed.getText().toString().length()!=16)
+           else if(accountno_ed.getText().toString().length()<8)
             {
                 ret=false;
                 selectbank_txt.setError(null);
@@ -807,12 +829,12 @@ public class AddMoneyActivity extends AppCompatActivity {
                         dailogHelper.dismissDailog();
                         ApplyPromocode server_response = response.body();
                         if (server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS)) {
-                            discount_txt.setText("-"+server_response.getData().getDiscount()+" SAR");
+                            discount_txt.setText("-"+server_response.getData().getDiscount()+" "+getString(R.string.sar));
                             long netprice=Long.parseLong(total_price_txt.getText().toString().split(" ")[0])-(server_response.getData().getDiscount());
-                            netTotal_txt.setText(netprice+" SAR");
+                            netTotal_txt.setText(netprice+" "+getString(R.string.sar));
                         } else if (server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                         {
-                            discount_txt.setText("-0 SAR");
+                            discount_txt.setText("-0 "+getString(R.string.sar));
                             netTotal_txt.setText(total_price_txt.getText().toString());
                             Toast.makeText(AddMoneyActivity.this, server_response.getResponseMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -823,7 +845,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                 public void onFailure(Call<ApplyPromocode> call, Throwable t) {
                     dailogHelper.dismissDailog();
                     Toast.makeText(AddMoneyActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                    discount_txt.setText("-0 SAR");
+                    discount_txt.setText("-0 "+getString(R.string.sar));
                     netTotal_txt.setText(total_price_txt.getText().toString());
                 }
             });
@@ -845,9 +867,9 @@ public class AddMoneyActivity extends AppCompatActivity {
             Payment payment=new Payment();
             payment.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
             payment.setStoreId(getIntent().getStringExtra(GlobalVariables.storeId));
-
             payment.setPoints(Integer.parseInt(getIntent().getStringExtra(GlobalVariables.points)));
             payment.setPaymentType(paymentType);
+            payment.setLangCode(SharedPreferenceWriter.getInstance(AddMoneyActivity.this).getString(GlobalVariables.langCode));
             RequestBody requestBody;
             MultipartBody.Part photo = null;
             if(paymentType.equalsIgnoreCase("Bank"))

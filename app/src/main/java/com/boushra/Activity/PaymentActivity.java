@@ -116,6 +116,7 @@ public class PaymentActivity extends AppCompatActivity {
             bookforcaster.setName(getIntent().getStringExtra(GlobalVariables.name));
             bookforcaster.setDob(getIntent().getStringExtra(GlobalVariables.dob));
             bookforcaster.setGender(getIntent().getStringExtra(GlobalVariables.gender));
+            bookforcaster.setLangCode(SharedPreferenceWriter.getInstance(PaymentActivity.this).getString(GlobalVariables.langCode));
             bookforcaster.setMaritalStatus(getIntent().getStringExtra(GlobalVariables.maritalStatus));
 
             if(getIntent().getStringExtra(GlobalVariables.points)!=null) {

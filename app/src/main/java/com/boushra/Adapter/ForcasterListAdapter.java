@@ -53,9 +53,6 @@ public class ForcasterListAdapter extends RecyclerView.Adapter<ForcasterListAdap
     @NonNull
     @Override
     public ForcasterListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-
-
         View view = LayoutInflater.from(context).inflate(R.layout.adapter_forcaster_list, parent, false);
 
         return new ForcasterListAdapter.MyViewHolder(view);

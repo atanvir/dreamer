@@ -39,7 +39,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="SR"
+                android:text="@string/sar"
                 android:textColor="#722cff"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -67,7 +67,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="40dp"
                 android:gravity="center"
-                android:text="Spended Points"
+                android:text="@string/spended_points"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +93,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="Points"
+                android:text="@string/points"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -160,7 +160,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="35dp"
                 android:gravity="center"
-                android:text="Cancelled"
+                android:text="@string/cancelled"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -215,7 +215,7 @@
                 android:layout_marginEnd="14dp"
                 android:layout_marginBottom="35dp"
                 android:gravity="center"
-                android:text="In Progress"
+                android:text="@string/in_progress"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -240,20 +240,20 @@
         <LinearLayout
             android:id="@+id/backLL"
             android:layout_width="@dimen/dp_70"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_40"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/backImageView"
-                android:layout_width="@dimen/dp_50"
-                android:layout_height="@dimen/dp_40"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-
+                android:layout_gravity="center"
                 android:layout_centerVertical="true"
-                android:src="@drawable/back"
+                android:src="@drawable/back_bitmap"
 
                 />
         </LinearLayout>
@@ -265,7 +265,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:text="My Wallet"
+            android:text="@string/my_wallet"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>
@@ -286,7 +286,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
         android:gravity="center"
-        android:text="Details"
+        android:text="@string/details"
         android:textColor="@android:color/black"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -337,7 +337,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Completed Request"
+                android:text="@string/completed_request"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
