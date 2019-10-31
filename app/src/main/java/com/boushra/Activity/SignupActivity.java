@@ -306,20 +306,6 @@ public class SignupActivity extends AppCompatActivity implements CountryCodePick
                 startActivity(intent2);
                 break;
 
-            case R.id.country_txt:
-                CountryPickerDialog countryPicker =
-                        new CountryPickerDialog(SignupActivity.this, new CountryPickerCallbacks() {
-                            @Override
-                            public void onCountrySelected(Country country, int flagResId) {
-                                country_txt.setText("+"+country.getDialingCode());
-                                countrycode=country_txt.getText().toString();
-                                // TODO handle callback
-                            }
-                        });
-                countryPicker.show();
-
-
-                break;
         }
 
 
@@ -333,7 +319,7 @@ public class SignupActivity extends AppCompatActivity implements CountryCodePick
             signup.setMobileNumber(phone_number);
             if(countrycode.equalsIgnoreCase(""))
             {
-                countrycode="+91";
+                countrycode=ccode.getDefaultCountryCodeWithPlus();
                 signup.setCountryCode(countrycode);
             }
             else

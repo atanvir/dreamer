@@ -131,7 +131,7 @@ public class SplashActivity extends AppCompatActivity {
                                                 Log.e("fcm", fcm);
                                                 if((getIntent().getStringExtra("title").equalsIgnoreCase("Oops! Chat Off")))
                                                 {
-                                                    Intent intent = new Intent(SplashActivity.this, ChatDetailsActivity.class);
+                                                    Intent intent = new Intent(SplashActivity.this, CategorySelectionActivity.class);
                                                     intent.putExtra("FCM", "Yes");
                                                     startActivity(intent);
 

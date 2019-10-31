@@ -149,7 +149,7 @@
     <string name="my_payment">مدفوعاتي</string>
     <string name="my_booking">حجوزاتي</string>
     <string name="contact_with_email">التواصل عبر البريد الإلكتروني </string>
-    <string name="contact_with_message">Contact with message</string>
+    <string name="contact_with_message">الاتصال مع الرسالة</string>
     <string name="please_play_audio_first">يُرجى تشغيل الصوت أولاً</string>
     <string name="please_enter_valid_mobile_number">الرجاء إدخال رقم الجوال</string>
     <string name="write_your_dream">اكتب حلمك</string>
@@ -191,6 +191,7 @@
     <string name="please_enable_fingerprint_permissioin">يُرجى تفعيل تصريح البصمة </string>
     <string name="no_fingerprint_configured">لم يتم تهيئة بصمة، يُرجى تسجيل بصمة واحدة على الأقل في إعدادات جهازك</string>
     <string name="enable_lockscreen_security">يُرجى تفعيل تأمين شاشة الغلق في إعدادات جهازك</string>
+    <string name="mobile_number_registered">رقم الجوال مُسجِّل</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

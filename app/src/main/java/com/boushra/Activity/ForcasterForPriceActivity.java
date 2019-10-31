@@ -631,7 +631,7 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             else if(gender_txt.getText().toString().equalsIgnoreCase(getString(R.string.gender)))
             {
                 ret=false;
-                gender_txt.setError("Please select gender");
+                gender_txt.setError(getString(R.string.please_select_gender));
                 gender_txt.setFocusable(true);
                 gender_txt.requestFocus();
                 maritalstatus_txt.setError(null);
@@ -771,8 +771,6 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         timer=new CountDownTimer(31000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
-
             }
 
             @Override
@@ -797,7 +795,6 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
         {
         mRecorder.stop();
         mRecorder.release();
-        //chromometer.stop();
 
     } catch (Exception e) {
         e.printStackTrace();
@@ -830,7 +827,6 @@ public class ForcasterForPriceActivity extends AppCompatActivity implements Seek
             e.printStackTrace();
         }
         mPlayer = null;
-        //showing the play button
 
     }
 

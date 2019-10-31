@@ -239,11 +239,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 forgotPasswordPopup();
                 break;
 
-            case R.id.countryCodePicker:
-                ccode.performClick();
-
-                break;
-
 
         }
     }
@@ -254,8 +249,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Login login=new Login();
         if(countrycode.equalsIgnoreCase(""))
         {
-            countrycode="+91";
-            login.setCountryCode(countrycode);
+            //countrycode="+91";
+            login.setCountryCode(ccode.getDefaultCountryCodeWithPlus());
 
 
         }
@@ -338,7 +333,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         EditText phone_editText=dialog.findViewById(R.id.phone_editText);
         Button submitBtn=dialog.findViewById(R.id.submitBtn);
         CountryCodePicker ccPicker=dialog.findViewById(R.id.ccPicker);
-
         ccPicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {
@@ -346,8 +340,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 countrycode=ccPicker.getSelectedCountryCodeWithPlus();
             }
         });
-
-
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -360,8 +352,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     signup.setMobileNumber(phone_editText.getText().toString().trim());
                     if(countrycode.equalsIgnoreCase(""))
                     {
-                        countrycode="+91";
-                        signup.setCountryCode(countrycode);
+
+                        signup.setCountryCode(ccPicker.getDefaultCountryCodeWithPlus());
                     }
                     else
                     {
@@ -382,7 +374,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 {
                                     dialog.dismiss();
                                     dailogHelper.dismissDailog();
-                                    if(server_response.getResponse_message().equalsIgnoreCase("Mobile number is registered")) {
+                                    if(server_response.getResponse_message().equalsIgnoreCase(getResources().getString(R.string.mobile_number_registered))) {
                                         setPreferencesForSignup(server_response);
                                         sendVerificationCode(phone_editText.getText().toString().trim());
                                         OtpPopUpScreen(phone_editText);

@@ -32,16 +32,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TermsandConditionsActivity extends AppCompatActivity {
-    @BindView(R.id.privacy_cl) ConstraintLayout privacy_cl;
     @BindView(R.id.term_cl) ConstraintLayout term_cl;
     @BindView(R.id.term_condition_desc_txt) TextView term_condition_desc_txt;
-    @BindView(R.id.privacy_desc_txt) TextView privacy_desc_txt;
-    @BindView(R.id.privacy_policy_txt) TextView privacy_policy_txt;
     @BindView(R.id.term_condition_txt) TextView term_condition_txt;
     @BindView(R.id.backLL) LinearLayout backLL;
 
     long clickcount=0;
     long clickcount2=0;
+    String langCode="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +53,11 @@ public class TermsandConditionsActivity extends AppCompatActivity {
     }
 
     private void init() {
-        privacy_cl.setOnClickListener(this::OnClick);
+
         term_cl.setOnClickListener(this::OnClick);
         term_condition_desc_txt.setOnClickListener(this::OnClick);
-        privacy_desc_txt.setOnClickListener(this::OnClick);
         backLL.setOnClickListener(this::OnClick);
+        langCode=SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.langCode);
 
     }
 
@@ -77,13 +75,20 @@ public class TermsandConditionsActivity extends AppCompatActivity {
                    for(int i=0;i<alldata.size();i++)
                    {
                        if(alldata.get(i).getType()!=null) {
-                           if (alldata.get(i).getType().equalsIgnoreCase("PrivacyPolicy")) {
-                               privacy_policy_txt.setText(alldata.get(i).getTitle());
-                               privacy_desc_txt.setText(alldata.get(i).getDescription());
-                           }
+
                            if (alldata.get(i).getType().equalsIgnoreCase("TermCondition")) {
-                               term_condition_txt.setText(alldata.get(i).getTitle());
-                               term_condition_desc_txt.setText(alldata.get(i).getDescription());
+                               if (langCode.equalsIgnoreCase("ar"))
+                               {
+                                   term_condition_txt.setText(alldata.get(i).getTitleArabic());
+                                   term_condition_desc_txt.setText(alldata.get(i).getDescriptionArabic());
+                               }
+                               else
+                               {
+                                   term_condition_txt.setText(alldata.get(i).getTitle());
+                                   term_condition_desc_txt.setText(alldata.get(i).getDescription());
+                               }
+
+
                            }
                        }
 
@@ -113,33 +118,19 @@ public class TermsandConditionsActivity extends AppCompatActivity {
                 super.onBackPressed();
                 break;
 
-            case R.id.privacy_cl:
-                if(clickcount % 2==0)
-                {
-                clickcount=clickcount+1;
-                privacy_desc_txt.setVisibility(View.VISIBLE);
-                term_condition_desc_txt.setVisibility(View.GONE);
-                }
-                else
-                {
-                    clickcount=clickcount+1;
-                    privacy_desc_txt.setVisibility(View.GONE);
-                    term_condition_desc_txt.setVisibility(View.GONE);
-                }
-                break;
+
 
             case R.id.term_cl:
                 if(clickcount2 % 2==0)
                 {
                     clickcount2=clickcount2+1;
                     term_condition_desc_txt.setVisibility(View.VISIBLE);
-                    privacy_desc_txt.setVisibility(View.GONE);
+
                 }
                 else
                 {
                     clickcount2=clickcount2+1;
                     term_condition_desc_txt.setVisibility(View.GONE);
-                    privacy_desc_txt.setVisibility(View.GONE);
 
                 }
 

@@ -152,23 +152,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onPause(){
-//        super.onPause();
-//        Log.e("stop","yes");
-//        try
-//        {
-//            JSONObject object=new JSONObject();
-//            object.put(GlobalVariables.roomId,chatData.getRoomId());
-//            mSocket.emit("room leave",object);
-//        }
-//        catch (Exception e)
-//        {
-//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//
-//    }
-//
 
     private Emitter.Listener onRoomLeave=new Emitter.Listener() {
         @Override
@@ -186,7 +169,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
     private Emitter.Listener onConnect = args -> runOnUiThread(() -> {
 
 
-        //Toast.makeText(ChatDetailsActivity.this, "Connected", Toast.LENGTH_SHORT).show();
 
     });
 
@@ -197,8 +179,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    //DialogFactory.showToast(getApplicationContext(), getString(R.string.disconnected));
-                   //Toast.makeText(ChatDetailsActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -217,19 +197,9 @@ public class ChatDetailsActivity extends AppCompatActivity {
         }
     };
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//
-//        mSocket.disconnect();
-//        mSocket.off(Socket.EVENT_CONNECT, onConnect);
-//        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
-//        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-//        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-//        mSocket.off("message", onNewMessage);
-//        mSocket.off("room join", onLogin);
-//        mSocket.off("room leave",onRoomLeave);
-//    }
+
+
+
 
     private Emitter.Listener onLogin = new Emitter.Listener() {
         @Override
@@ -238,11 +208,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     login=true;
-
-
-                   // Toast.makeText(ChatDetailsActivity.this, getString(R.string.login_successfull), Toast.LENGTH_SHORT).show();
-
-
                 }
             });
         }
@@ -398,7 +363,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
     private void getChatHistoryApi() {
         if(new InternetCheck(ChatDetailsActivity.this).isConnect())
         {
-
             dailogHelper.showDailog();
             RetroInterface api_service= RetrofitInit.getConnect().createConnection();
             ChatHistory history=new ChatHistory();
@@ -518,7 +482,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 {
                     clickcount=clickcount+1;
                     stoppingAudio();
-
                 }
 
                 break;
@@ -650,12 +613,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
         mic_iv.playAnimation();
         mic_iv.setScaleX(1.9f);
         mic_iv.setScaleY(1.9f);
-
-
-
-
-
-
 
         timer=new CountDownTimer(30500, 1000) {
             @Override
@@ -838,7 +795,8 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 Log.e("progressup", String.valueOf(values[0]));
                 if (media_path.containsKey(uni_code)) {
                     onPostExecute("OK");
-                }
+                }                // This function will get a call back when upload completes
+
             }
         }
 
@@ -869,7 +827,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                         res.put("messageType", "Media");
 
                         jsonArr.put(res);
-                        // This will trigger server 'uploadFileChuncks' function
                         mSocket.emit("uploadFileChuncks", jsonArr);
                         Log.e("upload started","yes");
 
