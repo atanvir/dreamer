@@ -187,6 +187,10 @@
     <string name="forecaster_s_fee">Forecaster\'s Fee</string>
     <string name="forecaster_details">Forecaster Details</string>
     <string name="ask_a_question">Ask a Question</string>
+    <string name="device_not_support_fingerprint">Your device doesn\'t support fingerprint authentication</string>
+    <string name="please_enable_fingerprint_permissioin">Please enable the fingerprint permission</string>
+    <string name="no_fingerprint_configured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
+    <string name="enable_lockscreen_security">Please enable lockscreen security in your device\'s Settings</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

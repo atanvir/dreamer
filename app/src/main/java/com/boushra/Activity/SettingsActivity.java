@@ -86,6 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
     CountDownTimer timer;
     String code="";
     Dialog fingerprint_popup;
+    Logout logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
         {
             touch_id_iv.setImageResource(R.drawable.off);
         }
+        logout=new Logout();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -203,7 +205,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if(!fingerprintManager.isHardwareDetected())
             {
-                settingPopup("Error","Your device doesn't support fingerprint authentication");
+                settingPopup("Error",getString(R.string.device_not_support_fingerprint));
                 touch_id_iv.setImageDrawable(getDrawable(R.drawable.off));
                 touch_id=false;
 
@@ -217,7 +219,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
                 // If your app doesn't have this permission, then display the following text//
-                settingPopup("Error","Please enable the fingerprint permission");
+                settingPopup("Error",getString(R.string.please_enable_fingerprint_permissioin));
 
                 touch_id_iv.setImageDrawable(getDrawable(R.drawable.off));
 
@@ -232,7 +234,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
             if (!fingerprintManager.hasEnrolledFingerprints()) {
                 // If the user hasn’t configured any fingerprints, then display the following message//
-                settingPopup("Error","No fingerprint configured. Please register at least one fingerprint in your device's Settings");
+                settingPopup("Error",getString(R.string.no_fingerprint_configured));
 //                        text.setText("No fingerprint configured. Please register at least one fingerprint in your device's Settings");
                 touch_id_iv.setImageDrawable(getDrawable(R.drawable.off));
                 touch_id=false;
@@ -965,7 +967,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void UserLogoutApi() {
         dailogHelper.showDailog();
         RetroInterface api_service =RetrofitInit.getConnect().createConnection();
-        Logout logout=new Logout();
+
         logout.setUserId(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables._id));
         logout.setLangCode(SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.langCode));
         Call<Logout> call= api_service.userLogout(logout);
@@ -981,11 +983,13 @@ public class SettingsActivity extends AppCompatActivity {
                         dailogHelper.dismissDailog();
                         SharedPreferenceWriter.getInstance(SettingsActivity.this).getString(GlobalVariables.langCode);
                         Toast.makeText(SettingsActivity.this,""+server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
-                        SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.islogin,"No");
+
                         Intent intent=new Intent(SettingsActivity.this,LoginActivity.class);
                         finish();
                         startActivity(intent);
                         SharedPreferenceWriter.getInstance(SettingsActivity.this).clearPreferenceValues();
+                        SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.islogin,"No");
+                        SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.langCode,logout.getLangCode());
                         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                             @Override
                             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -1008,6 +1012,8 @@ public class SettingsActivity extends AppCompatActivity {
                             finish();
                             startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                             SharedPreferenceWriter.getInstance(SettingsActivity.this).clearPreferenceValues();
+                            SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.islogin,"No");
+                            SharedPreferenceWriter.getInstance(SettingsActivity.this).writeStringValue(GlobalVariables.langCode,logout.getLangCode());
                             FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<InstanceIdResult> task) {

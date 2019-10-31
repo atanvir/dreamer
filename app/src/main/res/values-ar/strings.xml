@@ -6,7 +6,7 @@
     <string name="log_in">تسجيل الدخول</string>
     <string name="terms_conditions">تسجيلك للدخول في بشرى معناه<b>\n موافقتك على جميع الشروط والأحكام</b></string>
     <string name="or"><b>Or</b></string>
-    <string name="google">Google</string>
+    <string name="google">جوجل</string>
     <string name="facebook">Facebook</string>
     <string name="new_user"><b>مستخدم جديد؟ سجل الآن  </b></string>
     <string name="sign_up"><u><b>سجل</b></u></string>
@@ -148,7 +148,7 @@
     <string name="my_wallet">محفظتي</string>
     <string name="my_payment">مدفوعاتي</string>
     <string name="my_booking">حجوزاتي</string>
-    <string name="contact_with_email">Contact with email</string>
+    <string name="contact_with_email">التواصل عبر البريد الإلكتروني </string>
     <string name="contact_with_message">Contact with message</string>
     <string name="please_play_audio_first">يُرجى تشغيل الصوت أولاً</string>
     <string name="please_enter_valid_mobile_number">الرجاء إدخال رقم الجوال</string>
@@ -176,17 +176,21 @@
     <string name="psychological_counselling2">الاستشارة \n النفسية</string>
     <string name="self_devolpment2">استشارات التنمية \n الذاتية</string>
     <string name="write_your_comment">من فضلك اكتب تعليقك</string>
-    <string name="details">Details</string>
-    <string name="cancelled">Cancelled</string>
-    <string name="in_progress">In Progress</string>
-    <string name="completed_request">Completed Request</string>
-    <string name="spended_points">Spended Points</string>
+    <string name="details">التفاصيل</string>
+    <string name="cancelled">ملغي</string>
+    <string name="in_progress">قيد العمل</string>
+    <string name="completed_request">الطلب مكتمل</string>
+    <string name="spended_points">النقاط المنفقة</string>
     <string name="record_audio_first">يرجى تسجيل الصوت أولا</string>
     <string name="record_upto_30sec">يمكنك تسجيل حوالي 30 ثانية</string>
     <string name="payment">دفع</string>
-    <string name="forecaster_s_fee">Forecaster\'s Fee</string>
-    <string name="forecaster_details">Forecaster Details</string>
-    <string name="ask_a_question">Ask a Question</string>
+    <string name="forecaster_s_fee">سعر الحلم</string>
+    <string name="forecaster_details">تفاصيل المفسّر</string>
+    <string name="ask_a_question">اطرح سؤال</string>
+    <string name="device_not_support_fingerprint">جهازك لا يدعم المصادقة بالبصمة </string>
+    <string name="please_enable_fingerprint_permissioin">يُرجى تفعيل تصريح البصمة </string>
+    <string name="no_fingerprint_configured">لم يتم تهيئة بصمة، يُرجى تسجيل بصمة واحدة على الأقل في إعدادات جهازك</string>
+    <string name="enable_lockscreen_security">يُرجى تفعيل تأمين شاشة الغلق في إعدادات جهازك</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

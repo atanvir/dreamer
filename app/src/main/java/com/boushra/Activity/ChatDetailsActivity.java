@@ -103,6 +103,7 @@ public class ChatDetailsActivity extends AppCompatActivity {
     final int PERMISSION_REQUEST_CODE2 = 400;
     String fcm;
     boolean login=false;
+    String langCode="";
 
 
     @Override
@@ -255,18 +256,46 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 public void run() {
                     String server_data = args[0].toString();
                     Log.e("data",server_data);
+                    String arabic="";
                   //  Toast.makeText(ChatDetailsActivity.this, server_data, Toast.LENGTH_SHORT).show();
                     JSONObject data = null;
                     if(server_data.equalsIgnoreCase("You have been sent request already to forecaster. Please wait for forecaster reply"))
                     {
-                        setupPopDailog(server_data);
+                        if(langCode.equalsIgnoreCase("ar"))
+                        {
+                            arabic="لقد قمت بارسال طلب لمفسر الاحلام ، الرجاء الانتظار حتى يقوم بالرد .";
+                            setupPopDailog(arabic);
+                        }
+                        else
+                        {
+                            setupPopDailog(server_data);
+                        }
+
                     }
                     else if(server_data.equalsIgnoreCase("Maximum time finish so can not chat now"))
                     {
-                        setupPopDailog(server_data);
+                        if(langCode.equalsIgnoreCase("ar"))
+                        {
+                            arabic="الوقت المحدد انتهى لا يمكنك المحادثة الان ";
+                            setupPopDailog(arabic);
+                        }
+                        else
+                        {
+                            setupPopDailog(server_data);
+                        }
+
+
                     }
                     else if(server_data.equalsIgnoreCase("This chat has been off now.You can not chat due to time limit of 30 mints.")) {
-                        setupPopDailog(server_data);
+                        if(langCode.equalsIgnoreCase("ar"))
+                        {
+                            arabic="تم إيقاف هذه الدردشة الآن. لا يمكنك الدردشة بسبب الحد الزمني البالغ 30 دقيقة.";
+                            setupPopDailog(arabic);
+                        }
+                        else
+                        {
+                            setupPopDailog(server_data);
+                        }
                     }
 
 
@@ -443,6 +472,7 @@ public class ChatDetailsActivity extends AppCompatActivity {
             textname.setText(chatData.getForecasterData().getName());
         }
         mic_iv.setOnClickListener(this::OnClick);
+        langCode=SharedPreferenceWriter.getInstance(ChatDetailsActivity.this).getString(GlobalVariables.langCode);
 
     }
 
@@ -467,7 +497,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                     if(!mesage_ed.getText().toString().trim().isEmpty())
                     {
                         sendMessage(mesage_ed.getText().toString());
-
                     }
                 }
                 else
@@ -652,7 +681,7 @@ public class ChatDetailsActivity extends AppCompatActivity {
                     }
 
                     Log.e("timer_stop","yes");
-                    Toast.makeText(ChatDetailsActivity.this,"You can record upto 30 secounds",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChatDetailsActivity.this,getString(R.string.record_upto_30sec),Toast.LENGTH_LONG).show();
                 }
             }
         }.start();
@@ -837,7 +866,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                         res.put("senderId", chatData.getSenderId());
                         res.put("receiverId", chatData.getReceiverId());
                         res.put("message","Attach voice");
-
                         res.put("messageType", "Media");
 
                         jsonArr.put(res);
@@ -861,16 +889,12 @@ public class ChatDetailsActivity extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 Log.e("callback", String.valueOf(args[0]));
-                for (int jj = 0; jj < args.length; jj++) {
-                }
                 try {
                     JSONObject json_data = (JSONObject) args[0];
                     int place = json_data.getInt("Place");
                     int percent = json_data.getInt("Percent");
                     publishProgress(json_data.getInt("Percent"));
-
                     callback.uploadChunck(place, percent);
-
                 } catch (JSONException e) {
                     callback.err(e);
                 }

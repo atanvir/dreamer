@@ -65,12 +65,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="40dp"
                 android:gravity="center"
                 android:text="@string/spended_points"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -90,12 +90,12 @@
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:text="@string/points"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,13 +104,12 @@
                 android:layout_width="1dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintBottom_toTopOf="@+id/textView23"
-                app:layout_constraintEnd_toStartOf="@+id/sus_bk_txt"
+                app:layout_constraintBottom_toBottomOf="@+id/textView23"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.551"
-                app:layout_constraintStart_toEndOf="@+id/totalpoint_txt"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView22" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -335,7 +334,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="35dp"
                 android:gravity="center"
                 android:text="@string/completed_request"
                 android:textColor="@android:color/black"
