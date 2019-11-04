@@ -52,7 +52,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     boolean playing=false;
     boolean pause=false;
     private SeekBar seekBar;
-
     int positiony=0;
 
 

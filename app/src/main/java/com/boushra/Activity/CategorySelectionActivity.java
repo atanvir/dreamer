@@ -5,13 +5,20 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Dialog;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.boushra.Fragment.NavigationChatFragment;
@@ -129,7 +136,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
 
     @OnClick({R.id.homeLL,R.id.chatLL,R.id.profileLL,R.id.moreLL})
     void OnClick(View view)
-{
+    {
     switch (view.getId())
     {
         case R.id.homeLL:
@@ -211,10 +218,29 @@ public class CategorySelectionActivity extends AppCompatActivity{
                 }
                 else if(entryName.equalsIgnoreCase("CategorySelectionActivity"))
                 {
-                  finishAffinity();
+                    final Dialog dialog=new Dialog(CategorySelectionActivity.this,android.R.style.Theme_Black);
+                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.setContentView(R.layout.exit_popup);
+                    TextView yesText=dialog.findViewById(R.id.yesText);
+                    TextView noText=dialog.findViewById(R.id.noText);
+
+                    yesText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            finishAffinity();
+                        }
+                    });
+                    noText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
-
-
             }
 
             else

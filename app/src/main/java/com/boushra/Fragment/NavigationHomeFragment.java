@@ -60,16 +60,23 @@ import retrofit2.Response;
 public class NavigationHomeFragment extends Fragment {
     @BindView(R.id.notification_im) ImageView notification_im;
     @BindView(R.id.image_viewpager) ViewPager image_viewpager;
+    @BindView(R.id.logo_iv) ImageView logo_iv;
     @BindView(R.id.pointtxt) TextView pointtxt;
     int currentposition=0;
     Timer timer;
     List<Data> images;
+    String lagncode="";
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_home_navigation,container,false);
         ButterKnife.bind(this,view);
+        lagncode=SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.langCode);
+        if(lagncode.equalsIgnoreCase("ar"))
+        {
+            logo_iv.setImageResource(R.drawable.logo_heaader_ar);
+        }
         notification_im.setOnClickListener(this::onClick);
         pointtxt.setOnClickListener(this::onClick);
         pointtxt.setText(""+SharedPreferenceWriter.getInstance(getActivity()).getString(GlobalVariables.totalPoints));

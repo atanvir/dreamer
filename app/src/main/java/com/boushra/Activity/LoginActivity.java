@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public static final int req_code=100;
     String auth_token;
-    FirebaseAuth auth;;
+    FirebaseAuth auth;
 
     EditText newpass_txt,confirmpass_txt;
     String countrycode="";
@@ -119,7 +119,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         auth= FirebaseAuth.getInstance();
         deviceToken= SharedPreferenceWriter.getInstance(LoginActivity.this).getString(GlobalVariables.firebase_token);
         settingProgressDialog();
-
 
         GoogleSignInOptions signInOptions=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient=new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
@@ -238,8 +237,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             case R.id.forgetPasswordtxt:
                 forgotPasswordPopup();
                 break;
-
-
         }
     }
 
@@ -249,10 +246,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Login login=new Login();
         if(countrycode.equalsIgnoreCase(""))
         {
-            //countrycode="+91";
             login.setCountryCode(ccode.getDefaultCountryCodeWithPlus());
-
-
         }
         else
         {
@@ -410,11 +404,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         phone_editText.requestFocus();
                                     }
 
-
-
-
-//                                           mobile_number_ed.setError("Invalid mobile number");
-//                                           password_ed.setError("Invalid password");
                                 }
                             }
                         }

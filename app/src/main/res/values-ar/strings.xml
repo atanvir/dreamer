@@ -192,6 +192,8 @@
     <string name="no_fingerprint_configured">لم يتم تهيئة بصمة، يُرجى تسجيل بصمة واحدة على الأقل في إعدادات جهازك</string>
     <string name="enable_lockscreen_security">يُرجى تفعيل تأمين شاشة الغلق في إعدادات جهازك</string>
     <string name="mobile_number_registered">رقم الجوال مُسجِّل</string>
+    <string name="touch_fingerprint_sensor">المس مستشعر البصمة</string>
+    <string name="are_you_sure">هل ترغب فعلا بالخروج ؟</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

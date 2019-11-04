@@ -192,6 +192,8 @@
     <string name="no_fingerprint_configured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="enable_lockscreen_security">Please enable lockscreen security in your device\'s Settings</string>
     <string name="mobile_number_registered">Mobile number is registered</string>
+    <string name="touch_fingerprint_sensor">Touch the fingerprint sensor</string>
+    <string name="are_you_sure">Are you sure wants to exit?</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

@@ -5,6 +5,7 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.boushra.R;
+import com.boushra.Utility.GlobalVariables;
+import com.boushra.Utility.SharedPreferenceWriter;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -38,6 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Locale;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -62,6 +66,11 @@ public class FingerprintActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale locale=new Locale(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.langCode));
+        Locale.setDefault(locale);
+        Configuration config=new Configuration();
+        config.locale=locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.popup_fingerprint);
         getSupportActionBar().hide();
 
