@@ -176,7 +176,7 @@
         android:layout_marginBottom="50dp"
         android:background="@drawable/btnbackground"
         android:gravity="center"
-        android:text="pay"
+        android:text="@string/pay"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"

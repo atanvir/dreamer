@@ -145,22 +145,17 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
                         ForcasterDetails server_resposne=response.body();
                         if(server_resposne.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
                         {
-
-
-
                             audio_uri=Uri.parse(server_resposne.getData().getVoiceRecording());
                             settingSeekbar();
                             Glide.with(ForecasterDetailsActivity.this).load(server_resposne.getData().getProfilePic()).into(profilepic_iv);
                             name_txt.setText(server_resposne.getData().getName());
                             ratingBar.setRating(server_resposne.getData().getAvgRating());
                             aboutus_txt.setText(server_resposne.getData().getAboutUs());
-
                             video_uri=Uri.parse(server_resposne.getData().getUploadedVideo());
                             videoview.setVisibility(View.VISIBLE);
                             videoview.setVideoURI(video_uri);
                             videoview.seekTo(1);
                             play_iv.setVisibility(View.VISIBLE);
-
                             dailog.dismissDailog();
                             getForcasterRatingApi();
 
@@ -191,15 +186,13 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
                                 Toast.makeText(ForecasterDetailsActivity.this,server_resposne.getResponseMessage(),Toast.LENGTH_LONG).show();
 
                             }
-
-
-
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ForcasterDetails> call, Throwable t) {
+                    Toast.makeText(ForecasterDetailsActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -498,7 +491,6 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
 
                     }
                 });
-//                mediaPlayer.start();
                 seekBar.setProgress(0);
                 seekBar.setMax(mediaPlayer.getDuration());
                 seekBar.setClickable(false);
@@ -566,11 +558,6 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
                 videoview.start();
                 play_iv.setVisibility(View.GONE);
                 progress_bar.setVisibility(View.GONE);
-
-
-
-
-
             }
         });
 

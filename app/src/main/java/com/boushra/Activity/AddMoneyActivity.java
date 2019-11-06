@@ -369,7 +369,6 @@ public class AddMoneyActivity extends AppCompatActivity {
         {
             try
             {
-
                 if (isGoogleDriveUri(data.getData()))
                 {
                     imagePath =getDriveFilePath(data.getData(),this);

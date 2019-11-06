@@ -35,6 +35,7 @@ import com.boushra.Model.ForgotPassword;
 import com.boushra.Model.Login;
 import com.boushra.Model.Signup;
 import com.boushra.Model.SocialLogin;
+import com.boushra.Model.User;
 import com.boushra.R;
 import com.boushra.Retrofit.RetroInterface;
 import com.boushra.Retrofit.RetrofitInit;
@@ -330,7 +331,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         ccPicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {
-
                 countrycode=ccPicker.getSelectedCountryCodeWithPlus();
             }
         });
@@ -486,7 +486,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 {
                     dailogHelper.showDailog();
                     verifyVerificationCode(opt_phone_ed.getText().toString().trim(),dialog);
-
                 }
 
             }
@@ -548,9 +547,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
 
                 public void onFinish() {
-//                                                    dialog.show();
-//                                                    //here mnext is the button from which we can get next question.
-//
                     resend_code_txt.setText(getString(R.string.resend_code));
                     //  resend_code_txt.performClick();//this is used to perform clik automatically
 
@@ -563,6 +559,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void setPreferencesForSignup(Signup server_response) {
+
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.profilePic,server_response.getData().getProfilePic());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
@@ -573,7 +570,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.email,server_response.getData().getEmail());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.mobileNumber,server_response.getData().getMobileNumber());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.countryCode,server_response.getData().getCountryCode());
-
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.dob,server_response.getData().getDob());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.gender,server_response.getData().getGender());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.deviceToken,server_response.getData().getDeviceToken());
@@ -584,9 +580,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeIntValue(GlobalVariables.__v,server_response.getData().getV());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables._id,server_response.getData().getId());
         SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.jwtToken,server_response.getData().getJwtToken());
-
-
-
 
     }
 
@@ -688,6 +681,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }
 
                         private void setPreferencesForgotPassword(ForgotPassword server_response) {
+
                             SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.profilePic,server_response.getData().getProfilePic());
                             SharedPreferenceWriter.getInstance(LoginActivity.this).writeStringValue(GlobalVariables.status,server_response.getData().getStatus());
                             SharedPreferenceWriter.getInstance(LoginActivity.this).writeBooleanValue(GlobalVariables.notificationStatus,server_response.getData().getNotificationStatus());
@@ -1025,7 +1019,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                            // Toast.makeText(LoginActivity.this,"You have successfully logged in",Toast.LENGTH_LONG).show();
 
 
-
                         }
                         else if(server_response.getStatus().equalsIgnoreCase("FAILURE")) {
                             progressDialog.dismiss();
@@ -1069,13 +1062,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             Intent intent=new Intent(LoginActivity.this,CategorySelectionActivity.class);
             startActivity(intent);
-
-
-
-
-//            Glide.with(this).load(img_url).into()
-
-
         }
         else
         {
@@ -1091,10 +1077,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     {
         if(isLogin)
         {
-
-
-
-
         }
 
 

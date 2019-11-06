@@ -5,10 +5,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,15 +57,19 @@ public class CategorySelectionActivity extends AppCompatActivity{
     String fcm="",chat="";
     String activity="";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Locale locale=new Locale(SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).getString(GlobalVariables.langCode));
         Locale.setDefault(locale);
         Configuration config=new Configuration();
         config.locale=locale;
         getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+        //setStatusBarGradiant(this);
         setContentView(R.layout.activity_category_selection);
+
 
         ButterKnife.bind(this);
         getSupportActionBar().hide();
@@ -92,12 +99,12 @@ public class CategorySelectionActivity extends AppCompatActivity{
         }
 
         else {
-
-
            getSupportFragmentManager().beginTransaction().replace(R.id.replace, new NavigationHomeFragment()).addToBackStack(CategorySelectionActivity.class.getSimpleName()).commit();
        }
         SharedPreferenceWriter.getInstance(CategorySelectionActivity.this).writeStringValue(GlobalVariables.islogin,"Yes");
     }
+
+
 
     private void getUserDetailsApi() {
         User user=new User();

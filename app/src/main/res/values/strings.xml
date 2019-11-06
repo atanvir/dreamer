@@ -194,6 +194,7 @@
     <string name="mobile_number_registered">Mobile number is registered</string>
     <string name="touch_fingerprint_sensor">Touch the fingerprint sensor</string>
     <string name="are_you_sure">Are you sure wants to exit?</string>
+    <string name="pay">PAY</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

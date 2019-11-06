@@ -194,6 +194,7 @@
     <string name="mobile_number_registered">رقم الجوال مُسجِّل</string>
     <string name="touch_fingerprint_sensor">المس مستشعر البصمة</string>
     <string name="are_you_sure">هل ترغب فعلا بالخروج ؟</string>
+    <string name="pay">دفع</string>
     <string-array name="gener_array">
         <item>Gender</item>
         <item>Male</item>

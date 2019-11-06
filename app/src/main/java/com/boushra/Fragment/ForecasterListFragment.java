@@ -94,13 +94,12 @@ public class ForecasterListFragment extends Fragment implements Toolbar.OnMenuIt
                 if(response.isSuccessful())
                 {
                     dailog.dismissDailog();
-
                     ForcasterList server_response=response.body();
                     if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.SUCCESS))
                     {
-
                         List=server_response.getData();
                         settingAdapter();
+
                     }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                     {
                         if (server_response.getResponseMessage().equalsIgnoreCase(GlobalVariables.invalidoken)) {

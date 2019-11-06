@@ -35,6 +35,9 @@ public class TermsandConditionsActivity extends AppCompatActivity {
     @BindView(R.id.term_cl) ConstraintLayout term_cl;
     @BindView(R.id.term_condition_desc_txt) TextView term_condition_desc_txt;
     @BindView(R.id.term_condition_txt) TextView term_condition_txt;
+    @BindView(R.id.privacy_desc_txt) TextView privacy_desc_txt;
+    @BindView(R.id.privacy_txt) TextView privacy_txt;
+    @BindView(R.id.privacy_cl) ConstraintLayout privacy_cl;
     @BindView(R.id.backLL) LinearLayout backLL;
 
     long clickcount=0;
@@ -58,6 +61,7 @@ public class TermsandConditionsActivity extends AppCompatActivity {
         term_condition_desc_txt.setOnClickListener(this::OnClick);
         backLL.setOnClickListener(this::OnClick);
         langCode=SharedPreferenceWriter.getInstance(this).getString(GlobalVariables.langCode);
+        privacy_cl.setOnClickListener(this::OnClick);
 
     }
 
@@ -76,7 +80,7 @@ public class TermsandConditionsActivity extends AppCompatActivity {
                    {
                        if(alldata.get(i).getType()!=null) {
 
-                           if (alldata.get(i).getType().equalsIgnoreCase("TermCondition")) {
+                           if (alldata.get(i).getType().equalsIgnoreCase("TermConditionD")) {
                                if (langCode.equalsIgnoreCase("ar"))
                                {
                                    term_condition_txt.setText(alldata.get(i).getTitleArabic());
@@ -86,6 +90,20 @@ public class TermsandConditionsActivity extends AppCompatActivity {
                                {
                                    term_condition_txt.setText(alldata.get(i).getTitle());
                                    term_condition_desc_txt.setText(alldata.get(i).getDescription());
+                               }
+
+
+                           }
+                           if (alldata.get(i).getType().equalsIgnoreCase("PrivacyPolicyD")) {
+                               if (langCode.equalsIgnoreCase("ar"))
+                               {
+                                   privacy_txt.setText(alldata.get(i).getTitleArabic());
+                                   privacy_desc_txt.setText(alldata.get(i).getDescriptionArabic());
+                               }
+                               else
+                               {
+                                   privacy_txt.setText(alldata.get(i).getTitle());
+                                   privacy_desc_txt.setText(alldata.get(i).getDescription());
                                }
 
 
@@ -134,6 +152,22 @@ public class TermsandConditionsActivity extends AppCompatActivity {
 
                 }
 
+
+                break;
+
+            case R.id.privacy_cl:
+                if(clickcount % 2==0)
+                {
+                    clickcount=clickcount+1;
+                    privacy_desc_txt.setVisibility(View.VISIBLE);
+
+                }
+                else
+                {
+                    clickcount=clickcount+1;
+                    privacy_desc_txt.setVisibility(View.GONE);
+
+                }
 
                 break;
 

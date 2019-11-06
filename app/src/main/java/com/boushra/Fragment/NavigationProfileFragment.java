@@ -134,6 +134,7 @@ public class NavigationProfileFragment extends Fragment {
                     builder.append(simpleDateFormat.format(date));
                     dob_ed.setText(builder);
 
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -175,8 +176,6 @@ public class NavigationProfileFragment extends Fragment {
 
             }
         });
-
-
     }
 
     private void init() {
@@ -289,9 +288,6 @@ public class NavigationProfileFragment extends Fragment {
                         profileBottomLayout();
                     }
                 }
-
-
-
                 break;
             case R.id.save_btn:
                 if (checkValidation()) {
@@ -633,8 +629,6 @@ public class NavigationProfileFragment extends Fragment {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
     }
 
 
