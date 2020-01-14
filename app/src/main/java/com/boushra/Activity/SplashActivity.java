@@ -4,10 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -33,30 +39,32 @@ import butterknife.ButterKnife;
 public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
-    String fcm="";
-    String splash_pass="";
+    String fcm = "";
+    String splash_pass = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale locale=new Locale(SharedPreferenceWriter.getInstance(SplashActivity.this).getString(GlobalVariables.langCode));
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         ButterKnife.bind(this);
-        splash_pass=getIntent().getStringExtra("pass_splash");
 
-
+        splash_pass = getIntent().getStringExtra("pass_splash");
         if (SharedPreferenceWriter.getInstance(SplashActivity.this).getBoolean(GlobalVariables.touchid)) {
-            if(splash_pass!=null) {
-                if(splash_pass.equalsIgnoreCase("Yes"))
-                {
+            if (splash_pass != null) {
+                if (splash_pass.equalsIgnoreCase("Yes")) {
                     startSplashMethods();
                 }
 
-            }
-            else {
+            } else {
                 Intent intent = new Intent(this, FingerprintActivity.class);
                 finish();
-                startActivity(intent);
+                  startActivity(intent);
             }
         } else {
 
@@ -64,12 +72,10 @@ public class SplashActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
-
     }
+
+
+
 
     private void startSplashMethods() {
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {

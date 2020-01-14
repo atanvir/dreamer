@@ -476,6 +476,8 @@ public class NavigationProfileFragment extends Fragment {
         genderArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genderSpn.setAdapter(genderArrayAdapter);
         genderSpn.performClick();
+
+
     }
 
 

@@ -133,8 +133,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         int importance = NotificationManager.IMPORTANCE_HIGH;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(
-                    channelId, channelName, importance);
+            NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
             notificationManager.createNotificationChannel(mChannel);
         }
 
@@ -143,6 +142,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSound(uri);
+
 
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

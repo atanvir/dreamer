@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.boushra.R;
+import com.boushra.Utility.GlobalVariables;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +24,7 @@ public class ContactUsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalVariables.setStatusBarGradiant(this);
         setContentView(R.layout.activity_contact_us);
         getSupportActionBar().hide();
         ButterKnife.bind(this);

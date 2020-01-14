@@ -116,6 +116,8 @@ public class SignupActivity extends AppCompatActivity implements CountryCodePick
         signup=new Signup();
 
         TouchListner();
+
+
         datePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -556,8 +558,7 @@ public class SignupActivity extends AppCompatActivity implements CountryCodePick
         }
 
         @Override
-        public void onCodeSent(String verificationId,
-                PhoneAuthProvider.ForceResendingToken token) {
+        public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
             // The SMS verification code has been sent to the provided phone number, we
             // now need to ask the user to enter the code and then construct a credential
             // by combining the code with a verification ID.

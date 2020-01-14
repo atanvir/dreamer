@@ -8,65 +8,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/toolbar2"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp_200"
-            android:background="@drawable/toolbargradient"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+    <!--<com.boushra.View.BaseStatusBar-->
+        <!--android:id="@+id/baseStatusBar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/action_bar_bg"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/toolbar2"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar2"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_200"
+        android:background="@drawable/toolbargradient"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.boushra.View.fredokaTextView
+            android:id="@+id/pointtxt"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle_view"
+            android:gravity="center"
+            android:text="@string/wallet_money"
+            android:textAlignment="center"
+            android:textColor="@color/app_theme"
+
+            android:textSize="@dimen/dp_11"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/toolbar2" />
+
+        <ImageView
+            android:id="@+id/notification_im"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pointtxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/pointtxt"
+            app:srcCompat="@drawable/notification_white" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_im"
+            android:layout_width="@dimen/dp_110"
+            android:layout_height="@dimen/dp_110"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/img_chat" />
+
+        <ImageView
+            android:id="@+id/camera_im"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_im"
+            app:layout_constraintEnd_toEndOf="@+id/profile_im"
+            app:srcCompat="@drawable/cam" />
 
 
-            <com.boushra.View.fredokaTextView
-                android:id="@+id/pointtxt"
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/circle_view"
-                android:gravity="center"
-                android:textSize="@dimen/dp_11"
-                android:text="@string/wallet_money"
-                android:textColor="@color/app_theme"
-
-                android:textAlignment="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/toolbar2" />
-
-            <ImageView
-                android:id="@+id/notification_im"
-                android:layout_width="@dimen/dp_25"
-                android:layout_height="@dimen/dp_40"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/pointtxt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/pointtxt"
-                app:srcCompat="@drawable/notification_white" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_im"
-                android:layout_width="@dimen/dp_110"
-                android:layout_height="@dimen/dp_110"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/img_chat" />
-
-            <ImageView
-                android:id="@+id/camera_im"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_im"
-                app:layout_constraintEnd_toEndOf="@+id/profile_im"
-                app:srcCompat="@drawable/cam" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"

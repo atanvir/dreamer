@@ -490,6 +490,8 @@ public class Data implements Parcelable {
         categoryName = in.readString();
         roomId = in.readString();
         image = in.readString();
+//        in.readParcelable(String.class.getClassLoader())
+
         uploadedVideo = in.readString();
         username = in.readString();
         attachedDocument = in.readString();

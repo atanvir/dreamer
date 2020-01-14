@@ -99,6 +99,7 @@ public class ForecasterDetailsActivity extends AppCompatActivity implements Seek
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalVariables.setStatusBarGradiant(this);
         setContentView(R.layout.activity_forecaster_details);
         getSupportActionBar().hide();
         ButterKnife.bind(this);

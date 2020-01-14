@@ -109,6 +109,7 @@ public class ChatDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalVariables.setStatusBarGradiant(this);
         setContentView(R.layout.activity_chat);
         getSupportActionBar().hide();
         ButterKnife.bind(this);
@@ -780,10 +781,8 @@ public class ChatDetailsActivity extends AppCompatActivity {
             {
                 media_path.remove(uni_code);
                 mFileUploadManager.close();
-                Log.e("aaya","yes");
-
                 mSocket.off("uploadFileMoreDataReq", uploadFileMoreDataReq);
-                //  mSocket.off("uploadFileCompleteRes", onCompletedddd);
+                mSocket.off("uploadFileCompleteRes", onCompletedddd);
 //                uploadFileOnServer(media_path);
             }
         }
@@ -813,8 +812,6 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 if (mSocket.connected()) {
                     JSONArray jsonArr = new JSONArray();
                     JSONObject res = new JSONObject();
-
-
 
                     try {
                         res.put("Name", mFileUploadManager.getFileName());

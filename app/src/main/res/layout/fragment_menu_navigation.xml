@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_50"
-        android:background="@android:color/white"
+        android:background="@color/white"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,15 +23,15 @@
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_alignParentStart="true"
-            android:text="10000"
             android:layout_alignParentLeft="true"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:foregroundGravity="center"
-            android:textSize="@dimen/dp_11"
-            android:textColor="@color/white"
             android:background="@drawable/walletmoneygradient"
-            />
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:text="10000"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_11" />
+
         <ImageView
             android:id="@+id/notification_im"
             android:layout_width="wrap_content"

@@ -71,6 +71,7 @@ public class FingerprintActivity extends AppCompatActivity implements View.OnCli
         Configuration config=new Configuration();
         config.locale=locale;
         getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+        GlobalVariables.setStatusBarGradiant(this);
         setContentView(R.layout.popup_fingerprint);
         getSupportActionBar().hide();
 

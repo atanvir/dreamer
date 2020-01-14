@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -53,10 +54,10 @@ public class CategorySelectionActivity extends AppCompatActivity{
     @BindView(R.id.chat_im) ImageView chat_im;
     @BindView(R.id.profile_im) ImageView profile_im;
     @BindView(R.id.more_im) ImageView more_im;
+    @BindView(R.id.cl) ConstraintLayout cl;
     int clickcount=0;
     String fcm="",chat="";
     String activity="";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,13 @@ public class CategorySelectionActivity extends AppCompatActivity{
         Configuration config=new Configuration();
         config.locale=locale;
         getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-        //setStatusBarGradiant(this);
+        GlobalVariables.setStatusBarGradiant(this);
         setContentView(R.layout.activity_category_selection);
 
-
         ButterKnife.bind(this);
+
+//        cl.setBackground(getDrawable(R.drawable.white_background));
+
         getSupportActionBar().hide();
         toolbar = getSupportActionBar();
         home_iv.setBackground(getDrawable(R.drawable.home_gradient));
@@ -106,6 +109,7 @@ public class CategorySelectionActivity extends AppCompatActivity{
 
 
 
+
     private void getUserDetailsApi() {
         User user=new User();
         user.setUserId(SharedPreferenceWriter.getInstance(this).getString(GlobalVariables._id));
@@ -126,7 +130,6 @@ public class CategorySelectionActivity extends AppCompatActivity{
                    }else if(server_response.getStatus().equalsIgnoreCase(GlobalVariables.FAILURE))
                    {
                        Toast.makeText(CategorySelectionActivity.this, server_response.getResponseMessage(), Toast.LENGTH_SHORT).show();
-
                    }
 
                 }
@@ -181,8 +184,6 @@ public class CategorySelectionActivity extends AppCompatActivity{
             profile_im.setBackground(null);
             home_iv.setBackground(null);
             chat_im.setBackground(null);
-
-
 
             break;
 
